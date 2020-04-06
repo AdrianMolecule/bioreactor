@@ -18,20 +18,22 @@ Here is an example of a program that:
     "name": "test protocol",
     "root": {
         "steps": [
-            "hold_temperature_at": {
-                "temperature": 220,
-                "duration": 10800,
-            },
-            "bring_ph_to": {
-                "ph": 3,
-            },
-            "hold_lighting_at": {
-                "color": {
-                    "red": 0,
-                    "green": 255,
-                    "blue": 255,
+            {
+                "hold_temperature_at": {
+                    "temperature": 220,
+                    "duration": 10800,
+                },
+                "bring_ph_to": {
+                    "ph": 3,
+                },
+                "hold_lighting_at": {
+                    "color": {
+                        "red": 0,
+                        "green": 255,
+                        "blue": 255,
+                    }
+                    "duration": 600,
                 }
-                "duration": 600,
             }
         ]
     }
@@ -120,8 +122,8 @@ Example
 ```json
 {
     "ph": 5,
-    "max_rate": 3,                // heat at 3 degrees per second
-    "duration": 10800,            // 10800 seconds = 3 hours
+    "max_rate": 3,         // heat at 3 degrees per second
+    "duration": 10800,     // 10800 seconds = 3 hours
 }
 ```
 
@@ -131,9 +133,9 @@ HoldLightingAt holds the lighting at a set color and brightness for a certain am
 
 ```go
 type Color struct {
-    Red int    // The red component of color (0..255)
-    Green int  // The green component of color (0..255)
-    Blue int   // The blue component of color (0..255)
+    Red int    // the red component of color (0..255)
+    Green int  // the green component of color (0..255)
+    Blue int   // the blue component of color (0..255)
 }
 
 type HoldLightingAt struct {
@@ -239,20 +241,22 @@ Example:
     "name": "test protocol",
     "root": {
         "steps": [
-            "hold_temperature_at": {
-                "temperature": 220,
-                "duration": 10800,
-            },
-            "bring_ph_to": {
-                "ph": 3,
-            },
-            "hold_lighting_at": {
-                "color": {
-                    "red": 0,
-                    "green": 255,
-                    "blue": 255,
+            {
+                "hold_temperature_at": {
+                    "temperature": 220,
+                    "duration": 10800,
+                },
+                "bring_ph_to": {
+                    "ph": 3,
+                },
+                "hold_lighting_at": {
+                    "color": {
+                        "red": 0,
+                        "green": 255,
+                        "blue": 255,
+                    }
+                    "duration": 600,
                 }
-                "duration": 600,
             }
         ]
     }
