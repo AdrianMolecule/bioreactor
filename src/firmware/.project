@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>bioreactor</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.core.cBuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.arduino.core.arduinoNature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>display.cpp</name>
+			<type>1</type>
+			<location>/home/mi5/antares/_mine/reactor/repo/src/firmware/display.cpp</location>
+		</link>
+		<link>
+			<name>display.h</name>
+			<type>1</type>
+			<location>/home/mi5/antares/_mine/reactor/repo/src/firmware/display.h</location>
+		</link>
+		<link>
+			<name>pcf8574_esp.cpp</name>
+			<type>1</type>
+			<location>/home/mi5/antares/_mine/reactor/repo/src/firmware/pcf8574_esp.cpp</location>
+		</link>
+		<link>
+			<name>pcf8574_esp.h</name>
+			<type>1</type>
+			<location>/home/mi5/antares/_mine/reactor/repo/src/firmware/pcf8574_esp.h</location>
+		</link>
+	</linkedResources>
+</projectDescription>

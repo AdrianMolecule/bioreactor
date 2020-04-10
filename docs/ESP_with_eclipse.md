@@ -40,12 +40,12 @@ You need to change definitions in ~/.arduinocdt/packages/esp32/hardware/esp32/1.
 Substitute  
 ```
 -DMBEDTLS_CONFIG_FILE="mbedtls/esp_config.h"
--DARDUINO_VARIANT="esp32" 
+-DARDUINO_VARIANT="{build.variant}" 
 ```
 with  
 ```
 -DMBEDTLS_CONFIG_FILE='"mbedtls/esp_config.h"'  
--DARDUINO_VARIANT='"esp32"'
+-DARDUINO_VARIANT='"{build.variant}"'
 ```
 
 
