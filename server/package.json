@@ -1,0 +1,23 @@
+{
+  "name": "bioreactor-server",
+  "version": "1.0.0",
+  "description": "Provides bioreactor command, data aggregation, and top-level control using a cybernetic framework. The lower-level controller framework provides the software to hardware interface and reports its status.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bioreactor",
+    "monitoring",
+    "control",
+    "server"
+  ],
+  "author": "Adrian Burlacu",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
