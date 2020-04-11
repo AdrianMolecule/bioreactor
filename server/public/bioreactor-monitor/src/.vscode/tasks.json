@@ -6,7 +6,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "ng build"
+            "command": "ng build --prod"
         }
     ]
 }
