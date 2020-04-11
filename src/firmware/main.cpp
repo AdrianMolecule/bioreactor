@@ -1,8 +1,7 @@
 #include "SPIFFS.h"
 #include <WiFi.h>
 #include <WebServer.h>
-#include <Adafruit_ST7735.h>
-#include "display.h"
+#include "display/factory.h"
 
 
 const char* ssid = "natashka";
@@ -10,6 +9,7 @@ const char* password = "12345678";
 IPAddress local_ip(192,168,1,1);
 IPAddress gateway(192,168,1,1);
 IPAddress subnet(255,255,255,1);
+std::unique_ptr<Display> display;
 
 WebServer server(80);
 void handle_OnConnect();
@@ -35,19 +35,20 @@ void setup() {
   file.close();
 	*/
 
-
-  display_init();
-
+  display = CreateDisplay(Displays::ST7735);
+  display->init();
 
   //WiFi.softAP(ssid, password);
   //WiFi.softAPConfig(local_ip, gateway, subnet);
-  WiFi.begin(ssid, password);
+
+
     while (WiFi.status() != WL_CONNECTED) {
+        WiFi.begin(ssid, password);
     delay(1000);
-    display_text("Connecting to WiFi..", 10, 10, 2);
+    display->print("Connecting to WiFi..");
   }
     String out = "IP: " + WiFi.localIP().toString();
-    display_text(out.c_str(), 10, 10, 2);
+    display->print(out.c_str());
 
   server.on("/", handle_OnConnect);
   server.begin();
