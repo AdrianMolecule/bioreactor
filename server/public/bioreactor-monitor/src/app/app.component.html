@@ -334,7 +334,7 @@
     <h2><li>Control Loops</li></h2>
     <p>	In a different loop and the same frequency as the sensor updating, the sensor’s values will be compared to their set goal value. Based on that comparison, each actuator is put into its relevant state: positive or negative. </p>
     <h2><li>Alarm</li></h2>
-    <p>	A special control loop is an end-of-cycle alarm. This alarm triggers all other actuators to shut off the bioreactor and sound an alarm. There is no positive action for this sensor because it is passively listening to the density of the bacteria system.</p>
+    <p>	A special control loop is an end-of-cycle alarm. This alarm triggers all other actuators to shut off the bioreactor and sound an alarm. There is no positive action for this sensor because it is passively listening to the density of the bacteria in the system.</p>
     <h2><li>Real-time Controllers</li></h2>
     <p>	The real-time control system will rely on a shared plan of execution using NTP synchronization with the command server. The only information that will be passed between this controller and the aggregation and command server are incoming execution plans, synced time, and outbound current sensor values.</p>
   </ol>
