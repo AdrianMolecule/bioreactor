@@ -33,3 +33,4 @@
 
 # nodejs
 node_modules/
+server/package-lock.json
