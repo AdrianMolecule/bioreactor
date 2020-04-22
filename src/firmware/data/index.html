@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebSocket demo</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />
+    </head>
+    <body>
+<div id="div_g"/>
+
+        <script>
+//window.document.onload = function(e){ 
+      var data = [];
+
+      var g = new Dygraph(document.getElementById("div_g"), data,
+                          {
+                            drawPoints: true,
+                            showRoller: true,
+                            valueRange: [20.0, 30.0],
+                            labels: ['Time', 'Temperature']
+                          });
+
+/*      // It sucks that these things aren't objects, and we need to store state in window.
+      window.intervalId = setInterval(function() {
+        var x = new Date();  // current time
+        var y = Math.random();
+        data.push([x, y]);
+        g.updateOptions( { 'file': data } );
+      }, 1000);
+*/
+//    };
+
+            var ws = new WebSocket("ws://192.168.0.16:81/");
+            ws.onmessage = function (event) {
+		data.push([new Date(), parseFloat(event.data)]);
+		g.updateOptions( {'file': data } );
+            };
+
+        </script>
+    </body>
+</html>
