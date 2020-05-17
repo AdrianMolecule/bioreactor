@@ -8,99 +8,81 @@
 
 #include "hwinit.h"
 #include "config.h"
+#include "ph.h"
+
 
 std::unique_ptr<Display> display;
 std::unique_ptr<TempSensor> temp;
 HTTPServer server;
-Stepper stepper(200,2,4,19,23);
+Stepper stepper(config::motor_steps,
+					config::motor_pin_1,
+					config::motor_pin_2,
+					config::motor_pin_3,
+					config::motor_pin_4
+				);
+DFRobot_ESP_PH ph(config::ph_sensor);
 
-#include "ph.h"
-
-DFRobot_ESP_PH ph;
-#define ESPADC 4096.0   //the esp Analog Digital Convertion value
-#define ESPVOLTAGE 3300 //the esp voltage supply value
-#define PH_PIN 15  //the esp gpio data pin number
-float voltage, phValue = 7, temperature = 20;
-
-#include <driver/adc.h>
 void setup() {
 	Serial.begin(9600);
 
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
 
-	//temp = CreateTempSensor(TempSensors::DS18B20);
-	//temp->init(15);
+	temp = CreateTempSensor(TempSensors::DS18B20);
+	temp->init(config::temp_sensor);
 
-	WiFiConnect();
+	if(!WiFiConnect())
+	{
+		Serial.println("Failed to init AP mode");
+	}
 
 	server.init();
 
-	if (1 || !MDNS.begin(config::domainName))
+	String ip = "APIP: " + WiFi.softAPIP().toString() + "\n" +
+			"WFIP: " + WiFi.localIP().toString();
+
+	Serial.println(ip);
+
+	if (!MDNS.begin(config::deviceName))
 	{
-		String out = "IP: " + WiFi.localIP().toString();
-		display->print(out.c_str());
+		display->print(ip.c_str());
 	}
 	else
 	{
-		String host = config::domainName;
+		MDNS.addService("http","tcp",80);
+		String host = config::deviceName;
 		host = "http://" + host + ".local";
 		display->print(host);
 	}
 
 	//stepper.setSpeed(170);
-	pinMode(PH_PIN, OUTPUT);
-	digitalWrite(PH_PIN, LOW);
+	pinMode(config::ph_sensor, OUTPUT);
+	digitalWrite(config::ph_sensor, LOW);
 	//ph.begin();
 
-	voltage = 0;
-	adc1_config_width(ADC_WIDTH_BIT_12);
-	//adc1_config_channel_atten(ADC1_CHANNEL_0,ADC_ATTEN_DB_0);
-	//adc1_config_channel_atten(ADC1_CHANNEL_3,ADC_ATTEN_DB_0);
+	//adc1_config_width(ADC_WIDTH_BIT_12);
 }
-
-
 
 void loop() {
 
 //	stepper.step(100);
+	float phValue = ph.readPH();
+	float tempValue = temp->readCelcius();
 
-	/*
-	float tem = temp->readCelcius();
-	String data(tem);
+	if(phValue < 5)
+		digitalWrite(config::ph_pump_relay, HIGH);
+	else if(phValue > 6.0)
+		digitalWrite(config::ph_pump_relay, LOW);
 
+	String data("{\"ph\":\"");
+	data += phValue;
+	data += "\", \"temp\":\"";
+	data += tempValue;
+	data += "\"}";
+
+	Serial.println(data);
 	server.loop();
 	server.sendWebSockData(data);
-	delay(1000);
-	*/
 
-
-	static unsigned long timepoint = millis();
-	 if (millis() - timepoint > 1000U) //time interval: 1s
-	 {
-	  timepoint = millis();
-	  //voltage = rawPinValue / esp32ADC * esp32Vin
-
-	  voltage = adc1_get_raw(ADC1_CHANNEL_3) / ESPADC * ESPVOLTAGE; // read the voltage
-	  Serial.print("voltage: ");
-	  Serial.print(voltage);
-
-	  //temperature = readTemperature();  // read your temperature sensor to execute temperature compensation
-
-	  phValue = ph.readPH(voltage, temperature); // convert voltage to pH with temperature compensation
-	  Serial.print(" pH:");
-	  Serial.println(phValue, 4);
-	 }
-	 ph.calibration(voltage, temperature);
-	 if(phValue < 5)
-		 digitalWrite(PH_PIN, HIGH);
-	 else if(phValue > 6.0)
-		 digitalWrite(PH_PIN, LOW);
-
-
-	 String data(phValue);
-	server.loop();
-	server.sendWebSockData(data);
 	delay(1000);
 }
-

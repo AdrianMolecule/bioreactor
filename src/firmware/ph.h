@@ -22,6 +22,7 @@
 #define _DFROBOT_ESP_PH_H_
 
 #include "Arduino.h"
+#include <driver/adc.h>
 
 #define PHVALUEADDR 0x00 //the start address of the pH calibration parameters stored in the EEPROM
 
@@ -35,11 +36,11 @@
 class DFRobot_ESP_PH
 {
 public:
-    DFRobot_ESP_PH();
+    DFRobot_ESP_PH(adc1_channel_t ph_pin);
     ~DFRobot_ESP_PH();
     void calibration(float voltage, float temperature, char *cmd); //calibration by Serial CMD
     void calibration(float voltage, float temperature);
-    float readPH(float voltage, float temperature); // voltage to pH value, with temperature compensation
+    float readPH(); // voltage to pH value, with temperature compensation
     void begin();                                   //initialization
 
 private:
@@ -51,6 +52,7 @@ private:
 
     char _cmdReceivedBuffer[ReceivedBufferLength]; //store the Serial CMD
     byte _cmdReceivedBufferIndex;
+    adc1_channel_t _ph_pin;
 
 private:
     boolean cmdSerialDataAvailable();

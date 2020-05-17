@@ -3,30 +3,94 @@
 #include <WiFi.h>
 #include "config.h"
 #include "lwip/inet.h"
+#include <Preferences.h>
 
-void WiFiConnect(bool isAccessPoint)
+bool WiFiConnect()
 {
-	if(isAccessPoint)
+	WiFi.mode(WIFI_AP_STA);
+/*
+	if(!WiFi.softAPConfig(
+			inet_addr(config::AP_ip),
+			inet_addr(config::AP_gateway),
+			inet_addr(config::AP_subnet)
+			)
+		)
 	{
-		WiFi.softAP(config::AP_ssid);
-		IPAddress t(192,168,0,1);
-		IPAddress t1(255,255,255,1);
-		WiFi.softAPConfig(t,t,t1);
-	  	/*WiFi.softAPConfig(
-	  			inet_addr(config::AP_ip),
-				inet_addr(config::AP_gateway),
-				inet_addr(config::AP_subnet)
-	  	);
-	  	*/
+		return false;
 	}
-	else
+*/
+	String APName = String(config::deviceName) + "-" + WiFi.macAddress();
+	WiFi.softAP(APName.c_str());
+	delay(100);
+
+	String ssid, password;
+	getWifiSettings(ssid, password);
+
+	if(!ssid.isEmpty())
 	{
-		while (WiFi.status() != WL_CONNECTED)
+		for(size_t tries = 0; tries < 10 && WiFi.status() != WL_CONNECTED; ++tries)
 		{
-			WiFi.begin(config::ssid, config::password);
+			WiFi.begin(ssid.c_str(), password.c_str());
 			delay(1000);
-			//display->print("Connecting to WiFi..");
+			Serial.println("Connecting to '" + ssid + "'");
+		}
+
+		if(WiFi.status() != WL_CONNECTED)
+		{
+			Serial.println("Failed connect to '" + ssid + "'");
 		}
 	}
-
+	return true;
 }
+
+std::vector<String> WiFiNetworks()
+{
+	size_t networks = WiFi.scanNetworks();
+
+	std::vector<String> result(networks);
+
+	for (size_t i = 0; i < networks; ++i)
+	{
+		result.push_back(WiFi.SSID(i));
+		//WiFi.RSSI(i)
+		//WiFi.encryptionType(i) == WIFI_AUTH_OPEN
+	}
+	return result;
+}
+
+void getWifiSettings(String& ssid, String& password)
+{
+	Preferences preferences;
+	preferences.begin("wifi", true);
+	ssid = preferences.getString("ssid", "");
+	password = preferences.getString("pass", "");
+	preferences.end();
+}
+
+void saveWifiSettings(String&& ssid, String&& password)
+{
+	Preferences preferences;
+	preferences.begin("wifi");
+	preferences.putString("ssid", ssid);
+	preferences.putString("pass", password);
+	preferences.end();
+}
+
+void getProgramSettings(float& temperature, float& ph)
+{
+	Preferences preferences;
+	preferences.begin("program", true);
+	temperature = preferences.getFloat("temp", .0);
+	ph = preferences.getFloat("ph", .0);
+	preferences.end();
+}
+
+void saveProgramSettings(const float& temperature, const float& ph)
+{
+	Preferences preferences;
+	preferences.begin("program");
+	preferences.putFloat("temp", temperature);
+	preferences.putFloat("ph", ph);
+	preferences.end();
+}
+

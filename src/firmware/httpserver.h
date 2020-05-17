@@ -19,6 +19,8 @@ public:
 private:
 	void onWSEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
 	void onHTTPConnect();
+	void onSettings();
+	void onProgram();
 
 	WebSocketsServer WSServer;
 	WebServer webServer;
