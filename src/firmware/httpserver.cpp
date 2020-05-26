@@ -7,8 +7,8 @@
 using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
-: webServer(HTTPPort),
-  WSServer(webSocketPort)
+: WSServer(webSocketPort),
+  webServer(HTTPPort)
 {
 
 }
@@ -57,7 +57,7 @@ void HTTPServer::onWSEvent(uint8_t num,
     case WStype_CONNECTED:
       {
     	  WSConnections.insert(num);
-        IPAddress ip = WSServer.remoteIP(num);
+        IPAddress ip { WSServer.remoteIP(num) };
         Serial.printf("[%u] Connection from ", num);
         Serial.println(ip.toString());
       }

@@ -164,7 +164,6 @@ byte DFRobot_ESP_PH::cmdParse()
 
 void DFRobot_ESP_PH::phCalibration(byte mode)
 {
-    char *receivedBufferPtr;
     static boolean phCalibrationFinish = 0;
     static boolean enterCalibrationFlag = 0;
     switch (mode)

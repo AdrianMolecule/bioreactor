@@ -28,7 +28,7 @@ void ST7735::setupExpander()
 	  Wire.setClock(100000L);
 
 	  expanderTwo.begin();
-	  expanderTwo.write(0xffff);
+	  expanderTwo.write(0xff);
 
 	  pinMode(32, INPUT_PULLUP);
 	  expanderTwo.read();
