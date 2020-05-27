@@ -18,10 +18,8 @@
  * date  2019-06
  */
 
-#ifndef _DFROBOT_ESP_PH_H_
-#define _DFROBOT_ESP_PH_H_
-
-#include "Arduino.h"
+#pragma once
+#include <Arduino.h>
 #include <driver/adc.h>
 
 #define PHVALUEADDR 0x00 //the start address of the pH calibration parameters stored in the EEPROM
@@ -32,33 +30,35 @@
 #define PH_3_VOLTAGE 2010
 
 #define ReceivedBufferLength 10 //length of the Serial CMD buffer
-
-class DFRobot_ESP_PH
+namespace sensor
 {
-public:
-    DFRobot_ESP_PH(adc1_channel_t ph_pin);
-    ~DFRobot_ESP_PH();
-    void calibration(float voltage, float temperature, char *cmd); //calibration by Serial CMD
-    void calibration(float voltage, float temperature);
-    float readPH(); // voltage to pH value, with temperature compensation
-    void begin();                                   //initialization
 
-private:
-    float _phValue;
-    float _acidVoltage;
-    float _neutralVoltage;
-    float _voltage;
-    float _temperature;
+	class PH
+	{
+	public:
+		PH(adc1_channel_t ph_pin);
+		~PH();
+		void calibration(float voltage, float temperature, char *cmd); //calibration by Serial CMD
+		void calibration(float voltage, float temperature);
+		float readPH(); // voltage to pH value, with temperature compensation
+		void begin();                                   //initialization
 
-    char _cmdReceivedBuffer[ReceivedBufferLength]; //store the Serial CMD
-    byte _cmdReceivedBufferIndex;
-    adc1_channel_t _ph_pin;
+	private:
+		float _phValue;
+		float _acidVoltage;
+		float _neutralVoltage;
+		float _voltage;
+		float _temperature;
 
-private:
-    boolean cmdSerialDataAvailable();
-    void phCalibration(byte mode); // calibration process, wirte key parameters to EEPROM
-    byte cmdParse(const char *cmd);
-    byte cmdParse();
-};
+		char _cmdReceivedBuffer[ReceivedBufferLength]; //store the Serial CMD
+		byte _cmdReceivedBufferIndex;
+		adc1_channel_t _ph_pin;
 
-#endif
+	private:
+		boolean cmdSerialDataAvailable();
+		void phCalibration(byte mode); // calibration process, wirte key parameters to EEPROM
+		byte cmdParse(const char *cmd);
+		byte cmdParse();
+	};
+
+}

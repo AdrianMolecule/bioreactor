@@ -1,5 +1,7 @@
 #include "DS18B20.h"
 
+using namespace sensor;
+
 DS18B20::DS18B20() : sensors(&dataWire)
 {
 	sensors.begin();

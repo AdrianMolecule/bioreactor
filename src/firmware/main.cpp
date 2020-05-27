@@ -1,18 +1,19 @@
 #include <ESPmDNS.h>
 
 #include "display/factory.h"
-#include "temp/factory.h"
 #include "httpserver.h"
 
 #include <Stepper.h>
 
 #include "hwinit.h"
 #include "config.h"
-#include "ph.h"
 
+#include "sensors/DS18B20.h"
+#include "sensors/PH.h"
 
 std::unique_ptr<Display> display;
-std::unique_ptr<TempSensor> temp;
+std::unique_ptr<sensor::PH> phsensor;
+std::unique_ptr<sensor::DS18B20> tempsensor;
 HTTPServer server;
 Stepper stepper(config::motor_steps,
 					config::motor_pin_1,
@@ -20,7 +21,6 @@ Stepper stepper(config::motor_steps,
 					config::motor_pin_3,
 					config::motor_pin_4
 				);
-DFRobot_ESP_PH ph(config::ph_sensor);
 
 void setup() {
 	Serial.begin(9600);
@@ -28,8 +28,9 @@ void setup() {
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
 
-	temp = CreateTempSensor(TempSensors::DS18B20);
-	temp->init(config::temp_sensor);
+	tempsensor.reset(new sensor::DS18B20());
+	tempsensor->init(config::temp_sensor);
+	phsensor.reset(new sensor::PH(config::ph_sensor));
 
 	if(!WiFiConnect())
 	{
@@ -66,8 +67,8 @@ void setup() {
 void loop() {
 
 //	stepper.step(100);
-	float phValue = ph.readPH();
-	float tempValue = temp->readCelcius();
+	float phValue = phsensor->readPH();
+	float tempValue = tempsensor->readCelcius();
 
 	if(phValue < 5)
 		digitalWrite(config::ph_pump_relay, HIGH);

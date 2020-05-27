@@ -1,5 +1,5 @@
 /*
- * file DFRobot_ESP_PH.cpp * @ https://github.com/GreenPonik/DFRobot_ESP_PH_BY_GREENPONIK
+ * file PH.cpp * @ https://github.com/GreenPonik/PH_BY_GREENPONIK
  *
  * Arduino library for Gravity: Analog pH Sensor / Meter Kit V2, SKU: SEN0161-V2
  *
@@ -18,15 +18,16 @@
  * date  2019-05
  */
 
-#include "Arduino.h"
-#include "ph.h"
+#include "PH.h"
 #include "EEPROM.h"
 
 #define ESPADC 4096.0   //the esp Analog Digital Convertion value
 #define ESPVOLTAGE 3300 //the esp voltage supply value
 #define PH_3_VOLTAGE 2010
 
-DFRobot_ESP_PH::DFRobot_ESP_PH(adc1_channel_t ph_pin)
+using namespace sensor;
+
+PH::PH(adc1_channel_t ph_pin)
 {
     _temperature = 25.0;
     _phValue = 7.0;
@@ -36,11 +37,11 @@ DFRobot_ESP_PH::DFRobot_ESP_PH(adc1_channel_t ph_pin)
     _ph_pin = ph_pin;
 }
 
-DFRobot_ESP_PH::~DFRobot_ESP_PH()
+PH::~PH()
 {
 }
 
-void DFRobot_ESP_PH::begin()
+void PH::begin()
 {
     //check if calibration values (neutral and acid) are stored in eeprom
     _neutralVoltage = EEPROM.readFloat(PHVALUEADDR); //load the neutral (pH = 7.0)voltage of the pH board from the EEPROM
@@ -60,7 +61,7 @@ void DFRobot_ESP_PH::begin()
     }
 }
 
-float DFRobot_ESP_PH::readPH()
+float PH::readPH()
 {
 	_voltage = adc1_get_raw(_ph_pin) / ESPADC * ESPVOLTAGE; // read the voltage
 
@@ -80,7 +81,7 @@ float DFRobot_ESP_PH::readPH()
     return _phValue;
 }
 
-void DFRobot_ESP_PH::calibration(float voltage, float temperature, char *cmd)
+void PH::calibration(float voltage, float temperature, char *cmd)
 {
     _voltage = voltage;
     _temperature = temperature;
@@ -88,7 +89,7 @@ void DFRobot_ESP_PH::calibration(float voltage, float temperature, char *cmd)
     phCalibration(cmdParse(cmd)); // if received Serial CMD from the serial monitor, enter into the calibration mode
 }
 
-void DFRobot_ESP_PH::calibration(float voltage, float temperature)
+void PH::calibration(float voltage, float temperature)
 {
     _voltage = voltage;
     _temperature = temperature;
@@ -98,7 +99,7 @@ void DFRobot_ESP_PH::calibration(float voltage, float temperature)
     }
 }
 
-boolean DFRobot_ESP_PH::cmdSerialDataAvailable()
+boolean PH::cmdSerialDataAvailable()
 {
     char cmdReceivedChar;
     static unsigned long cmdReceivedTimeOut = millis();
@@ -126,7 +127,7 @@ boolean DFRobot_ESP_PH::cmdSerialDataAvailable()
     return false;
 }
 
-byte DFRobot_ESP_PH::cmdParse(const char *cmd)
+byte PH::cmdParse(const char *cmd)
 {
     byte modeIndex = 0;
     if (strstr(cmd, "ENTERPH") != NULL)
@@ -144,7 +145,7 @@ byte DFRobot_ESP_PH::cmdParse(const char *cmd)
     return modeIndex;
 }
 
-byte DFRobot_ESP_PH::cmdParse()
+byte PH::cmdParse()
 {
     byte modeIndex = 0;
     if (strstr(_cmdReceivedBuffer, "ENTERPH") != NULL)
@@ -162,7 +163,7 @@ byte DFRobot_ESP_PH::cmdParse()
     return modeIndex;
 }
 
-void DFRobot_ESP_PH::phCalibration(byte mode)
+void PH::phCalibration(byte mode)
 {
     static boolean phCalibrationFinish = 0;
     static boolean enterCalibrationFlag = 0;
