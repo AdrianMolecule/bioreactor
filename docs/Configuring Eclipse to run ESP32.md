@@ -16,10 +16,10 @@ Also i assume your IDE already has C/C++ support, if not, you can easily upgrade
 
 4. Then you can enable platform under 'Arduino->Preferences->Arduino->Platforms and Boards' and libraries 'Arduino->Preferences->Arduino->Library Manager'.  
 ![sdk lsit](images/eclipse2.jpeg)  
-There is a useful option 'Arduino->Reattach libraries' which should search through the source code and enable all libraries in Library Manager, though sometimes it misses few   of them.
+There is a useful option 'Arduino->Reattach libraries' which should search through the source code and enable all libraries in Library Manager, though sometimes it misses few of them.
 
 5. After that you just need to import existing project from src/firmware  
-If you create a project from scratch, choose File->New->Arduino sketch. In project`s Preferences you want set ESP settings as depicted below
+If you create a project from scratch, choose File->New->Arduino sketch. In project`s Preferences you want set ESP settings as  depicted below  
 ![new target](images/eclipse3.jpeg)  
 
 6. Make sure that eclipse didn't override project files after import (.settings folder and .cproject .project files), otherwise you'll experience weird compilation errors and platform warnings.
