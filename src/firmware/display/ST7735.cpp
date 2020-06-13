@@ -1,11 +1,9 @@
 #include "ST7735.h"
 
 #include <Adafruit_GFX.h>
-#include <Adafruit_ST7735.h>
+
 #include <Wire.h>
 #include <jm_PCF8574.h>
-
-Adafruit_ST7735 tft = Adafruit_ST7735(-1, 12, 13, 14, -1); //cs dc mosi sck rst
 
 jm_PCF8574 expanderTwo(0x20);
 #define lcdLed    4
@@ -30,7 +28,7 @@ void ST7735::setupExpander()
 	  Wire.setClock(100000L);
 
 	  expanderTwo.begin();
-	  expanderTwo.write(0xffff);
+	  expanderTwo.write(0xff);
 
 	  pinMode(32, INPUT_PULLUP);
 	  expanderTwo.read();
@@ -38,24 +36,25 @@ void ST7735::setupExpander()
 
 void ST7735::init()
 {
+	tft.reset(new Adafruit_ST7735(-1, 12, 13, 14, -1));	//cs dc mosi sck rst
 	setupExpander();
 
-	tft.initR(INITR_BLACKTAB);
+	tft->initR(INITR_BLACKTAB);
 	backLight (true);
-	tft.initR(INITR_BLACKTAB);
-	tft.setRotation(3);
+	tft->initR(INITR_BLACKTAB);
+	tft->setRotation(3);
 
-	tft.fillScreen(ST77XX_BLACK);
+	tft->fillScreen(ST77XX_BLACK);
 }
 
 void ST7735::print(const String& text)
 {
-	tft.fillScreen(ST77XX_BLACK);
-	tft.setTextWrap(true);
+	tft->fillScreen(ST77XX_BLACK);
+	tft->setTextWrap(true);
 
-	tft.setTextSize(2);
-	tft.setCursor(10, 10);
-	tft.setTextColor(ST77XX_WHITE);
-	tft.print(text);
+	tft->setTextSize(2);
+	tft->setCursor(10, 10);
+	tft->setTextColor(ST77XX_WHITE);
+	tft->print(text);
 
 }

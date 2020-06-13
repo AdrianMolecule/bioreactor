@@ -3,6 +3,8 @@
 
 #include "interface.h"
 
+#include <memory>
+#include <Adafruit_ST7735.h>
 
 class ST7735 final : public Display
 {
@@ -13,6 +15,8 @@ public:
 private:
 	void backLight(bool state);
 	void setupExpander();
+
+	std::unique_ptr<Adafruit_ST7735> tft;
 };
 
 #endif

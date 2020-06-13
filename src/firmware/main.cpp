@@ -1,69 +1,89 @@
-#include "SPIFFS.h"
-#include <WiFi.h>
-#include <WebServer.h>
+#include <ESPmDNS.h>
+
 #include "display/factory.h"
+#include "httpserver.h"
 
+#include <Stepper.h>
 
-const char* ssid = "natashka";
-const char* password = "12345678";
-IPAddress local_ip(192,168,1,1);
-IPAddress gateway(192,168,1,1);
-IPAddress subnet(255,255,255,1);
+#include "hwinit.h"
+#include "config.h"
+
+#include "sensors/DS18B20.h"
+#include "sensors/PH.h"
+
 std::unique_ptr<Display> display;
-
-WebServer server(80);
-void handle_OnConnect();
+std::unique_ptr<sensor::PH> phsensor;
+std::unique_ptr<sensor::DS18B20> tempsensor;
+HTTPServer server;
+Stepper stepper(config::motor_steps,
+					config::motor_pin_1,
+					config::motor_pin_2,
+					config::motor_pin_3,
+					config::motor_pin_4
+				);
 
 void setup() {
-  Serial.begin(9600);
+	Serial.begin(9600);
 
-  if(!SPIFFS.begin(true)){
-    Serial.println("An Error has occurred while mounting SPIFFS");
-    return;
-  }
+	display = CreateDisplay(Displays::ST7735);
+	display->init();
 
-  File file = SPIFFS.open("/index.html");
-  if(!file){
-    Serial.println("Failed to open file for reading");
-    return;
-  }
+	tempsensor.reset(new sensor::DS18B20());
+	tempsensor->init(config::temp_sensor);
+	phsensor.reset(new sensor::PH(config::ph_sensor));
 
-  Serial.println("File Content:");
-  /*while(file.available()){
-    //Serial.write(file.read());
-  }
-  file.close();
-	*/
+	if(!WiFiConnect())
+	{
+		Serial.println("Failed to init AP mode");
+	}
 
-  display = CreateDisplay(Displays::ST7735);
-  display->init();
+	server.init();
 
-  //WiFi.softAP(ssid, password);
-  //WiFi.softAPConfig(local_ip, gateway, subnet);
+	String ip = "APIP: " + WiFi.softAPIP().toString() + "\n" +
+			"WFIP: " + WiFi.localIP().toString();
 
+	Serial.println(ip);
 
-    while (WiFi.status() != WL_CONNECTED) {
-        WiFi.begin(ssid, password);
-    delay(1000);
-    display->print("Connecting to WiFi..");
-  }
-    String out = "IP: " + WiFi.localIP().toString();
-    display->print(out.c_str());
+	if (!MDNS.begin(config::deviceName))
+	{
+		display->print(ip.c_str());
+	}
+	else
+	{
+		MDNS.addService("http","tcp",80);
+		String host = config::deviceName;
+		host = "http://" + host + ".local";
+		display->print(host);
+	}
 
-  server.on("/", handle_OnConnect);
-  server.begin();
-  Serial.printf("HTTP server started on %s\n", WiFi.localIP());
+	//stepper.setSpeed(170);
+	pinMode(config::ph_sensor, OUTPUT);
+	digitalWrite(config::ph_sensor, LOW);
+	//ph.begin();
 
+	//adc1_config_width(ADC_WIDTH_BIT_12);
 }
 
 void loop() {
-  server.handleClient();
-}
 
-void handle_OnConnect() {
-  Serial.println("connected");
-  File file = SPIFFS.open("/index.html");
+//	stepper.step(100);
+	float phValue = phsensor->readPH();
+	float tempValue = tempsensor->readCelcius();
 
-  server.send(200, "text/html", file.readString());
-  file.close();
+	if(phValue < 5)
+		digitalWrite(config::ph_pump_relay, HIGH);
+	else if(phValue > 6.0)
+		digitalWrite(config::ph_pump_relay, LOW);
+
+	String data("{\"ph\":\"");
+	data += phValue;
+	data += "\", \"temp\":\"";
+	data += tempValue;
+	data += "\"}";
+
+	Serial.println(data);
+	server.loop();
+	server.sendWebSockData(data);
+
+	delay(1000);
 }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>main</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />
+	    <style type="text/css">
+    #tep_g {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 40px;
+      bottom: 10px;
+    }
+    #menuTable table {
+        width: 100%;
+    }
+    #menuTable td {
+        text-align: center;
+        vertical-align: middle;
+    }
+    .chart { width: 500px; height: 300px; float: left; }
+    
+    </style>
+    </head>
+    <body>
+    <table width=100% id="menuTable"><tr><td><a href="/">Main</a></td><td><a href="/program">Program</a></td><td><a href="/settings">Settings</a></td></tr></table>
+    <div id="ph_g" class="chart"></div>
+    <div id="temp_g" class="chart"></div>
+    
+
+    <script>
+        var ph_data = [];
+        var temp_data = [];
+
+        var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
+                            {
+                            drawPoints: true,
+                            rollPeriod: 7,
+                            valueRange: [0.0, 14.0],
+                            labels: ['Time', 'PH']
+                            });
+
+                            
+        var temperature = new Dygraph(document.getElementById("temp_g"), temp_data,
+                            {
+                            drawPoints: true,
+                            rollPeriod: 7,
+                            labels: ['Time', 'Temperature']
+                            });
+                         
+        var ws = new WebSocket("ws://"+document.location.hostname+":81/");
+        ws.onmessage = function (event) {
+            var readings = JSON.parse(event.data);
+            
+            ph_data.push([new Date(), parseFloat(readings.ph)]);
+            ph.updateOptions( {'file': ph_data } );
+            
+            temp_data.push([new Date(), parseFloat(readings.temp)]);
+            temperature.updateOptions( {'file': temp_data } );
+        };
+
+    </script>
+    </body>
+</html>
