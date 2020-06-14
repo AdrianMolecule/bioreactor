@@ -3,34 +3,24 @@
 #include "display/factory.h"
 #include "httpserver.h"
 
-#include <Stepper.h>
-
 #include "hwinit.h"
 #include "config.h"
+#include "sensor_state.h"
+#include "reactor_state.h"
 
-#include "sensors/DS18B20.h"
-#include "sensors/PH.h"
+#include <ArduinoJson.h>
 
 std::unique_ptr<Display> display;
-std::unique_ptr<sensor::PH> phsensor;
-std::unique_ptr<sensor::DS18B20> tempsensor;
+std::unique_ptr<SensorState> sensors;
+std::unique_ptr<ReactorState> reactor;
+
 HTTPServer server;
-Stepper stepper(config::motor_steps,
-					config::motor_pin_1,
-					config::motor_pin_2,
-					config::motor_pin_3,
-					config::motor_pin_4
-				);
 
 void setup() {
 	Serial.begin(9600);
 
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
-
-	tempsensor.reset(new sensor::DS18B20());
-	tempsensor->init(config::temp_sensor);
-	phsensor.reset(new sensor::PH(config::ph_sensor));
 
 	if(!WiFiConnect())
 	{
@@ -56,34 +46,57 @@ void setup() {
 		display->print(host);
 	}
 
-	//stepper.setSpeed(170);
-	pinMode(config::ph_sensor, OUTPUT);
-	digitalWrite(config::ph_sensor, LOW);
-	//ph.begin();
+
+	sensors.reset(new SensorState(config::sensor::ph_adc, config::sensor::temp_pin));
+	reactor.reset(new ReactorState());
 
 	//adc1_config_width(ADC_WIDTH_BIT_12);
+
+
 }
 
 void loop() {
+/*
+	digitalWrite(config::motor::direction,HIGH); //Enables the motor to move in a perticular direction
+	// for one full rotation required 200 pulses
+	for(int x = 0; x < 900; x++){
+	  digitalWrite(config::motor::step,HIGH);
+	  delayMicroseconds(500);
+	  digitalWrite(config::motor::step,LOW);
+	  delayMicroseconds(500);
+	}
+*/
 
-//	stepper.step(100);
-	float phValue = phsensor->readPH();
-	float tempValue = tempsensor->readCelcius();
+	float tempValue = sensors->readTemperature()[0];
 
-	if(phValue < 5)
-		digitalWrite(config::ph_pump_relay, HIGH);
-	else if(phValue > 6.0)
-		digitalWrite(config::ph_pump_relay, LOW);
+	if(tempValue < 27.0)
+		reactor->changeFET(0, true);
+	else
+		reactor->changeFET(0, false);
 
-	String data("{\"ph\":\"");
-	data += phValue;
-	data += "\", \"temp\":\"";
-	data += tempValue;
-	data += "\"}";
+	static StaticJsonDocument<300> state;
+	state["ph"] = sensors->readPH();
+	state["temp"][0] = sensors->readTemperature()[0];
+	state["temp"][1] = sensors->readTemperature()[1];
+	state["temp"][2] = sensors->readTemperature()[2];
+	state["light"] = sensors->readLight();
+
+	for(size_t i = 0; i < config::fet.size(); ++i)
+		state["fet"][i] = reactor->read().fet[i];
+
+	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
+	{
+		state["hbridge"][i] = bridgeStateConvert(reactor->read().hbridge[i]);
+	}
+	state["led"] = reactor->read().led;
+
+	String data;
+	serializeJson(state, data);
 
 	Serial.println(data);
 	server.loop();
 	server.sendWebSockData(data);
+
 
 	delay(1000);
 }
