@@ -31,37 +31,37 @@
             <tr><td>PH</td><td> <div id="ph_l"/> </td><td></tr>
             <tr><td>Light</td><td> <div id="light_l"/> </td><td></tr>
             
-            <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" id="fet1">Enable</td></tr>
-            <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" id="fet2">Enable</td></tr>
+            <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" name="fet1">Enable</td></tr>
+            <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" name="fet2">Enable</td></tr>
             <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
-                <select id="hbridge1">
+                <select name="hbridge1">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
             </td></tr>
             <tr><td>HBridge2</td><td> <div id="hbridge2_l"/> </td><td>
-                <select id="hbridge2">
+                <select name="hbridge2">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
             </td></tr>
             <tr><td>HBridge3</td><td> <div id="hbridge3_l"/> </td><td>
-                <select id="hbridge3">
+                <select name="hbridge3">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
             </td></tr>
             <tr><td>HBridge4</td><td> <div id="hbridge4_l"/> </td><td>
-                <select id="hbridge4">
+                <select name="hbridge4">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
             </td></tr>
-            <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" id="led">Enable</td></tr>
+            <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
             </table>
             <input type="submit">
         </form>
@@ -78,9 +78,25 @@
         var ph_data = [];
         var temp_data = [];
         var light_data = [];
+        var first = true;
+        function setAction(json)
+        {
+            document.getElementsByName("fet1")[0].checked = json.fet[0];
+            document.getElementsByName("fet2")[0].checked = json.fet[1];
+            document.getElementsByName("hbridge1")[0].value = json.hbridge[0];
+            document.getElementsByName("hbridge2")[0].value = json.hbridge[1];
+            document.getElementsByName("hbridge3")[0].value = json.hbridge[2];
+            document.getElementsByName("hbridge4")[0].value = json.hbridge[3];
+            document.getElementsByName("led")[0].checked = json.led;
+        }
         
         function setStatus(json)
         {
+            if(first)
+            {
+                setAction(json);
+                first = false;
+            }
             if( json.temp[0] == 0)
                 document.getElementById("temp_l").innerHTML = "N/A";
             else
@@ -103,7 +119,6 @@
             if( json.fet[0])
             {
                 document.getElementById("fet1_l").innerHTML = "Enabled";
-                document.getElementById("fet1").checked = true;
             }
             else
                 document.getElementById("fet1_l").innerHTML = "Disabled";
@@ -111,24 +126,19 @@
             if( json.fet[1] )
             {
                 document.getElementById("fet2_l").innerHTML = "Enabled";
-                document.getElementById("fet2").checked = true;
             }
             else
                 document.getElementById("fet2_l").innerHTML = "Disabled";
                 
             document.getElementById("hbridge1_l").innerHTML = json.hbridge[0];
-            document.getElementById("hbridge1").value = json.hbridge[0];
             document.getElementById("hbridge2_l").innerHTML = json.hbridge[1];
-            document.getElementById("hbridge2").value = json.hbridge[1];
             document.getElementById("hbridge3_l").innerHTML = json.hbridge[2];
-            document.getElementById("hbridge3").value = json.hbridge[2];
             document.getElementById("hbridge4_l").innerHTML = json.hbridge[3];
-            document.getElementById("hbridge4").value = json.hbridge[3];
+            
             
             if( json.led )
             {
                 document.getElementById("led_l").innerHTML = "Enabled";
-                document.getElementById("led").checked = true;
             }
             else
                 document.getElementById("led_l").innerHTML = "Disabled";

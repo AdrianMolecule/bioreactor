@@ -76,6 +76,7 @@ bool ReactorState::changeHBridge(size_t num, BridgeState state)
 
 	digitalWrite(config::HBridge::pins[num].A, a_key);
 	digitalWrite(config::HBridge::pins[num].B, b_key);
+	devices_state.hbridge[num] = state;
 
 	return true;
 }

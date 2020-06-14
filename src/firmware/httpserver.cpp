@@ -80,12 +80,12 @@ void HTTPServer::onHTTPConnect()
 {
 	if(webServer.method() == HTTPMethod::HTTP_POST)
 	{
-		if( webServer.arg("fet1") == "true" )
+		if( webServer.arg("fet1") == "on" )
 			reactorState->changeFET(0, true);
 		else
 			reactorState->changeFET(0, false);
 
-		if( webServer.arg("fet2") == "true" )
+		if( webServer.arg("fet2") == "on" )
 			reactorState->changeFET(1, true);
 		else
 			reactorState->changeFET(1, false);
@@ -95,7 +95,7 @@ void HTTPServer::onHTTPConnect()
 		reactorState->changeHBridge(2, bridgeStateConvert(webServer.arg("hbridge3")));
 		reactorState->changeHBridge(3, bridgeStateConvert(webServer.arg("hbridge4")));
 
-		if( webServer.arg("led") == "true" )
+		if( webServer.arg("led") == "on" )
 			reactorState->changeLED(true);
 		else
 			reactorState->changeLED(false);

@@ -98,5 +98,5 @@ void loop() {
 	server.sendWebSockData(data);
 
 
-	delay(1000);
+	//delay(100);
 }
