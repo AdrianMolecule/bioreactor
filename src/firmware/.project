@@ -52,6 +52,16 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_ST7735_and_ST7789_Library/1.5.15</locationURI>
 		</link>
 		<link>
+			<name>libraries/ArduinoJson</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ArduinoJson/6.15.2</locationURI>
+		</link>
+		<link>
+			<name>libraries/BH1750FVI</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/BH1750FVI/1.1.1</locationURI>
+		</link>
+		<link>
 			<name>libraries/DallasTemperature</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/DallasTemperature/3.8.0</locationURI>

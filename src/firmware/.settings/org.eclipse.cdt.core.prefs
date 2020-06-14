@@ -373,7 +373,7 @@ environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.PROTOCO
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.PROTOCOL/value=stk500v1
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.SPEED/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.SPEED/operation=replace
-environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.SPEED/value=115200
+environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.SPEED/value=921600
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.TOOL/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.TOOL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.586980521/A.UPLOAD.TOOL/value=esptool_py
@@ -403,7 +403,7 @@ environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.COM_PORT/
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.COM_PORT/value=/dev/ttyUSB0
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.ECLIPSE_LOCATION/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.ECLIPSE_LOCATION/operation=replace
-environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}///////////////
+environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.ECLIPSE_LOCATION/value=${eclipse_home}////////////////////
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.ALL/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.ALL/operation=replace
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.ALL/value=
@@ -427,7 +427,7 @@ environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.LIN
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.LINK/value=
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/operation=replace
-environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/value=CPUFreq\=240\nDebugLevel\=verbose\nFlashFreq\=80\nFlashMode\=qio\nFlashSize\=4M\nPartitionScheme\=default\nPSRAM\=disabled\nUploadSpeed\=115200
+environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/value=CPUFreq\=240\nDebugLevel\=verbose\nFlashFreq\=80\nFlashMode\=qio\nFlashSize\=4M\nPartitionScheme\=default\nPSRAM\=disabled\nUploadSpeed\=921600
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/operation=replace
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/value=${A.RECIPE.OBJCOPY.EEP.PATTERN}\n\t${A.RECIPE.OBJCOPY.HEX.PATTERN}

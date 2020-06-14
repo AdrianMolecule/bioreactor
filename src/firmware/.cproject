@@ -76,6 +76,10 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -124,6 +128,10 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -172,6 +180,10 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
                                     								
                                 </option>
                                 								
