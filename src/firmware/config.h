@@ -37,12 +37,12 @@ namespace config
 		constexpr std::array<input, 4> pins{{ {18,16}, {4,15}, {33,23}, {5,14} }};
 	}
 
-	constexpr std::array<unsigned char, 2> fet{ 17, 26};
+	constexpr std::array<unsigned char, 2> fet{ 17, 0};
 
 	namespace sensor
 	{
 		//--------- Temperature
-		constexpr unsigned char temp_pin = 19;
+		constexpr unsigned char temp_pin = 26;
 
 		//--------- PH sensor
 		constexpr adc1_channel_t ph_adc = ADC1_CHANNEL_3;
