@@ -12,7 +12,7 @@
 
 std::unique_ptr<Display> display;
 std::unique_ptr<SensorState> sensors;
-std::unique_ptr<ReactorState> reactor;
+std::shared_ptr<ReactorState> reactor;
 
 HTTPServer server;
 
@@ -27,7 +27,7 @@ void setup() {
 		Serial.println("Failed to init AP mode");
 	}
 
-	server.init();
+
 
 	String ip = "APIP: " + WiFi.softAPIP().toString() + "\n" +
 			"WFIP: " + WiFi.localIP().toString();
@@ -49,9 +49,8 @@ void setup() {
 
 	sensors.reset(new SensorState(config::sensor::ph_adc, config::sensor::temp_pin));
 	reactor.reset(new ReactorState());
-
+	server.init(reactor);
 	//adc1_config_width(ADC_WIDTH_BIT_12);
-
 
 }
 
@@ -66,6 +65,7 @@ void loop() {
 	  delayMicroseconds(500);
 	}
 */
+
 
 	float tempValue = sensors->readTemperature()[0];
 

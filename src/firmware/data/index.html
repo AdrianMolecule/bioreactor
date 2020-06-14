@@ -12,27 +12,128 @@
       top: 40px;
       bottom: 10px;
     }
-    #menuTable table {
-        width: 100%;
-    }
-    #menuTable td {
-        text-align: center;
-        vertical-align: middle;
-    }
     .chart { width: 500px; height: 300px; float: left; }
     
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
     </style>
     </head>
     <body>
-    <table width=100% id="menuTable"><tr><td><a href="/">Main</a></td><td><a href="/program">Program</a></td><td><a href="/settings">Settings</a></td></tr></table>
+    <iframe src="./header.html" style="border:none;width:100%;height:40px"></iframe></br>
+    
+    <div style="float: right;">
+        <form action="/" method="post">
+            <table style="border:1px">
+            <tr><td>Parameter</td><td>Status</td><td>Action</td></tr>
+            <tr><td>Temp</td><td> <div id="temp_l"/></td><td></tr>
+            <tr><td>PH</td><td> <div id="ph_l"/> </td><td></tr>
+            <tr><td>Light</td><td> <div id="light_l"/> </td><td></tr>
+            
+            <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" id="fet1">Enable</td></tr>
+            <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" id="fet2">Enable</td></tr>
+            <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
+                <select id="hbridge1">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge2</td><td> <div id="hbridge2_l"/> </td><td>
+                <select id="hbridge2">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge3</td><td> <div id="hbridge3_l"/> </td><td>
+                <select id="hbridge3">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge4</td><td> <div id="hbridge4_l"/> </td><td>
+                <select id="hbridge4">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" id="led">Enable</td></tr>
+            </table>
+            <input type="submit">
+        </form>
+    </div>
     <div id="ph_g" class="chart"></div>
+
     <div id="temp_g" class="chart"></div>
+
+    <div id="light_g" class="chart"></div>
+
     
 
     <script>
         var ph_data = [];
         var temp_data = [];
-
+        var light_data = [];
+        
+        function setStatus(json)
+        {
+            if( json.temp[0] == 0)
+                document.getElementById("temp_l").innerHTML = "N/A";
+            else
+            {
+                document.getElementById("temp_l").innerHTML = json.temp[0] + " C";
+                temp_data.push([new Date(), parseFloat(json.temp[0])]);
+            }
+            
+            document.getElementById("ph_l").innerHTML = json.ph;
+            ph_data.push([new Date(), parseFloat(json.ph)]);
+            
+            if( json.light == 54612 )
+                document.getElementById("light_l").innerHTML = "N/A";
+            else
+            {
+                document.getElementById("light_l").innerHTML = json.light + " Lux";
+                light_data.push([new Date(), parseFloat(json.light)]);
+            }
+            
+            if( json.fet[0])
+            {
+                document.getElementById("fet1_l").innerHTML = "Enabled";
+                document.getElementById("fet1").checked = true;
+            }
+            else
+                document.getElementById("fet1_l").innerHTML = "Disabled";
+                
+            if( json.fet[1] )
+            {
+                document.getElementById("fet2_l").innerHTML = "Enabled";
+                document.getElementById("fet2").checked = true;
+            }
+            else
+                document.getElementById("fet2_l").innerHTML = "Disabled";
+                
+            document.getElementById("hbridge1_l").innerHTML = json.hbridge[0];
+            document.getElementById("hbridge1").value = json.hbridge[0];
+            document.getElementById("hbridge2_l").innerHTML = json.hbridge[1];
+            document.getElementById("hbridge2").value = json.hbridge[1];
+            document.getElementById("hbridge3_l").innerHTML = json.hbridge[2];
+            document.getElementById("hbridge3").value = json.hbridge[2];
+            document.getElementById("hbridge4_l").innerHTML = json.hbridge[3];
+            document.getElementById("hbridge4").value = json.hbridge[3];
+            
+            if( json.led )
+            {
+                document.getElementById("led_l").innerHTML = "Enabled";
+                document.getElementById("led").checked = true;
+            }
+            else
+                document.getElementById("led_l").innerHTML = "Disabled";
+        }
+        
         var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
                             {
                             drawPoints: true,
@@ -48,16 +149,23 @@
                             rollPeriod: 7,
                             labels: ['Time', 'Temperature']
                             });
-                         
+                            
+        var light = new Dygraph(document.getElementById("light_g"), temp_data,
+                            {
+                            drawPoints: true,
+                            rollPeriod: 7,
+                            labels: ['Time', 'Lux']
+                            });
+                            
         var ws = new WebSocket("ws://"+document.location.hostname+":81/");
         ws.onmessage = function (event) {
             var readings = JSON.parse(event.data);
             
-            ph_data.push([new Date(), parseFloat(readings.ph)]);
-            ph.updateOptions( {'file': ph_data } );
+            setStatus(readings);
             
-            temp_data.push([new Date(), parseFloat(readings.temp)]);
+            ph.updateOptions( {'file': ph_data } );
             temperature.updateOptions( {'file': temp_data } );
+            light.updateOptions( {'file': light_data } );
         };
 
     </script>

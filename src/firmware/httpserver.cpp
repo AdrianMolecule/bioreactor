@@ -4,6 +4,8 @@
 #include "SPIFFS.h"
 #include "hwinit.h"
 
+#include "reactor_state.h"
+
 using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
@@ -13,11 +15,15 @@ HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
 
 }
 
-void HTTPServer::init()
+void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 {
+	reactorState = reactor;
+
 	webServer.on("/", std::bind(&HTTPServer::onHTTPConnect, this));
 	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
 	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
+	webServer.on("/header.html", std::bind(&HTTPServer::onFile, this));
+
 	webServer.begin();
 	WSServer.begin();
 	WSServer.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
@@ -72,11 +78,34 @@ void HTTPServer::onWSEvent(uint8_t num,
 
 void HTTPServer::onHTTPConnect()
 {
-  Serial.println("connected " + webServer.uri());
-  File file = SPIFFS.open("/index.html");
+	if(webServer.method() == HTTPMethod::HTTP_POST)
+	{
+		if( webServer.arg("fet1") == "true" )
+			reactorState->changeFET(0, true);
+		else
+			reactorState->changeFET(0, false);
 
-  webServer.send(200, "text/html", file.readString());
-  file.close();
+		if( webServer.arg("fet2") == "true" )
+			reactorState->changeFET(1, true);
+		else
+			reactorState->changeFET(1, false);
+
+		reactorState->changeHBridge(0, bridgeStateConvert(webServer.arg("hbridge1")));
+		reactorState->changeHBridge(1, bridgeStateConvert(webServer.arg("hbridge2")));
+		reactorState->changeHBridge(2, bridgeStateConvert(webServer.arg("hbridge3")));
+		reactorState->changeHBridge(3, bridgeStateConvert(webServer.arg("hbridge4")));
+
+		if( webServer.arg("led") == "true" )
+			reactorState->changeLED(true);
+		else
+			reactorState->changeLED(false);
+	}
+
+	Serial.println("connected " + webServer.uri());
+	File file = SPIFFS.open("/index.html");
+
+	webServer.send(200, "text/html", file.readString());
+	file.close();
 }
 
 void HTTPServer::onSettings()
@@ -126,4 +155,12 @@ void HTTPServer::onProgram()
 	file.close();
 
 
+}
+
+void HTTPServer::onFile()
+{
+	File file = SPIFFS.open("/header.html");
+
+	webServer.send(200, "text/html", file.readString());
+	file.close();
 }

@@ -85,7 +85,7 @@ bool ReactorState::changeFET(size_t num, bool is_enabled)
 	if(num >= config::fet.size())
 		return false;
 
-	digitalWrite(config::fet[num], LOW);	// reverse bool because FETs enabled by LOW signal
+	digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
 	devices_state.fet[num] = is_enabled;
 	return true;
 }
@@ -112,3 +112,12 @@ const char* bridgeStateConvert(BridgeState state)
 	return "Off";
 }
 
+BridgeState bridgeStateConvert(const String& state)
+{
+	if( state == "Forward" )
+		return BridgeState::FORWARD;
+	else if( state == "Reverse" )
+		return BridgeState::REVERSE;
+
+	return BridgeState::OFF;
+}
