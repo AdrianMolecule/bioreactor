@@ -1,0 +1,5 @@
+Save / Export Run put under a sub menu called Audit?
+Settings will have calibration for PH, Oxygen, Temperature
+Add new "Troubleshooting" menu to check each parameters one by one. For testing and debugging purpose
+About Box
+Customize blocks to only parameters supported by the board

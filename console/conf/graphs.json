@@ -1,0 +1,14 @@
+{
+    "parameters": [
+        {
+            "type": "Temperature",
+            "names":["Current Temp", "Target Temp"],
+            "labels":["Time", "Temperature"]
+        },
+        {
+            "type": "PH",
+            "names":["Current PH", "Target PH"],
+            "labels":["PH", "Temperature"]
+        }
+    ]
+}
