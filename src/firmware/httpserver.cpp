@@ -1,8 +1,8 @@
 #include "httpserver.h"
 
 #include <functional>
-#include "SPIFFS.h"
 #include "hwinit.h"
+#include <Update.h>
 
 #include "reactor_state.h"
 
@@ -20,9 +20,17 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 	reactorState = reactor;
 
 	webServer.on("/", std::bind(&HTTPServer::onHTTPConnect, this));
-	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
+
+	webServer.on("/settings", HTTP_ANY,
+			std::bind(&HTTPServer::onSettings, this),
+			std::bind(&HTTPServer::onFirmwareUpload, this)
+	);
 	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
 	webServer.on("/header.html", std::bind(&HTTPServer::onFile, this));
+	webServer.on("/upload", HTTP_ANY,
+			[this]() { webServer.send(200, "text/html", "");},
+			std::bind(&HTTPServer::handleFileUpload, this)
+	);
 
 	webServer.begin();
 	WSServer.begin();
@@ -99,6 +107,11 @@ void HTTPServer::onHTTPConnect()
 			reactorState->changeLED(true);
 		else
 			reactorState->changeLED(false);
+
+		if( webServer.arg("motor") == "on" )
+			reactorState->changeMotor(true);
+		else
+			reactorState->changeMotor(false);
 	}
 
 	Serial.println("connected " + webServer.uri());
@@ -163,4 +176,69 @@ void HTTPServer::onFile()
 
 	webServer.send(200, "text/html", file.readString());
 	file.close();
+}
+
+void HTTPServer::onFirmwareUpload()
+{
+	HTTPUpload& upload = webServer.upload();
+	if (upload.status == UPLOAD_FILE_START)
+	{
+	  Serial.printf("Update: %s %d\n", upload.filename.c_str(), upload.currentSize);
+	  if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
+		Update.printError(Serial);
+	  }
+	} else if (upload.status == UPLOAD_FILE_WRITE) {
+	      /* flashing firmware to ESP*/
+	      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+	        Update.printError(Serial);
+	      }
+	    } else if (upload.status == UPLOAD_FILE_END) {
+	      if (Update.end(true)) { //true to set the size to the current progress
+	        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+	        ESP.restart();
+	      } else {
+	        Update.printError(Serial);
+	      }
+	    }
+}
+
+
+void HTTPServer::handleFileUpload() {
+  /*if (!fsOK) {
+    return replyServerError(FPSTR(FS_INIT_ERROR));
+  }
+
+  if (server.uri() != "/edit") {
+    return;
+  }
+  */
+  HTTPUpload& upload = webServer.upload();
+  if (upload.status == UPLOAD_FILE_START) {
+    String filename = upload.filename;
+    // Make sure paths always start with "/"
+    if (!filename.startsWith("/")) {
+      filename = "/" + filename;
+    }
+    Serial.println(String("handleFileUpload Name: ") + filename);
+    uploadFile = SPIFFS.open(filename, "w");
+    if (!uploadFile) {
+    	Serial.println("CREATE FAILED");
+      return;
+    }
+    Serial.println(String("Upload: START, filename: ") + filename);
+  } else if (upload.status == UPLOAD_FILE_WRITE) {
+    if (uploadFile) {
+      size_t bytesWritten = uploadFile.write(upload.buf, upload.currentSize);
+      if (bytesWritten != upload.currentSize) {
+        Serial.println("WRITE FAILED");
+        return;
+      }
+    }
+    Serial.println(String("Upload: WRITE, Bytes: ") + upload.currentSize);
+  } else if (upload.status == UPLOAD_FILE_END) {
+    if (uploadFile) {
+      uploadFile.close();
+    }
+    Serial.println(String("Upload: END, Size: ") + upload.totalSize);
+  }
 }

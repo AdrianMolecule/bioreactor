@@ -6,6 +6,7 @@
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 #include <unordered_set>
+#include "SPIFFS.h"
 
 class ReactorState;
 
@@ -24,11 +25,14 @@ private:
 	void onSettings();
 	void onProgram();
 	void onFile();
+	void onFirmwareUpload();
+	void handleFileUpload();
 
 	WebSocketsServer WSServer;
 	WebServer webServer;
 	std::unordered_set<uint8_t> WSConnections;
 	std::shared_ptr<ReactorState> reactorState;
+	File uploadFile;
 };
 
 #endif

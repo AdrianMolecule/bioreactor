@@ -38,6 +38,7 @@ bool WiFiConnect()
 		if(WiFi.status() != WL_CONNECTED)
 		{
 			Serial.println("Failed connect to '" + ssid + "'");
+			WiFi.disconnect(true);
 		}
 	}
 	return true;

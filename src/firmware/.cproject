@@ -80,6 +80,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -132,6 +134,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -184,6 +188,8 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -235,6 +241,14 @@
     	
     <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
     	
-    <storageModule moduleId="refreshScope"/>
+    <storageModule moduleId="refreshScope" versionNumber="2">
+        		
+        <configuration configurationName="Release">
+            			
+            <resource resourceType="PROJECT" workspacePath="/bioreactor"/>
+            		
+        </configuration>
+        	
+    </storageModule>
     
 </cproject>

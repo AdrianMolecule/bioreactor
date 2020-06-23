@@ -41,6 +41,7 @@ bool ReactorState::shutdown()
 
 	result &= powerHBridge(false);
 	result &= changeLED(false);
+	result &= changeMotor(false);
 	return result;
 }
 
@@ -95,6 +96,13 @@ bool ReactorState::changeLED(bool is_enabled)
 {
 	digitalWrite(config::led_pin, is_enabled);
 	devices_state.led = is_enabled;
+	return true;
+}
+
+bool ReactorState::changeMotor(bool is_enabled)
+{
+	digitalWrite(config::motor::power, is_enabled);
+	devices_state.motor = is_enabled;
 	return true;
 }
 

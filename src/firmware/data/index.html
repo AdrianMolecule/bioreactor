@@ -31,6 +31,7 @@
             <tr><td>PH</td><td> <div id="ph_l"/> </td><td></tr>
             <tr><td>Light</td><td> <div id="light_l"/> </td><td></tr>
             
+            <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
             <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" name="fet1">Enable</td></tr>
             <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" name="fet2">Enable</td></tr>
             <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
@@ -88,6 +89,7 @@
             document.getElementsByName("hbridge3")[0].value = json.hbridge[2];
             document.getElementsByName("hbridge4")[0].value = json.hbridge[3];
             document.getElementsByName("led")[0].checked = json.led;
+            document.getElementsByName("motor")[0].checked = json.motor;
         }
         
         function setStatus(json)
@@ -97,7 +99,7 @@
                 setAction(json);
                 first = false;
             }
-            if( json.temp[0] == 0)
+            if( json.temp[0] < 1)
                 document.getElementById("temp_l").innerHTML = "N/A";
             else
             {
@@ -142,7 +144,14 @@
             }
             else
                 document.getElementById("led_l").innerHTML = "Disabled";
-        }
+                
+            if( json.motor )
+            {
+                document.getElementById("motor_l").innerHTML = "Enabled";
+            }
+            else
+                document.getElementById("motor_l").innerHTML = "Disabled";
+        }   
         
         var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
                             {

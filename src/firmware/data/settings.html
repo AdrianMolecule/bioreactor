@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>settings</title>
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
     </head>
     <body>
     <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
@@ -10,19 +11,63 @@
     <script>
         var ssid = "##ssid##";
         if(ssid !== "")
-            document.getElementById('div_g').prepend("Set to connect to '" + ssid + "' WiFi");
+            document.getElementById('div_g').prepend("Connection to '" + ssid + "' WiFi saved");
         else
             document.getElementById('div_g').prepend("No settings for WiFi");
 
     </script>
     
-    <form action="/settings" method="post">
+    <form action="/settings" method="post" id="settings">
         <label for="ssid">WiFi:</label>
         <input type="text" name="ssid"><br><br>
         <label for="pass">Password:</label>
-        <input type="password" name="pass"/><br><br>
+        <input type="text" name="pass"/><br><br>
         <input type="submit">
     </form>
+       
+    <br/><br/>
+    Update ESP32 firmware:<br/>
+    <form method='POST' action='#' enctype='multipart/form-data' id='upload_form'>
+   <input type='file' name='update'>
+        <input type='submit' value='Update'>
+    </form>
+        Update ESP32 html:<br/>
+    <form method='POST' action='#' enctype='multipart/form-data' id='file_upload'>
+   <input type='file' name='update'>
+        <input type='submit' value='Update'>
+    </form>
+ <div id='prg'>progress: 0%</div>
+ <script>
+  $('form').submit(function(e){
+  if( this.id != 'file_upload' && this.id != 'upload_form' ) 
+  return true;
+  e.preventDefault();
+  var form = $('#' + this.id)[0];
+  var data = new FormData(form);
+   $.ajax({
+  url: this.id=='file_upload' ? '/upload' : '/settings',
+  type: 'POST',
+  data: data,
+  contentType: false,
+  processData:false,
+  xhr: function() {
+  var xhr = new window.XMLHttpRequest();
+  xhr.upload.addEventListener('progress', function(evt) {
+  if (evt.lengthComputable) {
+  var per = evt.loaded / evt.total;
+  $('#prg').html('progress: ' + Math.round(per*100) + '%');
+  }
+  }, false);
+  return xhr;
+  },
+  success:function(d, s) {
+  console.log('success!') 
+ },
+ error: function (a, b, c) {
+ }
+ });
+ });
+ </script> 
        
     </body>
 </html>

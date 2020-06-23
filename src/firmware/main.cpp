@@ -55,7 +55,7 @@ void setup() {
 }
 
 void loop() {
-/*
+
 	digitalWrite(config::motor::direction,HIGH); //Enables the motor to move in a perticular direction
 	// for one full rotation required 200 pulses
 	for(int x = 0; x < 900; x++){
@@ -64,7 +64,6 @@ void loop() {
 	  digitalWrite(config::motor::step,LOW);
 	  delayMicroseconds(500);
 	}
-*/
 
 
 	float tempValue = sensors->readTemperature()[0];
@@ -77,8 +76,8 @@ void loop() {
 	static StaticJsonDocument<300> state;
 	state["ph"] = sensors->readPH();
 	state["temp"][0] = sensors->readTemperature()[0];
-	state["temp"][1] = sensors->readTemperature()[1];
-	state["temp"][2] = sensors->readTemperature()[2];
+	state["temp"][1] = 0; //sensors->readTemperature()[1];
+	state["temp"][2] = 0; //sensors->readTemperature()[2];
 	state["light"] = sensors->readLight();
 
 	for(size_t i = 0; i < config::fet.size(); ++i)
@@ -89,14 +88,15 @@ void loop() {
 		state["hbridge"][i] = bridgeStateConvert(reactor->read().hbridge[i]);
 	}
 	state["led"] = reactor->read().led;
+	state["motor"] = reactor->read().motor;
 
 	String data;
 	serializeJson(state, data);
 
-	Serial.println(data);
+	//Serial.println(data);
 	server.loop();
 	server.sendWebSockData(data);
 
-
+	delay(1000);
 	//delay(100);
 }

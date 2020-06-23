@@ -18,6 +18,7 @@ public:
 		std::array<BridgeState, config::HBridge::pins.size()> hbridge;
 		std::array<bool, config::fet.size()> fet;
 		bool led;
+		bool motor;
 	};
 
 	ReactorState();
@@ -28,6 +29,7 @@ public:
 	bool changeHBridge(size_t num, BridgeState state);
 	bool changeFET(size_t num, bool is_enabled);
 	bool changeLED(bool is_enabled);
+	bool changeMotor(bool is_enabled);
 
 	//motor
 	const Devices& read() const;
