@@ -21,14 +21,35 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 
 	webServer.on("/", std::bind(&HTTPServer::onHTTPConnect, this));
 
-	webServer.on("/settings", HTTP_ANY,
-			std::bind(&HTTPServer::onSettings, this),
+	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
+
+	webServer.on("/firmware", HTTP_ANY,
+			std::bind(
+					&HTTPServer::responseWithFile,
+					this,
+					"/dummy.html",
+					html_variables({{"##server_message##", "Reboot the board to apply changes"}})
+			),
 			std::bind(&HTTPServer::onFirmwareUpload, this)
 	);
+
 	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
-	webServer.on("/header.html", std::bind(&HTTPServer::onFile, this));
+	webServer.on("/header.html",
+			std::bind(
+				&HTTPServer::responseWithFile,
+				this,
+				"/header.html",
+				html_variables({{}})
+			)
+	);
+
 	webServer.on("/upload", HTTP_ANY,
-			[this]() { webServer.send(200, "text/html", "");},
+			std::bind(
+					&HTTPServer::responseWithFile,
+					this,
+					"/dummy.html",
+					html_variables({{"##server_message##", "Successfully uploaded"}})
+				),
 			std::bind(&HTTPServer::handleFileUpload, this)
 	);
 
@@ -115,10 +136,7 @@ void HTTPServer::onHTTPConnect()
 	}
 
 	Serial.println("connected " + webServer.uri());
-	File file = SPIFFS.open("/index.html");
-
-	webServer.send(200, "text/html", file.readString());
-	file.close();
+	responseWithFile("/index.html", {});
 }
 
 void HTTPServer::onSettings()
@@ -131,16 +149,10 @@ void HTTPServer::onSettings()
 	String ssid, password;
 	getWifiSettings(ssid, password);
 
-	File file = SPIFFS.open("/settings.html");
+	html_variables data;
+	data["##ssid##"] = ssid;
 
-	String content(file.size() + ssid.length());
-	content = file.readString();
-	content.replace("##ssid##", ssid);
-
-	webServer.send(200, "text/html", std::move(content));
-	file.close();
-
-
+	responseWithFile("/settings.html", data);
 }
 
 void HTTPServer::onProgram()
@@ -152,38 +164,21 @@ void HTTPServer::onProgram()
 
 	float temperature, ph;
 	getProgramSettings(temperature, ph);
-	String tempStr(temperature, 4);
-	String phStr(ph, 4);
 
-	Serial.println("Temp before send is " + tempStr);
+	html_variables data;
+	data["##temp##"] = String(temperature, 2);
+	data["##phlevel##"] = String(ph, 2);
 
-	File file = SPIFFS.open("/program.html");
-
-	String content(file.size() + tempStr.length() + phStr.length());
-	content = file.readString();
-	content.replace("##temp##", tempStr);
-	content.replace("##phlevel##", phStr);
-
-	webServer.send(200, "text/html", std::move(content));
-	file.close();
-
-
-}
-
-void HTTPServer::onFile()
-{
-	File file = SPIFFS.open("/header.html");
-
-	webServer.send(200, "text/html", file.readString());
-	file.close();
+	responseWithFile("/program.html", data);
 }
 
 void HTTPServer::onFirmwareUpload()
 {
 	HTTPUpload& upload = webServer.upload();
+
 	if (upload.status == UPLOAD_FILE_START)
 	{
-	  Serial.printf("Update: %s %d\n", upload.filename.c_str(), upload.currentSize);
+	  Serial.printf("Update: %d\n", upload.currentSize);
 	  if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
 		Update.printError(Serial);
 	  }
@@ -195,7 +190,7 @@ void HTTPServer::onFirmwareUpload()
 	    } else if (upload.status == UPLOAD_FILE_END) {
 	      if (Update.end(true)) { //true to set the size to the current progress
 	        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
-	        ESP.restart();
+	        //ESP.restart();
 	      } else {
 	        Update.printError(Serial);
 	      }
@@ -213,18 +208,19 @@ void HTTPServer::handleFileUpload() {
   }
   */
   HTTPUpload& upload = webServer.upload();
+
   if (upload.status == UPLOAD_FILE_START) {
     String filename = upload.filename;
     // Make sure paths always start with "/"
     if (!filename.startsWith("/")) {
       filename = "/" + filename;
     }
-    Serial.println(String("handleFileUpload Name: ") + filename);
     uploadFile = SPIFFS.open(filename, "w");
     if (!uploadFile) {
     	Serial.println("CREATE FAILED");
       return;
     }
+
     Serial.println(String("Upload: START, filename: ") + filename);
   } else if (upload.status == UPLOAD_FILE_WRITE) {
     if (uploadFile) {
@@ -242,3 +238,20 @@ void HTTPServer::handleFileUpload() {
     Serial.println(String("Upload: END, Size: ") + upload.totalSize);
   }
 }
+
+void HTTPServer::responseWithFile(const char filename[], html_variables data)
+{
+	File file = SPIFFS.open(filename);
+	Serial.println(String("open file ") + filename);
+	String content;
+	content = file.readString();
+
+	for(const auto& substitute : data)
+	{
+		content.replace(substitute.first, substitute.second);
+	}
+
+	webServer.send(200, "text/html", content);
+	file.close();
+}
+

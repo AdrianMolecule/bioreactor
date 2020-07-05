@@ -6,6 +6,7 @@
 #include <WebServer.h>
 #include <WebSocketsServer.h>
 #include <unordered_set>
+#include <unordered_map>
 #include "SPIFFS.h"
 
 class ReactorState;
@@ -20,6 +21,7 @@ public:
 	void sendWebSockData(String data);
 
 private:
+	using html_variables = std::unordered_map<const char*, String>;
 	void onWSEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
 	void onHTTPConnect();
 	void onSettings();
@@ -27,6 +29,7 @@ private:
 	void onFile();
 	void onFirmwareUpload();
 	void handleFileUpload();
+	void responseWithFile(const char filename[], html_variables data);
 
 	WebSocketsServer WSServer;
 	WebServer webServer;
