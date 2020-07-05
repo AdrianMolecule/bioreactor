@@ -7,6 +7,8 @@
   <script src="blockly/javascript_compressed.js"></script>
   <script src="blockly/msg/js/en.js"></script>
   <script src="tools/jquery-3.5.1.min.js"></script>
+  <script src="js/bioreactor-params-blocks.js"></script>
+  <script src="js/bioreactor-params-blocks-stubs.js"></script>
   <style>
     body {
       background-color: #fff;
@@ -19,9 +21,9 @@
     }
 	
 	h2 {
-      font-weight: normal;
+      font-weight: bold;
       font-size: 100%;
-	  color: #686868;
+	    color: #686868;
     }
 
 
@@ -61,26 +63,20 @@
 
     .table {
         position: relative;
-        top: 70px;
+        top: 10px;
     }
   </style>
 
 </head>
 <body>
-    <div class="nav_container" id="nav_container"></div>
+    <div class="nav_container" id="nav_container">
+    </div>
 
-  <!--p>
-	<div class="buttons" align="left" onclick="download()">
-		<a class="buttons" target="_blank" rel="nofollow noopener">Download Workspace</a>
-	</div>
-	<input id="restore-input" name="file-to-restore" type="file"style="display: none;" />
-	<div class="buttons" align="left" onclick="document.getElementById('restore-input').click();">
-		<a class="buttons" target="_blank" rel="nofollow noopener">Upload Workspace</a>
-	</div>
-    <div class="buttons" align="right" onclick="runCode()">
-		<a class="buttons" target="_blank" rel="nofollow noopener">Run JavaScript</a>
-	</div>
-  </p-->
+    <div>
+      <h2>
+        <label for='workspace-name'>Workspace Name:</label>	
+        <input size="30" id="workspace-name" class="workspace-name"/>
+      </h2>
     <table width="100%" class="table">
     <tr>
       <td>
@@ -88,13 +84,22 @@
       </td>
       <td>
         <div id="jsDiv" class="blockly">
-		<textarea id="codeBox" style="border-color: lightgray; width: 600px; height: 473px;" readonly></textarea>
+		<textarea id="codeBox" style="border-color: lightgray; width: 600px; height: 475px;" readonly></textarea>
 		</div>
       </td>
     </tr>
   </table>
-
+</div>
+    
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Bioreactor" colour="#8B0000">
+      <block type="temperature"></block>
+      <block type="shaking"/></block>
+      <block type="optical_density"/></block>
+      <block type="ph"></block>
+      <block type="blue_light"></block>
+      <block type="product"></block>
+    </category>
     <category name="Logic" colour="%{BKY_LOGIC_HUE}">
       <block type="controls_if"></block>
       <block type="logic_compare"></block>
@@ -127,70 +132,24 @@
   </xml>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
-    <block type="controls_if" inline="false" x="20" y="20">
-      <mutation else="1"></mutation>
-      <value name="IF0">
-        <block type="logic_compare" inline="true">
-          <field name="OP">EQ</field>
-          <value name="A">
-            <block type="math_arithmetic" inline="true">
-              <field name="OP">MULTIPLY</field>
-              <value name="A">
-                <block type="math_number">
-                  <field name="NUM">6</field>
-                </block>
-              </value>
-              <value name="B">
-                <block type="math_number">
-                  <field name="NUM">7</field>
-                </block>
-              </value>
-            </block>
-          </value>
-          <value name="B">
-            <block type="math_number">
-              <field name="NUM">42</field>
-            </block>
-          </value>
-        </block>
-      </value>
-      <statement name="DO0">
-        <block type="text_print" inline="false">
-          <value name="TEXT">
-            <block type="text">
-              <field name="TEXT">Don't panic</field>
-            </block>
-          </value>
-        </block>
-      </statement>
-      <statement name="ELSE">
-        <block type="text_print" inline="false">
-          <value name="TEXT">
-            <block type="text">
-              <field name="TEXT">Panic</field>
-            </block>
-          </value>
-        </block>
-      </statement>
-    </block>
   </xml>
 
   <script>
-    var demoWorkspace = Blockly.inject('blocklyDiv',
+  $(".nav_container").load("./common/navbar.html");
+  var demoWorkspace = Blockly.inject('blocklyDiv',
         {media: 'blockly/media/',
          toolbox: document.getElementById('toolbox')});
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
                                demoWorkspace);
-    
-	$(".nav_container").load("./common/navbar.html");
 
-	var input = document.getElementById('restore-input');
+	  var input = document.getElementById('restore-input');
+    
     function showCode() {
       // Generate JavaScript code and display it.
       Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
       var code = Blockly.JavaScript.workspaceToCode(demoWorkspace);
       //alert(code);
-	document.getElementById('codeBox').value = code;
+	    document.getElementById('codeBox').value = code;
 	  
     }
 
@@ -228,9 +187,9 @@
 	  if(wspacename.length == 0)
 	    wspacename = "Blockly-Untitled";
 	  anchor.download = wspacename+'.xml';
-      anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
-      anchor.dataset.downloadurl = ['text/xml', anchor.download, anchor.href].join(':');
-      anchor.click();
+    anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+    anchor.dataset.downloadurl = ['text/xml', anchor.download, anchor.href].join(':');
+    anchor.click();
 	}
 	
 	function renameWorkspace(){
@@ -257,15 +216,7 @@
 			}
 		}
 	};
-	/*
-	var el = document.getElementById('txt');
-	el.onblur = function(){
-  		this.setAttribute('readonly');
-	};
-	
-	el.ondblclick = function(){
-  		this.removeAttribute('readonly');
-	};*/
+
   </script>
 
 </body>
