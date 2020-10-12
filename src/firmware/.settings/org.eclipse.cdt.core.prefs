@@ -19,7 +19,7 @@ environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.BOOT/ope
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.BOOT/value=qio
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CODE_DEBUG/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CODE_DEBUG/operation=replace
-environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CODE_DEBUG/value=5
+environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CODE_DEBUG/value=1
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CORE.PATH/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CORE.PATH/operation=replace
 environment/project/io.sloeber.core.toolChain.release.586980521/A.BUILD.CORE.PATH/value=${eclipse_home}/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/cores/esp32
@@ -427,7 +427,7 @@ environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.LIN
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.EXTRA.LINK/value=
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/operation=replace
-environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/value=CPUFreq\=240\nDebugLevel\=verbose\nFlashFreq\=80\nFlashMode\=qio\nFlashSize\=4M\nPartitionScheme\=default\nPSRAM\=disabled\nUploadSpeed\=921600
+environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.MENU/value=CPUFreq\=240\nDebugLevel\=error\nFlashFreq\=80\nFlashMode\=qio\nFlashSize\=4M\nPartitionScheme\=default\nPSRAM\=disabled\nUploadSpeed\=921600
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/delimiter=\:
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/operation=replace
 environment/project/io.sloeber.core.toolChain.release.586980521/JANTJE.OBJCOPY/value=${A.RECIPE.OBJCOPY.EEP.PATTERN}\n\t${A.RECIPE.OBJCOPY.HEX.PATTERN}

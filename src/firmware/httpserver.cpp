@@ -34,14 +34,6 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 	);
 
 	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
-	webServer.on("/header.html",
-			std::bind(
-				&HTTPServer::responseWithFile,
-				this,
-				"/header.html",
-				html_variables({{}})
-			)
-	);
 
 	webServer.on("/upload", HTTP_ANY,
 			std::bind(
@@ -53,14 +45,17 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 			std::bind(&HTTPServer::handleFileUpload, this)
 	);
 
+	if(!SPIFFS.begin(true))
+	{
+		Serial.println("An Error has occurred while mounting SPIFFS");
+		return;
+	}
+
+	webServer.serveStatic("/header.html", SPIFFS, "/header.html");
+
 	webServer.begin();
 	WSServer.begin();
 	WSServer.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
-
-	  if(!SPIFFS.begin(true)){
-	    Serial.println("An Error has occurred while mounting SPIFFS");
-	    return;
-	  }
 }
 
 void HTTPServer::loop()
