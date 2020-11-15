@@ -5,8 +5,9 @@
 
 #include "hwinit.h"
 #include "config.h"
-#include "sensor_state.h"
-#include "reactor_state.h"
+#include "core/sensor_state.h"
+#include "core/reactor_state.h"
+#include "core/reactor_program.h"
 
 #include <ArduinoJson.h>
 
@@ -65,14 +66,9 @@ void loop() {
 	  delayMicroseconds(500);
 	}
 
+	program_run(sensors, reactor);
 
-	float tempValue = sensors->readTemperature()[0];
-
-	if(tempValue < 27.0)
-		reactor->changeFET(0, true);
-	else
-		reactor->changeFET(0, false);
-
+	//---- state to Json converter
 	static StaticJsonDocument<300> state;
 	state["ph"] = sensors->readPH();
 	state["temp"][0] = sensors->readTemperature()[0];
@@ -89,6 +85,7 @@ void loop() {
 	}
 	state["led"] = reactor->read().led;
 	state["motor"] = reactor->read().motor;
+	state["reactor_enabled"] = reactor->is_enabled();
 
 	String data;
 	serializeJson(state, data);
@@ -97,6 +94,5 @@ void loop() {
 	server.loop();
 	server.sendWebSockData(data);
 
-	delay(1000);
 	//delay(100);
 }

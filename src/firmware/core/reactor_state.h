@@ -1,7 +1,7 @@
 #pragma once
 
 #include <array>
-#include "config.h"
+#include "../config.h"
 
 enum class BridgeState
 {
@@ -24,6 +24,9 @@ public:
 	ReactorState();
 
 	bool initialize();
+
+	bool enable();
+	bool is_enabled();
 	bool shutdown();
 
 	bool changeHBridge(size_t num, BridgeState state);
@@ -38,6 +41,7 @@ private:
 	bool powerHBridge(bool is_enabled);
 
 	Devices devices_state;
+	bool enabled;
 };
 
 const char* bridgeStateConvert(BridgeState state);

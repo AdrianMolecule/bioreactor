@@ -28,9 +28,22 @@ bool ReactorState::initialize()
 	return true;
 }
 
+bool ReactorState::enable()
+{
+	enabled = true;
+	return true;
+}
+
+bool ReactorState::is_enabled()
+{
+	return enabled;
+}
+
 bool ReactorState::shutdown()
 {
 	bool result = true;
+
+	enabled = false;
 	for(size_t i = 0; i < config::fet.size(); ++i)
 		result &= changeFET(i, false);
 

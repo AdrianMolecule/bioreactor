@@ -4,7 +4,7 @@
 #include "hwinit.h"
 #include <Update.h>
 
-#include "reactor_state.h"
+#include "core/reactor_state.h"
 
 using namespace std::placeholders;
 
@@ -19,7 +19,7 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 {
 	reactorState = reactor;
 
-	webServer.on("/", std::bind(&HTTPServer::onHTTPConnect, this));
+	webServer.on("/", std::bind(&HTTPServer::onMain, this));
 
 	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
 
@@ -52,6 +52,8 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 	}
 
 	webServer.serveStatic("/header.html", SPIFFS, "/header.html");
+	webServer.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
+	webServer.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
 
 	webServer.begin();
 	WSServer.begin();
@@ -100,7 +102,7 @@ void HTTPServer::onWSEvent(uint8_t num,
   }
 }
 
-void HTTPServer::onHTTPConnect()
+void HTTPServer::onMain()
 {
 	if(webServer.method() == HTTPMethod::HTTP_POST)
 	{
@@ -154,7 +156,8 @@ void HTTPServer::onProgram()
 {
 	if(webServer.method() == HTTPMethod::HTTP_POST)
 	{
-		saveProgramSettings(webServer.arg("temperature").toFloat(), webServer.arg("ph").toFloat());
+		saveProgramSettings(webServer.arg("temperature"), webServer.arg("ph"));
+		reactorState->enable();
 	}
 
 	float temperature, ph;

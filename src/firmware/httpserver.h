@@ -23,7 +23,7 @@ public:
 private:
 	using html_variables = std::unordered_map<const char*, String>;
 	void onWSEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
-	void onHTTPConnect();
+	void onMain();
 	void onSettings();
 	void onProgram();
 	void onFile();

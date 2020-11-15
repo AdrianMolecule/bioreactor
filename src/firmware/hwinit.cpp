@@ -72,8 +72,10 @@ void saveWifiSettings(String&& ssid, String&& password)
 {
 	Preferences preferences;
 	preferences.begin("wifi");
-	preferences.putString("ssid", ssid);
-	preferences.putString("pass", password);
+	if(!ssid.isEmpty())
+		preferences.putString("ssid", ssid);
+	if(!password.isEmpty())
+		preferences.putString("pass", password);
 	preferences.end();
 }
 
@@ -86,12 +88,14 @@ void getProgramSettings(float& temperature, float& ph)
 	preferences.end();
 }
 
-void saveProgramSettings(const float& temperature, const float& ph)
+void saveProgramSettings(String&& temperature, String&& ph)
 {
 	Preferences preferences;
 	preferences.begin("program");
-	preferences.putFloat("temp", temperature);
-	preferences.putFloat("ph", ph);
+	if(!temperature.isEmpty())
+		preferences.putFloat("temp", temperature.toFloat());
+	if(!ph.isEmpty())
+		preferences.putFloat("ph", ph.toFloat());
 	preferences.end();
 }
 
