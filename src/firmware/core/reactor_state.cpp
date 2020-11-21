@@ -39,11 +39,17 @@ bool ReactorState::is_enabled()
 	return enabled;
 }
 
+bool ReactorState::disable()
+{
+	enabled = false;
+	return true;
+}
+
 bool ReactorState::shutdown()
 {
 	bool result = true;
 
-	enabled = false;
+	disable();
 	for(size_t i = 0; i < config::fet.size(); ++i)
 		result &= changeFET(i, false);
 

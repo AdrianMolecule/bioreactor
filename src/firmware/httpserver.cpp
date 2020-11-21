@@ -1,7 +1,7 @@
+#include <misc.h>
 #include "httpserver.h"
 
 #include <functional>
-#include "hwinit.h"
 #include <Update.h>
 
 #include "core/reactor_state.h"
@@ -52,6 +52,7 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 	}
 
 	webServer.serveStatic("/header.html", SPIFFS, "/header.html");
+	webServer.serveStatic("/footer.html", SPIFFS, "/footer.html");
 	webServer.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
 	webServer.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
 
@@ -157,7 +158,10 @@ void HTTPServer::onProgram()
 	if(webServer.method() == HTTPMethod::HTTP_POST)
 	{
 		saveProgramSettings(webServer.arg("temperature"), webServer.arg("ph"));
-		reactorState->enable();
+		if(reactorState->is_enabled())
+			reactorState->disable();
+		else
+			reactorState->enable();
 	}
 
 	float temperature, ph;
@@ -166,7 +170,7 @@ void HTTPServer::onProgram()
 	html_variables data;
 	data["##temp##"] = String(temperature, 2);
 	data["##phlevel##"] = String(ph, 2);
-
+	data["##is_enabled##"] = String(reactorState->is_enabled());
 	responseWithFile("/program.html", data);
 }
 

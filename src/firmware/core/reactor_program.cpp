@@ -1,8 +1,11 @@
+#include <misc.h>
 #include "reactor_program.h"
-#include "hwinit.h"
 
 void program_run(std::unique_ptr<SensorState>& sensors, std::shared_ptr<ReactorState> reactor)
 {
+	if( !reactor->is_enabled() )
+		return;
+
 	float target_temp, target_ph;
 	getProgramSettings(target_temp, target_ph);
 

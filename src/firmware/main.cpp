@@ -3,13 +3,12 @@
 #include "display/factory.h"
 #include "httpserver.h"
 
-#include "hwinit.h"
 #include "config.h"
 #include "core/sensor_state.h"
 #include "core/reactor_state.h"
 #include "core/reactor_program.h"
 
-#include <ArduinoJson.h>
+#include <misc.h>
 
 std::unique_ptr<Display> display;
 std::unique_ptr<SensorState> sensors;
@@ -68,27 +67,7 @@ void loop() {
 
 	program_run(sensors, reactor);
 
-	//---- state to Json converter
-	static StaticJsonDocument<300> state;
-	state["ph"] = sensors->readPH();
-	state["temp"][0] = sensors->readTemperature()[0];
-	state["temp"][1] = 0; //sensors->readTemperature()[1];
-	state["temp"][2] = 0; //sensors->readTemperature()[2];
-	state["light"] = sensors->readLight();
-
-	for(size_t i = 0; i < config::fet.size(); ++i)
-		state["fet"][i] = reactor->read().fet[i];
-
-	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
-	{
-		state["hbridge"][i] = bridgeStateConvert(reactor->read().hbridge[i]);
-	}
-	state["led"] = reactor->read().led;
-	state["motor"] = reactor->read().motor;
-	state["reactor_enabled"] = reactor->is_enabled();
-
-	String data;
-	serializeJson(state, data);
+	String data = serializeState(sensors, reactor);
 
 	//Serial.println(data);
 	server.loop();

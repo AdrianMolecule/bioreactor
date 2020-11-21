@@ -2,6 +2,13 @@
 <html>
     <head>
         <title>settings</title>
+        <script>
+	        window.onload = function(e)
+	        {
+	        	if(##is_enabled##)
+	        		document.getElementById('submit_button').value="Stop";
+	        }
+	    </script>
     </head>
     <body>
     <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
@@ -22,8 +29,7 @@
         <input type="text" name="temperature"><br><br>
         <label for="ph">PH:</label>
         <input type="text" name="ph"/><br><br>
-        <input type="submit">
+        <input type="submit" id="submit_button" value="Start">
     </form>
-       
     </body>
 </html>

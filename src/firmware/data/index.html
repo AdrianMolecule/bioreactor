@@ -21,16 +21,12 @@
     </style>
     </head>
     <body>
-    <iframe src="./header.html" style="border:none;width:100%;height:40px"></iframe></br>
+    <iframe id="header" src="./header.html" style="border:none;width:100%;height:40px;"></iframe></br>
     
     <div style="float: right;">
         <form action="/" method="post">
             <table style="border:1px">
-            <tr><td>Parameter</td><td>Status</td><td>Action</td></tr>
-            <tr><td>Temp</td><td> <div id="temp_l"/></td><td></tr>
-            <tr><td>PH</td><td> <div id="ph_l"/> </td><td></tr>
-            <tr><td>Light</td><td> <div id="light_l"/> </td><td></tr>
-            
+            <tr><td>Output</td><td>Status</td><td>Action</td></tr>
             <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
             <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" name="fet1">Enable</td></tr>
             <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" name="fet2">Enable</td></tr>
@@ -64,21 +60,17 @@
             </td></tr>
             <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
             </table>
-            <input type="submit">
+            <input type="submit" value="Apply">
         </form>
     </div>
     <div id="ph_g" class="chart"></div>
 
     <div id="temp_g" class="chart"></div>
 
-    <div id="light_g" class="chart"></div>
-
-    
-
     <script>
         var ph_data = [];
         var temp_data = [];
-        var light_data = [];
+
         var first = true;
         function setAction(json)
         {
@@ -94,29 +86,19 @@
         
         function setStatus(json)
         {
+       		document.getElementById('footer').contentWindow.UpdateStatus(json);
+
             if(first)
             {
                 setAction(json);
                 first = false;
             }
-            if( json.temp[0] < 1)
-                document.getElementById("temp_l").innerHTML = "N/A";
-            else
+            if( json.temp[0] >= 1)
             {
-                document.getElementById("temp_l").innerHTML = json.temp[0] + " C";
                 temp_data.push([new Date(), parseFloat(json.temp[0])]);
             }
             
-            document.getElementById("ph_l").innerHTML = json.ph;
             ph_data.push([new Date(), parseFloat(json.ph)]);
-            
-            if( json.light == 54612 )
-                document.getElementById("light_l").innerHTML = "N/A";
-            else
-            {
-                document.getElementById("light_l").innerHTML = json.light + " Lux";
-                light_data.push([new Date(), parseFloat(json.light)]);
-            }
             
             if( json.fet[0])
             {
@@ -169,13 +151,6 @@
                             labels: ['Time', 'Temperature']
                             });
                             
-        var light = new Dygraph(document.getElementById("light_g"), temp_data,
-                            {
-                            drawPoints: true,
-                            rollPeriod: 7,
-                            labels: ['Time', 'Lux']
-                            });
-                            
         var ws = new WebSocket("ws://"+document.location.hostname+":81/");
         ws.onmessage = function (event) {
             var readings = JSON.parse(event.data);
@@ -184,9 +159,9 @@
             
             ph.updateOptions( {'file': ph_data } );
             temperature.updateOptions( {'file': temp_data } );
-            light.updateOptions( {'file': light_data } );
         };
 
     </script>
+    <iframe id="footer" src="./footer.html" style="border:none;width:100%;"></iframe>
     </body>
 </html>

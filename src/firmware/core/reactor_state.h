@@ -27,6 +27,8 @@ public:
 
 	bool enable();
 	bool is_enabled();
+	bool disable();
+
 	bool shutdown();
 
 	bool changeHBridge(size_t num, BridgeState state);

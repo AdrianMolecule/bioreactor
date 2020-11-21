@@ -1,9 +1,13 @@
-#include "hwinit.h"
+#include <misc.h>
 
-#include <WiFi.h>
 #include "config.h"
+#include "core/sensor_state.h"
+#include "core/reactor_state.h"
+
 #include "lwip/inet.h"
+#include <WiFi.h>
 #include <Preferences.h>
+#include <ArduinoJson.h>
 
 bool WiFiConnect()
 {
@@ -99,3 +103,27 @@ void saveProgramSettings(String&& temperature, String&& ph)
 	preferences.end();
 }
 
+String serializeState(std::unique_ptr<SensorState>& sensors, std::shared_ptr<ReactorState> reactor)
+{
+	static StaticJsonDocument<300> state;
+	state["ph"] = sensors->readPH();
+	state["temp"][0] = sensors->readTemperature()[0];
+	state["temp"][1] = 0; //sensors->readTemperature()[1];
+	state["temp"][2] = 0; //sensors->readTemperature()[2];
+	state["light"] = sensors->readLight();
+
+	for(size_t i = 0; i < config::fet.size(); ++i)
+		state["fet"][i] = reactor->read().fet[i];
+
+	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
+	{
+		state["hbridge"][i] = bridgeStateConvert(reactor->read().hbridge[i]);
+	}
+	state["led"] = reactor->read().led;
+	state["motor"] = reactor->read().motor;
+	state["reactor_enabled"] = reactor->is_enabled();
+
+	String data;
+	serializeJson(state, data);
+	return data;
+}
