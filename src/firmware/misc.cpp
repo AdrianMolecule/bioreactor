@@ -2,12 +2,11 @@
 
 #include "config.h"
 #include "core/sensor_state.h"
-#include "core/reactor_state.h"
-
 #include "lwip/inet.h"
 #include <WiFi.h>
 #include <Preferences.h>
 #include <ArduinoJson.h>
+#include <core/actuators.h>
 
 bool WiFiConnect()
 {
@@ -103,7 +102,7 @@ void saveProgramSettings(String&& temperature, String&& ph)
 	preferences.end();
 }
 
-String serializeState(std::unique_ptr<SensorState>& sensors, std::shared_ptr<ReactorState> reactor)
+String serializeState(const SensorState* sensors, const Reactor* reactor_mgr)
 {
 	static StaticJsonDocument<300> state;
 	state["ph"] = sensors->readPH();
@@ -112,16 +111,18 @@ String serializeState(std::unique_ptr<SensorState>& sensors, std::shared_ptr<Rea
 	state["temp"][2] = 0; //sensors->readTemperature()[2];
 	state["light"] = sensors->readLight();
 
+	const Actuators* act_mgr = reactor_mgr->get_actuators();
+
 	for(size_t i = 0; i < config::fet.size(); ++i)
-		state["fet"][i] = reactor->read().fet[i];
+		state["fet"][i] = act_mgr->read().fet[i];
 
 	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{
-		state["hbridge"][i] = bridgeStateConvert(reactor->read().hbridge[i]);
+		state["hbridge"][i] = bridgeStateConvert(act_mgr->read().hbridge[i]);
 	}
-	state["led"] = reactor->read().led;
-	state["motor"] = reactor->read().motor;
-	state["reactor_enabled"] = reactor->is_enabled();
+	state["led"] = act_mgr->read().led;
+	state["motor"] = act_mgr->read().motor;
+	state["reactor_enabled"] = reactor_mgr->is_enabled();
 
 	String data;
 	serializeJson(state, data);

@@ -1,29 +1,29 @@
-#include <misc.h>
 #include "httpserver.h"
 
 #include <functional>
 #include <Update.h>
 
-#include "core/reactor_state.h"
+#include "core/reactor.h"
+#include "misc.h"
 
 using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
-: WSServer(webSocketPort),
-  webServer(HTTPPort)
+: _ws_server(webSocketPort),
+  _web_server(HTTPPort)
 {
 
 }
 
-void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
+void HTTPServer::init(Reactor* reactor_mgr)
 {
-	reactorState = reactor;
+	_reactor_mgr = reactor_mgr;
 
-	webServer.on("/", std::bind(&HTTPServer::onMain, this));
+	_web_server.on("/", std::bind(&HTTPServer::onMain, this));
 
-	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
+	_web_server.on("/settings", std::bind(&HTTPServer::onSettings, this));
 
-	webServer.on("/firmware", HTTP_ANY,
+	_web_server.on("/firmware", HTTP_ANY,
 			std::bind(
 					&HTTPServer::responseWithFile,
 					this,
@@ -33,9 +33,9 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 			std::bind(&HTTPServer::onFirmwareUpload, this)
 	);
 
-	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
+	_web_server.on("/program", std::bind(&HTTPServer::onProgram, this));
 
-	webServer.on("/upload", HTTP_ANY,
+	_web_server.on("/upload", HTTP_ANY,
 			std::bind(
 					&HTTPServer::responseWithFile,
 					this,
@@ -51,27 +51,27 @@ void HTTPServer::init(std::shared_ptr<ReactorState> reactor)
 		return;
 	}
 
-	webServer.serveStatic("/header.html", SPIFFS, "/header.html");
-	webServer.serveStatic("/footer.html", SPIFFS, "/footer.html");
-	webServer.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
-	webServer.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
+	_web_server.serveStatic("/header.html", SPIFFS, "/header.html");
+	_web_server.serveStatic("/footer.html", SPIFFS, "/footer.html");
+	_web_server.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
+	_web_server.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
 
-	webServer.begin();
-	WSServer.begin();
-	WSServer.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
+	_web_server.begin();
+	_ws_server.begin();
+	_ws_server.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
 }
 
 void HTTPServer::loop()
 {
-	webServer.handleClient();
-	WSServer.loop();
+	_web_server.handleClient();
+	_ws_server.loop();
 }
 
 void HTTPServer::sendWebSockData(String data)
 {
-	for(uint8_t client : WSConnections)
+	for(uint8_t client : _ws_connections)
 	{
-		WSServer.sendTXT(client, data);
+		_ws_server.sendTXT(client, data);
 	}
 }
 
@@ -84,13 +84,13 @@ void HTTPServer::onWSEvent(uint8_t num,
   switch(type)
   {
     case WStype_DISCONNECTED:
-    	WSConnections.erase(num);
+    	_ws_connections.erase(num);
       Serial.printf("[%u] Disconnected!\n", num);
       break;
     case WStype_CONNECTED:
       {
-    	  WSConnections.insert(num);
-        IPAddress ip { WSServer.remoteIP(num) };
+    	  _ws_connections.insert(num);
+        IPAddress ip { _ws_server.remoteIP(num) };
         Serial.printf("[%u] Connection from ", num);
         Serial.println(ip.toString());
       }
@@ -105,43 +105,45 @@ void HTTPServer::onWSEvent(uint8_t num,
 
 void HTTPServer::onMain()
 {
-	if(webServer.method() == HTTPMethod::HTTP_POST)
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		if( webServer.arg("fet1") == "on" )
-			reactorState->changeFET(0, true);
-		else
-			reactorState->changeFET(0, false);
+		Actuators* act_mgr = _reactor_mgr->get_actuators();
 
-		if( webServer.arg("fet2") == "on" )
-			reactorState->changeFET(1, true);
+		if( _web_server.arg("fet1") == "on" )
+			act_mgr->changeFET(0, true);
 		else
-			reactorState->changeFET(1, false);
+			act_mgr->changeFET(0, false);
 
-		reactorState->changeHBridge(0, bridgeStateConvert(webServer.arg("hbridge1")));
-		reactorState->changeHBridge(1, bridgeStateConvert(webServer.arg("hbridge2")));
-		reactorState->changeHBridge(2, bridgeStateConvert(webServer.arg("hbridge3")));
-		reactorState->changeHBridge(3, bridgeStateConvert(webServer.arg("hbridge4")));
-
-		if( webServer.arg("led") == "on" )
-			reactorState->changeLED(true);
+		if( _web_server.arg("fet2") == "on" )
+			act_mgr->changeFET(1, true);
 		else
-			reactorState->changeLED(false);
+			act_mgr->changeFET(1, false);
 
-		if( webServer.arg("motor") == "on" )
-			reactorState->changeMotor(true);
+		act_mgr->changeHBridge(0, bridgeStateConvert(_web_server.arg("hbridge1")));
+		act_mgr->changeHBridge(1, bridgeStateConvert(_web_server.arg("hbridge2")));
+		act_mgr->changeHBridge(2, bridgeStateConvert(_web_server.arg("hbridge3")));
+		act_mgr->changeHBridge(3, bridgeStateConvert(_web_server.arg("hbridge4")));
+
+		if( _web_server.arg("led") == "on" )
+			act_mgr->changeLED(true);
 		else
-			reactorState->changeMotor(false);
+			act_mgr->changeLED(false);
+
+		if( _web_server.arg("motor") == "on" )
+			act_mgr->changeMotor(true);
+		else
+			act_mgr->changeMotor(false);
 	}
 
-	Serial.println("connected " + webServer.uri());
+	Serial.println("connected " + _web_server.uri());
 	responseWithFile("/index.html", {});
 }
 
 void HTTPServer::onSettings()
 {
-	if(webServer.method() == HTTPMethod::HTTP_POST)
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		saveWifiSettings(webServer.arg("ssid"), webServer.arg("pass"));
+		saveWifiSettings(_web_server.arg("ssid"), _web_server.arg("pass"));
 	}
 
 	String ssid, password;
@@ -155,13 +157,13 @@ void HTTPServer::onSettings()
 
 void HTTPServer::onProgram()
 {
-	if(webServer.method() == HTTPMethod::HTTP_POST)
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		saveProgramSettings(webServer.arg("temperature"), webServer.arg("ph"));
-		if(reactorState->is_enabled())
-			reactorState->disable();
+		saveProgramSettings(_web_server.arg("temperature"), _web_server.arg("ph"));
+		if(_reactor_mgr->is_enabled())
+			_reactor_mgr->disable();
 		else
-			reactorState->enable();
+			_reactor_mgr->enable();
 	}
 
 	float temperature, ph;
@@ -170,13 +172,13 @@ void HTTPServer::onProgram()
 	html_variables data;
 	data["##temp##"] = String(temperature, 2);
 	data["##phlevel##"] = String(ph, 2);
-	data["##is_enabled##"] = String(reactorState->is_enabled());
+	data["##is_enabled##"] = String(_reactor_mgr->is_enabled());
 	responseWithFile("/program.html", data);
 }
 
 void HTTPServer::onFirmwareUpload()
 {
-	HTTPUpload& upload = webServer.upload();
+	HTTPUpload& upload = _web_server.upload();
 
 	if (upload.status == UPLOAD_FILE_START)
 	{
@@ -209,7 +211,7 @@ void HTTPServer::handleFileUpload() {
     return;
   }
   */
-  HTTPUpload& upload = webServer.upload();
+  HTTPUpload& upload = _web_server.upload();
 
   if (upload.status == UPLOAD_FILE_START) {
     String filename = upload.filename;
@@ -217,16 +219,16 @@ void HTTPServer::handleFileUpload() {
     if (!filename.startsWith("/")) {
       filename = "/" + filename;
     }
-    uploadFile = SPIFFS.open(filename, "w");
-    if (!uploadFile) {
+    _upload_file = SPIFFS.open(filename, "w");
+    if (!_upload_file) {
     	Serial.println("CREATE FAILED");
       return;
     }
 
     Serial.println(String("Upload: START, filename: ") + filename);
   } else if (upload.status == UPLOAD_FILE_WRITE) {
-    if (uploadFile) {
-      size_t bytesWritten = uploadFile.write(upload.buf, upload.currentSize);
+    if (_upload_file) {
+      size_t bytesWritten = _upload_file.write(upload.buf, upload.currentSize);
       if (bytesWritten != upload.currentSize) {
         Serial.println("WRITE FAILED");
         return;
@@ -234,8 +236,8 @@ void HTTPServer::handleFileUpload() {
     }
     Serial.println(String("Upload: WRITE, Bytes: ") + upload.currentSize);
   } else if (upload.status == UPLOAD_FILE_END) {
-    if (uploadFile) {
-      uploadFile.close();
+    if (_upload_file) {
+      _upload_file.close();
     }
     Serial.println(String("Upload: END, Size: ") + upload.totalSize);
   }
@@ -253,7 +255,7 @@ void HTTPServer::responseWithFile(const char filename[], html_variables data)
 		content.replace(substitute.first, substitute.second);
 	}
 
-	webServer.send(200, "text/html", content);
+	_web_server.send(200, "text/html", content);
 	file.close();
 }
 

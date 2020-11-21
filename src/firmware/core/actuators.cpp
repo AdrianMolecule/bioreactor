@@ -1,13 +1,13 @@
-#include "reactor_state.h"
 #include <Arduino.h>
+#include <core/actuators.h>
 
-ReactorState::ReactorState()
+Actuators::Actuators()
 {
 	initialize();
 	shutdown();
 }
 
-bool ReactorState::initialize()
+bool Actuators::initialize()
 {
 	pinMode(config::motor::step,OUTPUT);
 	pinMode(config::motor::direction,OUTPUT);
@@ -28,28 +28,10 @@ bool ReactorState::initialize()
 	return true;
 }
 
-bool ReactorState::enable()
-{
-	enabled = true;
-	return true;
-}
-
-bool ReactorState::is_enabled()
-{
-	return enabled;
-}
-
-bool ReactorState::disable()
-{
-	enabled = false;
-	return true;
-}
-
-bool ReactorState::shutdown()
+bool Actuators::shutdown()
 {
 	bool result = true;
 
-	disable();
 	for(size_t i = 0; i < config::fet.size(); ++i)
 		result &= changeFET(i, false);
 
@@ -64,13 +46,13 @@ bool ReactorState::shutdown()
 	return result;
 }
 
-bool ReactorState::powerHBridge(bool is_enabled)
+bool Actuators::powerHBridge(bool is_enabled)
 {
 	digitalWrite(config::HBridge::power, is_enabled);
 	return true;
 }
 
-bool ReactorState::changeHBridge(size_t num, BridgeState state)
+bool Actuators::changeHBridge(size_t num, BridgeState state)
 {
 	if(num >= config::HBridge::pins.size())
 		return false;
@@ -96,38 +78,38 @@ bool ReactorState::changeHBridge(size_t num, BridgeState state)
 
 	digitalWrite(config::HBridge::pins[num].A, a_key);
 	digitalWrite(config::HBridge::pins[num].B, b_key);
-	devices_state.hbridge[num] = state;
+	_devices_state.hbridge[num] = state;
 
 	return true;
 }
 
-bool ReactorState::changeFET(size_t num, bool is_enabled)
+bool Actuators::changeFET(size_t num, bool is_enabled)
 {
 	if(num >= config::fet.size())
 		return false;
 
 	digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
-	devices_state.fet[num] = is_enabled;
+	_devices_state.fet[num] = is_enabled;
 	return true;
 }
 
-bool ReactorState::changeLED(bool is_enabled)
+bool Actuators::changeLED(bool is_enabled)
 {
 	digitalWrite(config::led_pin, is_enabled);
-	devices_state.led = is_enabled;
+	_devices_state.led = is_enabled;
 	return true;
 }
 
-bool ReactorState::changeMotor(bool is_enabled)
+bool Actuators::changeMotor(bool is_enabled)
 {
 	digitalWrite(config::motor::power, is_enabled);
-	devices_state.motor = is_enabled;
+	_devices_state.motor = is_enabled;
 	return true;
 }
 
-const ReactorState::Devices& ReactorState::read() const
+const Actuators::Devices& Actuators::read() const
 {
-	return devices_state;
+	return _devices_state;
 }
 
 const char* bridgeStateConvert(BridgeState state)

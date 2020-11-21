@@ -61,7 +61,7 @@ void PH::begin()
     }
 }
 
-float PH::readPH()
+float PH::readPH() const
 {
 	_voltage = adc1_get_raw(_ph_pin) / ESPADC * ESPVOLTAGE; // read the voltage
 

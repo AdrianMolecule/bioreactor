@@ -10,7 +10,7 @@ enum class BridgeState
 	REVERSE
 };
 
-class ReactorState
+class Actuators
 {
 public:
 	struct Devices
@@ -21,13 +21,9 @@ public:
 		bool motor;
 	};
 
-	ReactorState();
+	Actuators();
 
 	bool initialize();
-
-	bool enable();
-	bool is_enabled();
-	bool disable();
 
 	bool shutdown();
 
@@ -42,8 +38,7 @@ public:
 private:
 	bool powerHBridge(bool is_enabled);
 
-	Devices devices_state;
-	bool enabled;
+	Devices _devices_state;
 };
 
 const char* bridgeStateConvert(BridgeState state);

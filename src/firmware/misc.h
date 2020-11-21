@@ -1,11 +1,11 @@
 #ifndef HWINIT_H
 #define HWINIT_H
 
-#include <memory>
+#include <vector>
 
 #include "core/sensor_state.h"
-#include "core/reactor_state.h"
-#include <vector>
+#include "core/reactor.h"
+
 
 class String;
 
@@ -19,6 +19,6 @@ void getProgramSettings(float& temperature, float& ph);
 void saveProgramSettings(String&& temperature, String&& ph);
 
 //---- state to Json converter
-String serializeState(std::unique_ptr<SensorState>& sensors, std::shared_ptr<ReactorState> reactor);
+String serializeState(const SensorState* sensors, const Reactor* reactor_mgr);
 
 #endif

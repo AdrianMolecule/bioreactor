@@ -5,14 +5,14 @@
 
 #include "config.h"
 #include "core/sensor_state.h"
-#include "core/reactor_state.h"
-#include "core/reactor_program.h"
-
-#include <misc.h>
+#include "core/actuators.h"
+#include "core/reactor.h"
+#include "misc.h"
 
 std::unique_ptr<Display> display;
-std::unique_ptr<SensorState> sensors;
-std::shared_ptr<ReactorState> reactor;
+SensorState* sensors;
+Actuators* act_mgr;
+Reactor* reactor_mgr;
 
 HTTPServer server;
 
@@ -47,9 +47,10 @@ void setup() {
 	}
 
 
-	sensors.reset(new SensorState(config::sensor::ph_adc, config::sensor::temp_pin));
-	reactor.reset(new ReactorState());
-	server.init(reactor);
+	sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
+	act_mgr = new Actuators();
+	reactor_mgr = new Reactor(sensors, act_mgr);
+	server.init(reactor_mgr);
 	//adc1_config_width(ADC_WIDTH_BIT_12);
 
 }
@@ -65,9 +66,9 @@ void loop() {
 	  delayMicroseconds(500);
 	}
 
-	program_run(sensors, reactor);
+	reactor_mgr->program_step();
 
-	String data = serializeState(sensors, reactor);
+	String data = serializeState(sensors, reactor_mgr);
 
 	//Serial.println(data);
 	server.loop();

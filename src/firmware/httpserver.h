@@ -9,14 +9,14 @@
 #include <unordered_map>
 #include "SPIFFS.h"
 
-class ReactorState;
+class Reactor;
 
 class HTTPServer
 {
 public:
 	HTTPServer(uint16_t HTTPPort = 80, uint16_t webSocketPort = 81);
 
-	void init(std::shared_ptr<ReactorState> reactor);
+	void init(Reactor* reactor_mgr);
 	void loop();
 	void sendWebSockData(String data);
 
@@ -31,11 +31,11 @@ private:
 	void handleFileUpload();
 	void responseWithFile(const char filename[], html_variables data);
 
-	WebSocketsServer WSServer;
-	WebServer webServer;
-	std::unordered_set<uint8_t> WSConnections;
-	std::shared_ptr<ReactorState> reactorState;
-	File uploadFile;
+	WebSocketsServer _ws_server;
+	WebServer _web_server;
+	std::unordered_set<uint8_t> _ws_connections;
+	Reactor* _reactor_mgr;
+	File _upload_file;
 };
 
 #endif
