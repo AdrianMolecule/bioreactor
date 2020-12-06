@@ -3,33 +3,87 @@
     <head>
         <title>settings</title>
         <script>
+        	function fillProgramData(id)
+        	{
+        	    if(program_data.programs.length > 0)
+        		{
+        			var active_program = program_data.programs[id];
+        			var form = document.forms["edit_program"];
+        			
+        			form.elements.namedItem("id").value = active_program.id;
+        			form.elements.namedItem("name").value = active_program.name;
+        			form.elements.namedItem("temp").value = active_program.temp;
+        			form.elements.namedItem("ph").value = active_program.ph;
+        			
+	        		document.getElementById('div_g').innerHTML = "Target temperature is <b>" + active_program.temp + "<\/b> &deg;C</br>";
+	        		document.getElementById('div_g').innerHTML += "Target ph level is <b>" + active_program.ph + "<\/b>";
+	        		
+		        	if(program_data.is_enabled)
+		        	{
+		        		document.getElementById('submit_button').value="Stop";
+		        		document.getElementById('enabled').value=1;
+		        	}
+        		}
+        	}
+        
 	        window.onload = function(e)
 	        {
-	        	if(##is_enabled##)
-	        		document.getElementById('submit_button').value="Stop";
+	            program_data = JSON.parse('##programs##'); 
+        		//program_data = JSON.parse('{"programs":[{"id":0,"name":"first","temp":0,"ph":7},{"id":1,"name":"second","temp":36,"ph":6}],"is_enabled":false,"active":1}'); 
+        
+        		var program_select = document.getElementById("programs");
+        		
+        		if(!program_data.programs)
+        			return;
+        		
+        		for(i = 0; i < program_data.programs.length; ++i)
+        		{
+					var option = document.createElement("option");
+					option.value = program_data.programs[i].id;
+					option.text = program_data.programs[i].name;
+					
+					if( program_data.programs[i].id == program_data.active )
+						option.selected = true;
+					
+					program_select.add(option);
+        		}
+
+				fillProgramData(program_data.active);
 	        }
 	    </script>
     </head>
     <body>
     <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
-    <div id="div_g"/>
 
-    <script>
-        var temperature = "##temp##";
-        var ph = "##phlevel##";
-        
-        document.getElementById('div_g').innerHTML += "Traget temperature is <b>" + temperature + "<\/b> &deg;C</br>";
-        document.getElementById('div_g').innerHTML += "Traget ph level is <b>" + ph + "<\/b>";
-    </script>
+
+    <label for="cars">Programs:</label>
+	<select id="programs" onchange="fillProgramData(this.value);">
+	</select>
+	
+	<br><br>	
+	<div id="div_g"></div>    
     
-    </br></br>
-    
-    <form action="/program" method="post">
-        <label for="temperature">Temperature:</label>
-        <input type="text" name="temperature"><br><br>
+    <form action="/program" method="post" name="edit_program">
+    	<label for="name">Name:</label>
+        <input type="text" name="name"><br><br>
+        <label for="temp">Temperature:</label>
+        <input type="text" name="temp" value=""><br><br>
         <label for="ph">PH:</label>
-        <input type="text" name="ph"/><br><br>
-        <input type="submit" id="submit_button" value="Start">
+        <input type="text" name="ph" value="">
+        <input type="hidden" name="enabled" value="0">
+        <input type="hidden" name="id"><br><br>
+        <input type="submit" onClick="document.getElementsByName('enabled')[0].value = (document.getElementsByName('enabled')[0].value * 1 + 1) % 2;" id="submit_button" value="Start">
+    </form>
+    
+    <form action="/program" method="post" name="new_program">
+    	<label for="name">Name:</label>
+        <input type="text" name="name"><br><br>
+        <label for="temp">Temperature:</label>
+        <input type="text" name="temp"><br><br>
+        <label for="ph">PH:</label>
+        <input type="text" name="ph"/>
+        <input type="hidden" name="new_program" value="1"><br><br>
+        <input type="submit" value="Save">
     </form>
     </body>
 </html>

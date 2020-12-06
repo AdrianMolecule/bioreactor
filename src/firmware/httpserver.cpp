@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <Update.h>
+#include <ArduinoJson.h>
 
 #include "core/reactor.h"
 #include "misc.h"
@@ -157,22 +158,53 @@ void HTTPServer::onSettings()
 
 void HTTPServer::onProgram()
 {
+	const auto& programs = _reactor_mgr->read_programs_list();
+
 	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		saveProgramSettings(_web_server.arg("temperature"), _web_server.arg("ph"));
-		if(_reactor_mgr->is_enabled())
-			_reactor_mgr->disable();
-		else
-			_reactor_mgr->enable();
+		Reactor::ProgramSettings settings{};
+
+		if(_web_server.arg("new_program").isEmpty())
+		{
+			int id = _web_server.arg("id").toInt();
+			if(id > programs.size())
+			{
+				id = _reactor_mgr->program_active();
+			}
+			settings = programs[static_cast<uint8_t>(id)];
+		}
+
+		if(!_web_server.arg("temp").isEmpty())
+			settings.temp = _web_server.arg("temp").toFloat();
+		if(!_web_server.arg("ph").isEmpty())
+			settings.ph = _web_server.arg("ph").toFloat();
+		if(!_web_server.arg("name").isEmpty())
+			settings.name = _web_server.arg("name").c_str();
+
+		Serial.printf("OnProgram: %d %s\n", _web_server.arg("new_program").isEmpty(), settings.name.c_str());
+
+		_reactor_mgr->save_program(settings, _web_server.arg("enabled").toInt(), !_web_server.arg("new_program").isEmpty());
 	}
 
-	float temperature, ph;
-	getProgramSettings(temperature, ph);
+	static StaticJsonDocument<300> programs_json;
+	programs_json.clear();
 
+	for(size_t i = 0; i < programs.size(); ++i)
+	{
+		programs_json["programs"][i];
+		programs_json["programs"][i]["id"] = programs[i].id;
+		programs_json["programs"][i]["name"] = programs[i].name.c_str();
+		programs_json["programs"][i]["temp"] = programs[i].temp;
+		programs_json["programs"][i]["ph"] = programs[i].ph;
+	}
+
+	programs_json["is_enabled"] = _reactor_mgr->program_enabled();
+	programs_json["active"] = _reactor_mgr->program_active();
+
+	String serialized_json;
+	serializeJson(programs_json, serialized_json);
 	html_variables data;
-	data["##temp##"] = String(temperature, 2);
-	data["##phlevel##"] = String(ph, 2);
-	data["##is_enabled##"] = String(_reactor_mgr->is_enabled());
+	data["##programs##"] = serialized_json;
 	responseWithFile("/program.html", data);
 }
 

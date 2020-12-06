@@ -7,6 +7,7 @@
 #include <Preferences.h>
 #include <ArduinoJson.h>
 #include <core/actuators.h>
+#include <esp_heap_caps.h>
 
 bool WiFiConnect()
 {
@@ -82,29 +83,11 @@ void saveWifiSettings(String&& ssid, String&& password)
 	preferences.end();
 }
 
-void getProgramSettings(float& temperature, float& ph)
-{
-	Preferences preferences;
-	preferences.begin("program", true);
-	temperature = preferences.getFloat("temp", .0);
-	ph = preferences.getFloat("ph", .0);
-	preferences.end();
-}
-
-void saveProgramSettings(String&& temperature, String&& ph)
-{
-	Preferences preferences;
-	preferences.begin("program");
-	if(!temperature.isEmpty())
-		preferences.putFloat("temp", temperature.toFloat());
-	if(!ph.isEmpty())
-		preferences.putFloat("ph", ph.toFloat());
-	preferences.end();
-}
-
 String serializeState(const SensorState* sensors, const Reactor* reactor_mgr)
 {
-	static StaticJsonDocument<300> state;
+	static StaticJsonDocument<400> state;
+	state.clear();
+
 	state["ph"] = sensors->readPH();
 	state["temp"][0] = sensors->readTemperature()[0];
 	state["temp"][1] = 0; //sensors->readTemperature()[1];
@@ -120,11 +103,51 @@ String serializeState(const SensorState* sensors, const Reactor* reactor_mgr)
 	{
 		state["hbridge"][i] = bridgeStateConvert(act_mgr->read().hbridge[i]);
 	}
+
 	state["led"] = act_mgr->read().led;
 	state["motor"] = act_mgr->read().motor;
-	state["reactor_enabled"] = reactor_mgr->is_enabled();
+	state["reactor_enabled"] = reactor_mgr->program_enabled();
+
+	const auto& programs = reactor_mgr->read_programs_list();
+	if(reactor_mgr->program_enabled() && !programs.empty())
+	{
+		state["program_active"] = programs[reactor_mgr->program_active()].name.c_str();
+	}
 
 	String data;
 	serializeJson(state, data);
+
 	return data;
 }
+
+void resetMemory()
+{
+	Preferences preferences;
+	preferences.begin("program");
+	uint8_t count = preferences.getUChar("count");
+	preferences.clear();
+	preferences.end();
+
+
+	for(size_t i=0; i < count; ++i)
+	{
+		char mem_namespace[16];
+		sprintf(mem_namespace, "program/%d", i);
+
+		Serial.printf("Clear %s\n", mem_namespace);
+
+		preferences.begin(mem_namespace);
+		preferences.clear();
+		preferences.end();
+	}
+	Serial.printf("found %d programs\n", count);
+	//preferences.begin("wifi");
+	//preferences.clear();
+}
+
+void dumpMemoryStatistic()
+{
+	//heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
+	heap_caps_print_heap_info(MALLOC_CAP_32BIT);
+}
+

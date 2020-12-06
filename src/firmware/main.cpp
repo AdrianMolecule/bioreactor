@@ -19,6 +19,8 @@ HTTPServer server;
 void setup() {
 	Serial.begin(9600);
 
+	//resetMemory();
+
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
 
@@ -69,10 +71,12 @@ void loop() {
 	reactor_mgr->program_step();
 
 	String data = serializeState(sensors, reactor_mgr);
-
 	//Serial.println(data);
+	//dumpMemoryStatistic();
+
 	server.loop();
 	server.sendWebSockData(data);
 
-	//delay(100);
+	delay(3);
+
 }

@@ -14,11 +14,10 @@ std::vector<String> WiFiNetworks();
 
 void getWifiSettings(String& ssid, String& password);
 void saveWifiSettings(String&& ssid, String&& password);
-
-void getProgramSettings(float& temperature, float& ph);
-void saveProgramSettings(String&& temperature, String&& ph);
+void resetMemory();
 
 //---- state to Json converter
 String serializeState(const SensorState* sensors, const Reactor* reactor_mgr);
+void dumpMemoryStatistic();
 
 #endif
