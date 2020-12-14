@@ -107,6 +107,18 @@ bool Actuators::changeMotor(bool is_enabled)
 	return true;
 }
 
+void Actuators::runMotor()
+{
+	digitalWrite(config::motor::direction,HIGH); //Enables the motor to move in a perticular direction
+	// for one full rotation required 200 pulses
+	for(int x = 0; x < 900; x++){
+	  digitalWrite(config::motor::step,HIGH);
+	  delayMicroseconds(500);
+	  digitalWrite(config::motor::step,LOW);
+	  delayMicroseconds(500);
+	}
+}
+
 const Actuators::Devices& Actuators::read() const
 {
 	return _devices_state;

@@ -57,17 +57,8 @@ void setup() {
 
 }
 
-void loop() {
-
-	digitalWrite(config::motor::direction,HIGH); //Enables the motor to move in a perticular direction
-	// for one full rotation required 200 pulses
-	for(int x = 0; x < 900; x++){
-	  digitalWrite(config::motor::step,HIGH);
-	  delayMicroseconds(500);
-	  digitalWrite(config::motor::step,LOW);
-	  delayMicroseconds(500);
-	}
-
+void loop()
+{
 	reactor_mgr->program_step();
 
 	String data = serializeState(sensors, reactor_mgr);

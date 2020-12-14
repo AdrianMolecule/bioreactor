@@ -31,6 +31,7 @@ public:
 	bool changeFET(size_t num, bool is_enabled);
 	bool changeLED(bool is_enabled);
 	bool changeMotor(bool is_enabled);
+	void runMotor();
 
 	//motor
 	const Devices& read() const;

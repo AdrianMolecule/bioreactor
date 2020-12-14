@@ -27,11 +27,16 @@ Actuators* Reactor::get_actuators() const
 void Reactor::program_step()
 {
 	if( !program_enabled() )
+	{
+		delay(500);
 		return;
+	}
 
 	const Reactor::ProgramSettings& active = programs[_program_active];
 
 	//Serial.printf("program_step: name %s temp %f\n", active.name.c_str(), active.temp);
+
+	_act_mgr->runMotor();
 
 	if(_sensors->readTemperature()[0] != active.temp)
 	{
@@ -92,6 +97,11 @@ Reactor::ProgramSettings Reactor::read_single_program(uint8_t id)
 void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 {
 	_program_enabled = enabled;
+
+	if(!_program_enabled)
+	{
+		_act_mgr->shutdown();
+	}
 
 	if(is_new)
 	{
