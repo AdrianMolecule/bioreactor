@@ -35,7 +35,7 @@ void Reactor::program_step()
 	const Reactor::ProgramSettings& active = programs[_program_active];
 
 	//Serial.printf("program_step: name %s temp %f\n", active.name.c_str(), active.temp);
-
+	_act_mgr->changeMotor(true);
 	_act_mgr->runMotor();
 
 	if(_sensors->readTemperature()[0] != active.temp)

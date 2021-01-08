@@ -10,12 +10,14 @@ void DS18B20::init(unsigned dataPin)
 {
 	dataWire.begin(dataPin);
 	sensors.begin();
+	sensors.setResolution(10);
+	sensors.getAddress(&address0, 0);
 }
 
-float DS18B20::readCelcius(uint8_t index) const
+float DS18B20::readCelcius() const
 {
 	sensors.requestTemperatures();
-	return sensors.getTempCByIndex(index);
+	return sensors.getTempC(&address0);
 }
 
 uint8_t DS18B20::sensorCount() const

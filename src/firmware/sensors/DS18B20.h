@@ -11,12 +11,13 @@ namespace sensor
 		DS18B20();
 
 		void init(unsigned dataPin);
-		float readCelcius(uint8_t index) const;
+		float readCelcius() const;
 		uint8_t sensorCount() const;
 
 	private:
 		OneWire dataWire;
 		mutable DallasTemperature sensors;
+		uint8_t address0;
 	};
 
 }

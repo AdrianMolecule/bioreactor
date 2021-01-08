@@ -26,9 +26,9 @@ uint32_t SensorState::readLight() const
 std::array<float, 3> SensorState::readTemperature() const
 {
 	std::array<float, 3> readings{0};
-	for(uint8_t i = 0; i < _temp.sensorCount() && i < readings.size(); ++i)
+
 	{
-		readings[i] = _temp.readCelcius(i);
+		readings[0] = _temp.readCelcius();
 	}
 
 	return readings;
