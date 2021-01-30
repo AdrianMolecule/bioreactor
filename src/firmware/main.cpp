@@ -53,8 +53,6 @@ void setup() {
 	act_mgr = new Actuators();
 	reactor_mgr = new Reactor(sensors, act_mgr);
 	server.init(reactor_mgr);
-	//adc1_config_width(ADC_WIDTH_BIT_12);
-
 }
 
 void loop()

@@ -44,7 +44,6 @@ namespace sensor
 		void begin();                                   //initialization
 
 	private:
-		mutable float _phValue;
 		float _acidVoltage;
 		float _neutralVoltage;
 		mutable float _voltage;

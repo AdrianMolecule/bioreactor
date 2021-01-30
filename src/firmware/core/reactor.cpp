@@ -38,7 +38,7 @@ void Reactor::program_step()
 	_act_mgr->changeMotor(true);
 	_act_mgr->runMotor();
 
-	if(_sensors->readTemperature()[0] != active.temp)
+	if(_sensors->readTemperature()[0] < active.temp)
 	{
 		_act_mgr->changeFET(0, true);
 	}
