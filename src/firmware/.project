@@ -72,6 +72,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/EEPROM</locationURI>
 		</link>
 		<link>
+			<name>libraries/ESP-FlexyStepper</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP-FlexyStepper/1.4.3</locationURI>
+		</link>
+		<link>
 			<name>libraries/ESPmDNS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/ESPmDNS</locationURI>
@@ -100,11 +105,6 @@
 			<name>libraries/SPIFFS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/SPIFFS</locationURI>
-		</link>
-		<link>
-			<name>libraries/Stepper</name>
-			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Stepper/1.1.3</locationURI>
 		</link>
 		<link>
 			<name>libraries/Update</name>

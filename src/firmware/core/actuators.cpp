@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include <core/actuators.h>
+#include "core/actuators.h"
 
 Actuators::Actuators()
 {
@@ -11,6 +11,9 @@ bool Actuators::initialize()
 {
 	pinMode(config::motor::step,OUTPUT);
 	pinMode(config::motor::direction,OUTPUT);
+
+	_stepper.connectToPins(config::motor::step, config::motor::direction);
+	_stepper.setSpeedInStepsPerSecond(1000);
 
 	for(auto& fet_pin : config::fet)
 	{
@@ -103,20 +106,20 @@ bool Actuators::changeLED(bool is_enabled)
 bool Actuators::changeMotor(bool is_enabled)
 {
 	digitalWrite(config::motor::power, is_enabled);
+
+	if(is_enabled && !_stepper.isStartedAsService())
+		_stepper.startAsService();
+	else if(!is_enabled && _stepper.isStartedAsService())
+		_stepper.stopService();
+
+
 	_devices_state.motor = is_enabled;
 	return true;
 }
 
 void Actuators::runMotor()
 {
-	digitalWrite(config::motor::direction,HIGH); //Enables the motor to move in a perticular direction
-	// for one full rotation required 200 pulses
-	for(int x = 0; x < 900; x++){
-	  digitalWrite(config::motor::step,HIGH);
-	  delayMicroseconds(500);
-	  digitalWrite(config::motor::step,LOW);
-	  delayMicroseconds(500);
-	}
+	_stepper.setTargetPositionRelativeInRevolutions(10000);
 }
 
 const Actuators::Devices& Actuators::read() const

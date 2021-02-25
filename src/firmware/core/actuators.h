@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <ESP_FlexyStepper.h>
 #include "../config.h"
 
 enum class BridgeState
@@ -40,6 +41,7 @@ private:
 	bool powerHBridge(bool is_enabled);
 
 	Devices _devices_state;
+	ESP_FlexyStepper _stepper;
 };
 
 const char* bridgeStateConvert(BridgeState state);
