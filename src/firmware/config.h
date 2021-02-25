@@ -49,6 +49,7 @@ namespace config
 	}
 
 	constexpr unsigned char led_pin = 19;
+	constexpr unsigned char buzzer_pin = 12;
 };
 
 #endif

@@ -24,6 +24,8 @@ void setup() {
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
 
+
+
 	if(!WiFiConnect())
 	{
 		Serial.println("Failed to init AP mode");
@@ -48,6 +50,10 @@ void setup() {
 		display->print(host);
 	}
 
+	//disabling buzzer
+	ledcSetup(0, 5000, 8);
+	ledcAttachPin(config::buzzer_pin, 0);
+	ledcWriteTone(0, 0);
 
 	sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
 	act_mgr = new Actuators();
