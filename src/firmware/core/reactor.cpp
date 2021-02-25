@@ -26,9 +26,10 @@ Actuators* Reactor::get_actuators() const
 
 void Reactor::program_step()
 {
+	_act_mgr->runMotor();
+
 	if( !program_enabled() )
 	{
-		delay(500);
 		return;
 	}
 
@@ -36,7 +37,6 @@ void Reactor::program_step()
 
 	//Serial.printf("program_step: name %s temp %f\n", active.name.c_str(), active.temp);
 	_act_mgr->changeMotor(true);
-	_act_mgr->runMotor();
 
 	if(_sensors->readTemperature()[0] < active.temp)
 	{

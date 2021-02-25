@@ -66,6 +66,6 @@ void loop()
 	server.loop();
 	server.sendWebSockData(data);
 
-	delay(3);
+	delay(10);
 
 }
