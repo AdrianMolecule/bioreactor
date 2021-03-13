@@ -42,9 +42,14 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/variants/esp32</locationURI>
 		</link>
 		<link>
+			<name>libraries/Adafruit_BusIO</name>
+			<type>2</type>
+			<location>/home/mi5/Arduino/libraries/Adafruit_BusIO</location>
+		</link>
+		<link>
 			<name>libraries/Adafruit_GFX_Library</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_GFX_Library/1.7.5</locationURI>
+			<location>/home/mi5/Arduino/libraries/Adafruit_GFX_Library</location>
 		</link>
 		<link>
 			<name>libraries/Adafruit_ST7735_and_ST7789_Library</name>
@@ -107,6 +112,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/SPIFFS</locationURI>
 		</link>
 		<link>
+			<name>libraries/Ticker</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Ticker</locationURI>
+		</link>
+		<link>
 			<name>libraries/Update</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Update</locationURI>
@@ -135,6 +145,11 @@
 			<name>libraries/Wire</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Wire</locationURI>
+		</link>
+		<link>
+			<name>libraries/arduino-timer</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/arduino-timer/2.3.0</locationURI>
 		</link>
 		<link>
 			<name>libraries/jm_PCF8574</name>

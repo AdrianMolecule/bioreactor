@@ -14,6 +14,7 @@ bool Actuators::initialize()
 
 	_stepper.connectToPins(config::motor::step, config::motor::direction);
 	_stepper.setSpeedInStepsPerSecond(1000);
+	_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
 
 	for(auto& fet_pin : config::fet)
 	{

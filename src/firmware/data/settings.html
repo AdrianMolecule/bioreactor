@@ -5,6 +5,8 @@
     </head>
     <body>
     <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
+    
+    <H4>WiFi settings</H4>
     <div id="div_g"/>
     
     <script>
@@ -23,14 +25,22 @@
         <input type="text" name="pass"/><br><br>
         <input type="submit">
     </form>
+    
+    
+    <br/><H4>Server settings</H4>
+    <form action="/settings" method="post" id="server_settings">
+        <label for="sensor_rate">Sensors reading rate:</label>
+        <input type="number" name="sensor_rate" value="##sensor_rate##"> seconds<br><br>
+        <input type="submit">
+    </form>
        
-    <br/><br/>
+    <br/><H4>Firmware update</H4>
     Update ESP32 firmware:<br/>
     <form method='POST' action='/firmware' enctype='multipart/form-data' id='upload_form'>
    <input type='file' name='update' required>
         <input type='submit' value='Update'>
     </form>
-        Update ESP32 html:<br/>
+        Update UI:<br/>
     <form method='POST' action='/upload' enctype='multipart/form-data' id='file_upload'>
    <input type='file' name='update' required>
         <input type='submit' value='Update'>

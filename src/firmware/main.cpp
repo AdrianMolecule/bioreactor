@@ -10,7 +10,7 @@
 #include "misc.h"
 
 std::unique_ptr<Display> display;
-SensorState* sensors;
+
 Actuators* act_mgr;
 Reactor* reactor_mgr;
 
@@ -55,9 +55,12 @@ void setup() {
 	ledcAttachPin(config::buzzer_pin, 0);
 	ledcWriteTone(0, 0);
 
-	sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
+	SensorState *sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
 	act_mgr = new Actuators();
-	reactor_mgr = new Reactor(sensors, act_mgr);
+
+	unsigned short sensor_read_rate = -1;
+	getServerSettings(sensor_read_rate);
+	reactor_mgr = new Reactor(sensors, act_mgr, sensor_read_rate);
 	server.init(reactor_mgr);
 }
 
@@ -65,13 +68,11 @@ void loop()
 {
 	reactor_mgr->program_step();
 
-	String data = serializeState(sensors, reactor_mgr);
 	//Serial.println(data);
 	//dumpMemoryStatistic();
 
 	server.loop();
-	server.sendWebSockData(data);
 
 	delay(10);
-
 }
+

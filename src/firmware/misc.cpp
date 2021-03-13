@@ -83,16 +83,32 @@ void saveWifiSettings(String&& ssid, String&& password)
 	preferences.end();
 }
 
-String serializeState(const SensorState* sensors, const Reactor* reactor_mgr)
+void getServerSettings(unsigned short &sensor_read_rate)
+{
+	Preferences preferences;
+	preferences.begin("server", true);
+	sensor_read_rate = preferences.getShort("sensor_rate",5);
+	preferences.end();
+}
+
+void saveServerSettings(const unsigned short sensor_rate)
+{
+	Preferences preferences;
+	preferences.begin("server");
+	preferences.putShort("sensor_rate", sensor_rate);
+	preferences.end();
+}
+
+String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data)
 {
 	static StaticJsonDocument<400> state;
 	state.clear();
 
-	state["ph"] = sensors->readPH();
-	state["temp"][0] = sensors->readTemperature()[0];
+	state["ph"] = sensor_data._ph;
+	state["temp"][0] = sensor_data._temp[0];
 	state["temp"][1] = 0; //sensors->readTemperature()[1];
 	state["temp"][2] = 0; //sensors->readTemperature()[2];
-	state["light"] = sensors->readLight();
+	state["light"] = sensor_data._light;
 
 	const Actuators* act_mgr = reactor_mgr->get_actuators();
 

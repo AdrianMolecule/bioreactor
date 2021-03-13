@@ -84,6 +84,12 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -138,6 +144,12 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -192,6 +204,12 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -213,7 +231,7 @@
                     					
                     <sourceEntries>
                         						
-                        <entry excluding="libraries/Wire/doc|libraries/WebSockets/travis|libraries/OneWire/util|libraries/OneWire/docs|libraries/Adafruit_GFX_Library/Fonts|libraries/Adafruit_GFX_Library/fontconvert|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+                        <entry excluding="libraries/TimerFive/config|libraries/TimerOne/config|libraries/TimerFour/config|libraries/TimerThree/config|libraries/Wire/doc|libraries/WebSockets/travis|libraries/OneWire/util|libraries/OneWire/docs|libraries/Adafruit_GFX_Library/Fonts|libraries/Adafruit_GFX_Library/fontconvert|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
                         					
                     </sourceEntries>
                     				

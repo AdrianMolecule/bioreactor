@@ -1,13 +1,17 @@
 #include "reactor.h"
 
 #include <Preferences.h>
+#include "misc.h"
 
-Reactor::Reactor(const SensorState* sensors, Actuators* act_mgr) : _program{ act_mgr },
+Reactor::Reactor(const SensorState* sensors, Actuators* act_mgr, unsigned short sensor_read_rate) : _program{ act_mgr },
 	_sensors{ sensors },
 	_act_mgr{ act_mgr },
 	_program_enabled{false}
 {
 	build_program_list();
+
+
+	schedule_routines(sensor_read_rate);
 }
 
 bool Reactor::program_enabled() const
@@ -26,6 +30,7 @@ Actuators* Reactor::get_actuators() const
 
 void Reactor::program_step()
 {
+	timer.tick();
 	_act_mgr->runMotor();
 
 	if( !program_enabled() )
@@ -148,3 +153,13 @@ void Reactor::update_program_list(ProgramSettings& settings, bool enabled)
 	_program_enabled = enabled;
 }
 
+void Reactor::sensor_reading()
+{
+	_sensor_data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+}
+
+void Reactor::schedule_routines(unsigned short sensor_rate_sec)
+{
+	timer.cancel();
+	timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
+}

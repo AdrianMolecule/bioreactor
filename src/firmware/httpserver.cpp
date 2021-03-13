@@ -66,6 +66,13 @@ void HTTPServer::loop()
 {
 	_web_server.handleClient();
 	_ws_server.loop();
+
+	while(!_reactor_mgr->_sensor_data.empty())
+	{
+		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.back());
+		sendWebSockData(data);
+		_reactor_mgr->_sensor_data.pop_back();
+	}
 }
 
 void HTTPServer::sendWebSockData(String data)
@@ -145,13 +152,24 @@ void HTTPServer::onSettings()
 	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
 		saveWifiSettings(_web_server.arg("ssid"), _web_server.arg("pass"));
+
+		if(!_web_server.arg("sensor_rate").isEmpty())
+		{
+			unsigned short sensor_rate = std::max<unsigned short>(_web_server.arg("sensor_rate").toInt(), 1);
+			saveServerSettings(sensor_rate);
+			_reactor_mgr->schedule_routines(sensor_rate);
+		}
 	}
 
 	String ssid, password;
 	getWifiSettings(ssid, password);
 
+	unsigned short sensor_read_rate = -1;
+	getServerSettings(sensor_read_rate);
+
 	html_variables data;
 	data["##ssid##"] = ssid;
+	data["##sensor_rate##"] = sensor_read_rate;
 
 	responseWithFile("/settings.html", data);
 }

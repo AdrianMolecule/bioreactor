@@ -85,8 +85,8 @@ float PH::readPH() const
     //Serial.print(", intercept:");
     //Serial.println(intercept);
 	float _phValue = slope * (_voltage - 1500.0) / 3.0 + intercept; //y = k*x + b
-    Serial.print("[readPH]... phValue ");
-    Serial.println(_phValue);
+    //Serial.print("[readPH]... phValue ");
+    //Serial.println(_phValue);
     return _phValue;
 }
 

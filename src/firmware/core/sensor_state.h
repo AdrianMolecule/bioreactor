@@ -10,6 +10,13 @@
 class SensorState
 {
 public:
+	struct Readings
+	{
+		std::array<float, 3> _temp;
+		float _ph;
+		uint32_t _light;
+	};
+
 	SensorState(adc1_channel_t ph_adc, unsigned char temperature_pin);
 	std::array<float, 3> readTemperature() const;
 	float readPH() const ;
