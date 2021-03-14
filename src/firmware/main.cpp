@@ -3,41 +3,35 @@
 #include "display/factory.h"
 #include "httpserver.h"
 
-#include <Stepper.h>
-
-#include "hwinit.h"
 #include "config.h"
-
-#include "sensors/DS18B20.h"
-#include "sensors/PH.h"
+#include "core/sensor_state.h"
+#include "core/actuators.h"
+#include "core/reactor.h"
+#include "misc.h"
 
 std::unique_ptr<Display> display;
-std::unique_ptr<sensor::PH> phsensor;
-std::unique_ptr<sensor::DS18B20> tempsensor;
+
+Actuators* act_mgr;
+Reactor* reactor_mgr;
+
 HTTPServer server;
-Stepper stepper(config::motor_steps,
-					config::motor_pin_1,
-					config::motor_pin_2,
-					config::motor_pin_3,
-					config::motor_pin_4
-				);
 
 void setup() {
 	Serial.begin(9600);
 
+	//resetMemory();
+
 	display = CreateDisplay(Displays::ST7735);
 	display->init();
 
-	tempsensor.reset(new sensor::DS18B20());
-	tempsensor->init(config::temp_sensor);
-	phsensor.reset(new sensor::PH(config::ph_sensor));
+
 
 	if(!WiFiConnect())
 	{
 		Serial.println("Failed to init AP mode");
 	}
 
-	server.init();
+
 
 	String ip = "APIP: " + WiFi.softAPIP().toString() + "\n" +
 			"WFIP: " + WiFi.localIP().toString();
@@ -56,34 +50,29 @@ void setup() {
 		display->print(host);
 	}
 
-	//stepper.setSpeed(170);
-	pinMode(config::ph_sensor, OUTPUT);
-	digitalWrite(config::ph_sensor, LOW);
-	//ph.begin();
+	//disabling buzzer
+	ledcSetup(0, 5000, 8);
+	ledcAttachPin(config::buzzer_pin, 0);
+	ledcWriteTone(0, 0);
 
-	//adc1_config_width(ADC_WIDTH_BIT_12);
+	SensorState *sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
+	act_mgr = new Actuators();
+
+	unsigned short sensor_read_rate = -1;
+	getServerSettings(sensor_read_rate);
+	reactor_mgr = new Reactor(sensors, act_mgr, sensor_read_rate);
+	server.init(reactor_mgr);
 }
 
-void loop() {
+void loop()
+{
+	reactor_mgr->program_step();
 
-//	stepper.step(100);
-	float phValue = phsensor->readPH();
-	float tempValue = tempsensor->readCelcius();
+	//Serial.println(data);
+	//dumpMemoryStatistic();
 
-	if(phValue < 5)
-		digitalWrite(config::ph_pump_relay, HIGH);
-	else if(phValue > 6.0)
-		digitalWrite(config::ph_pump_relay, LOW);
-
-	String data("{\"ph\":\"");
-	data += phValue;
-	data += "\", \"temp\":\"";
-	data += tempValue;
-	data += "\"}";
-
-	Serial.println(data);
 	server.loop();
-	server.sendWebSockData(data);
 
-	delay(1000);
+	delay(10);
 }
+

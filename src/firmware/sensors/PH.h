@@ -40,14 +40,13 @@ namespace sensor
 		~PH();
 		void calibration(float voltage, float temperature, char *cmd); //calibration by Serial CMD
 		void calibration(float voltage, float temperature);
-		float readPH(); // voltage to pH value, with temperature compensation
+		float readPH() const; // voltage to pH value, with temperature compensation
 		void begin();                                   //initialization
 
 	private:
-		float _phValue;
 		float _acidVoltage;
 		float _neutralVoltage;
-		float _voltage;
+		mutable float _voltage;
 		float _temperature;
 
 		char _cmdReceivedBuffer[ReceivedBufferLength]; //store the Serial CMD

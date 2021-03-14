@@ -2,27 +2,54 @@
 #define CONFIG_H
 
 #include <driver/adc.h>
-
+#include "Arduino.h"
 namespace config
 {
 	constexpr char deviceName[] PROGMEM = "bioreactor";	// real domain will be with label ".local", ex "http://bioreactor.local"
 
-	//--------- WiFi access point
-	constexpr char AP_ip[] PROGMEM = "192.168.1.1";
-	constexpr char AP_gateway[] PROGMEM = "192.168.1.1";
-	constexpr char AP_subnet[] PROGMEM = "255.255.255.0";
+	namespace network
+	{
+		//--------- WiFi access point
+		constexpr char AP_ip[] PROGMEM = "192.168.1.1";
+		constexpr char AP_gateway[] PROGMEM = "192.168.1.1";
+		constexpr char AP_subnet[] PROGMEM = "255.255.255.0";
+	}
 
-	//--------- Stepper motor config
-	constexpr int motor_steps = 200;
-	constexpr int motor_pin_1 = 2;
-	constexpr int motor_pin_2 = 4;
-	constexpr int motor_pin_3 = 19;
-	constexpr int motor_pin_4 = 23;
+	//--------- Stepper motor
+	namespace motor
+	{
+		constexpr int steps = 200;
+		constexpr int step = 25;
+		constexpr int direction = 32;
+		constexpr int power = 27;
+	}
 
-	//--------- pins
-	constexpr unsigned char temp_sensor = 15;
-	constexpr adc1_channel_t ph_sensor = ADC1_CHANNEL_3;
-	constexpr unsigned char ph_pump_relay = 15;
+	namespace HBridge
+	{
+		constexpr unsigned char power = 13;
+
+		struct input
+		{
+			unsigned char A;
+			unsigned char B;
+		};
+
+		constexpr std::array<input, 4> pins{{ {18,16}, {4,15}, {33,23}, {5,14} }};
+	}
+
+	constexpr std::array<unsigned char, 2> fet{ 17, 0};
+
+	namespace sensor
+	{
+		//--------- Temperature
+		constexpr unsigned char temp_pin = 26;
+
+		//--------- PH sensor
+		constexpr adc1_channel_t ph_adc = ADC1_CHANNEL_3;
+	}
+
+	constexpr unsigned char led_pin = 19;
+	constexpr unsigned char buzzer_pin = 12;
 };
 
 #endif

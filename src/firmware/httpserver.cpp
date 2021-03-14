@@ -1,44 +1,85 @@
 #include "httpserver.h"
 
 #include <functional>
-#include "SPIFFS.h"
-#include "hwinit.h"
+#include <Update.h>
+#include <ArduinoJson.h>
+
+#include "core/reactor.h"
+#include "misc.h"
 
 using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
-: WSServer(webSocketPort),
-  webServer(HTTPPort)
+: _ws_server(webSocketPort),
+  _web_server(HTTPPort)
 {
 
 }
 
-void HTTPServer::init()
+void HTTPServer::init(Reactor* reactor_mgr)
 {
-	webServer.on("/", std::bind(&HTTPServer::onHTTPConnect, this));
-	webServer.on("/settings", std::bind(&HTTPServer::onSettings, this));
-	webServer.on("/program", std::bind(&HTTPServer::onProgram, this));
-	webServer.begin();
-	WSServer.begin();
-	WSServer.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
+	_reactor_mgr = reactor_mgr;
 
-	  if(!SPIFFS.begin(true)){
-	    Serial.println("An Error has occurred while mounting SPIFFS");
-	    return;
-	  }
+	_web_server.on("/", std::bind(&HTTPServer::onMain, this));
+
+	_web_server.on("/settings", std::bind(&HTTPServer::onSettings, this));
+
+	_web_server.on("/firmware", HTTP_ANY,
+			std::bind(
+					&HTTPServer::responseWithFile,
+					this,
+					"/dummy.html",
+					html_variables({{"##server_message##", "Reboot the board to apply changes"}})
+			),
+			std::bind(&HTTPServer::onFirmwareUpload, this)
+	);
+
+	_web_server.on("/program", std::bind(&HTTPServer::onProgram, this));
+
+	_web_server.on("/upload", HTTP_ANY,
+			std::bind(
+					&HTTPServer::responseWithFile,
+					this,
+					"/dummy.html",
+					html_variables({{"##server_message##", "Successfully uploaded"}})
+				),
+			std::bind(&HTTPServer::handleFileUpload, this)
+	);
+
+	if(!SPIFFS.begin(true))
+	{
+		Serial.println("An Error has occurred while mounting SPIFFS");
+		return;
+	}
+
+	_web_server.serveStatic("/header.html", SPIFFS, "/header.html");
+	_web_server.serveStatic("/footer.html", SPIFFS, "/footer.html");
+	_web_server.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
+	_web_server.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
+
+	_web_server.begin();
+	_ws_server.begin();
+	_ws_server.onEvent(std::bind(&HTTPServer::onWSEvent, this, _1, _2, _3, _4));
 }
 
 void HTTPServer::loop()
 {
-	webServer.handleClient();
-	WSServer.loop();
+	_web_server.handleClient();
+	_ws_server.loop();
+
+	while(!_reactor_mgr->_sensor_data.empty())
+	{
+		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.back());
+		sendWebSockData(data);
+		_reactor_mgr->_sensor_data.pop_back();
+	}
 }
 
 void HTTPServer::sendWebSockData(String data)
 {
-	for(uint8_t client : WSConnections)
+	for(uint8_t client : _ws_connections)
 	{
-		WSServer.sendTXT(client, data);
+		_ws_server.sendTXT(client, data);
 	}
 }
 
@@ -51,13 +92,13 @@ void HTTPServer::onWSEvent(uint8_t num,
   switch(type)
   {
     case WStype_DISCONNECTED:
-    	WSConnections.erase(num);
+    	_ws_connections.erase(num);
       Serial.printf("[%u] Disconnected!\n", num);
       break;
     case WStype_CONNECTED:
       {
-    	  WSConnections.insert(num);
-        IPAddress ip { WSServer.remoteIP(num) };
+    	  _ws_connections.insert(num);
+        IPAddress ip { _ws_server.remoteIP(num) };
         Serial.printf("[%u] Connection from ", num);
         Serial.println(ip.toString());
       }
@@ -70,60 +111,201 @@ void HTTPServer::onWSEvent(uint8_t num,
   }
 }
 
-void HTTPServer::onHTTPConnect()
+void HTTPServer::onMain()
 {
-  Serial.println("connected " + webServer.uri());
-  File file = SPIFFS.open("/index.html");
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
+	{
+		Actuators* act_mgr = _reactor_mgr->get_actuators();
 
-  webServer.send(200, "text/html", file.readString());
-  file.close();
+		if( _web_server.arg("fet1") == "on" )
+			act_mgr->changeFET(0, true);
+		else
+			act_mgr->changeFET(0, false);
+
+		if( _web_server.arg("fet2") == "on" )
+			act_mgr->changeFET(1, true);
+		else
+			act_mgr->changeFET(1, false);
+
+		act_mgr->changeHBridge(0, bridgeStateConvert(_web_server.arg("hbridge1")));
+		act_mgr->changeHBridge(1, bridgeStateConvert(_web_server.arg("hbridge2")));
+		act_mgr->changeHBridge(2, bridgeStateConvert(_web_server.arg("hbridge3")));
+		act_mgr->changeHBridge(3, bridgeStateConvert(_web_server.arg("hbridge4")));
+
+		if( _web_server.arg("led") == "on" )
+			act_mgr->changeLED(true);
+		else
+			act_mgr->changeLED(false);
+
+		if( _web_server.arg("motor") == "on" )
+			act_mgr->changeMotor(true);
+		else
+			act_mgr->changeMotor(false);
+	}
+
+	Serial.println("connected " + _web_server.uri());
+	responseWithFile("/index.html", {});
 }
 
 void HTTPServer::onSettings()
 {
-	if(webServer.method() == HTTPMethod::HTTP_POST)
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		saveWifiSettings(webServer.arg("ssid"), webServer.arg("pass"));
+		saveWifiSettings(_web_server.arg("ssid"), _web_server.arg("pass"));
+
+		if(!_web_server.arg("sensor_rate").isEmpty())
+		{
+			unsigned short sensor_rate = std::max<unsigned short>(_web_server.arg("sensor_rate").toInt(), 1);
+			saveServerSettings(sensor_rate);
+			_reactor_mgr->schedule_routines(sensor_rate);
+		}
 	}
 
 	String ssid, password;
 	getWifiSettings(ssid, password);
 
-	File file = SPIFFS.open("/settings.html");
+	unsigned short sensor_read_rate = -1;
+	getServerSettings(sensor_read_rate);
 
-	String content(file.size() + ssid.length());
-	content = file.readString();
-	content.replace("##ssid##", ssid);
+	html_variables data;
+	data["##ssid##"] = ssid;
+	data["##sensor_rate##"] = sensor_read_rate;
 
-	webServer.send(200, "text/html", std::move(content));
-	file.close();
-
-
+	responseWithFile("/settings.html", data);
 }
 
 void HTTPServer::onProgram()
 {
-	if(webServer.method() == HTTPMethod::HTTP_POST)
+	const auto& programs = _reactor_mgr->read_programs_list();
+
+	if(_web_server.method() == HTTPMethod::HTTP_POST)
 	{
-		saveProgramSettings(webServer.arg("temperature").toFloat(), webServer.arg("ph").toFloat());
+		Reactor::ProgramSettings settings{};
+
+		if(_web_server.arg("new_program").isEmpty())
+		{
+			int id = _web_server.arg("id").toInt();
+			if(id > programs.size())
+			{
+				id = _reactor_mgr->program_active();
+			}
+			settings = programs[static_cast<uint8_t>(id)];
+		}
+
+		if(!_web_server.arg("temp").isEmpty())
+			settings.temp = _web_server.arg("temp").toFloat();
+		if(!_web_server.arg("ph").isEmpty())
+			settings.ph = _web_server.arg("ph").toFloat();
+		if(!_web_server.arg("name").isEmpty())
+			settings.name = _web_server.arg("name").c_str();
+
+		Serial.printf("OnProgram: %d %s\n", _web_server.arg("new_program").isEmpty(), settings.name.c_str());
+
+		_reactor_mgr->save_program(settings, _web_server.arg("enabled").toInt(), !_web_server.arg("new_program").isEmpty());
 	}
 
-	float temperature, ph;
-	getProgramSettings(temperature, ph);
-	String tempStr(temperature, 4);
-	String phStr(ph, 4);
+	static StaticJsonDocument<300> programs_json;
+	programs_json.clear();
 
-	Serial.println("Temp before send is " + tempStr);
+	for(size_t i = 0; i < programs.size(); ++i)
+	{
+		programs_json["programs"][i];
+		programs_json["programs"][i]["id"] = programs[i].id;
+		programs_json["programs"][i]["name"] = programs[i].name.c_str();
+		programs_json["programs"][i]["temp"] = programs[i].temp;
+		programs_json["programs"][i]["ph"] = programs[i].ph;
+	}
 
-	File file = SPIFFS.open("/program.html");
+	programs_json["is_enabled"] = _reactor_mgr->program_enabled();
+	programs_json["active"] = _reactor_mgr->program_active();
 
-	String content(file.size() + tempStr.length() + phStr.length());
-	content = file.readString();
-	content.replace("##temp##", tempStr);
-	content.replace("##phlevel##", phStr);
-
-	webServer.send(200, "text/html", std::move(content));
-	file.close();
-
-
+	String serialized_json;
+	serializeJson(programs_json, serialized_json);
+	html_variables data;
+	data["##programs##"] = serialized_json;
+	responseWithFile("/program.html", data);
 }
+
+void HTTPServer::onFirmwareUpload()
+{
+	HTTPUpload& upload = _web_server.upload();
+
+	if (upload.status == UPLOAD_FILE_START)
+	{
+	  Serial.printf("Update: %d\n", upload.currentSize);
+	  if (!Update.begin(UPDATE_SIZE_UNKNOWN)) { //start with max available size
+		Update.printError(Serial);
+	  }
+	} else if (upload.status == UPLOAD_FILE_WRITE) {
+	      /* flashing firmware to ESP*/
+	      if (Update.write(upload.buf, upload.currentSize) != upload.currentSize) {
+	        Update.printError(Serial);
+	      }
+	    } else if (upload.status == UPLOAD_FILE_END) {
+	      if (Update.end(true)) { //true to set the size to the current progress
+	        Serial.printf("Update Success: %u\nRebooting...\n", upload.totalSize);
+	        //ESP.restart();
+	      } else {
+	        Update.printError(Serial);
+	      }
+	    }
+}
+
+
+void HTTPServer::handleFileUpload() {
+  /*if (!fsOK) {
+    return replyServerError(FPSTR(FS_INIT_ERROR));
+  }
+
+  if (server.uri() != "/edit") {
+    return;
+  }
+  */
+  HTTPUpload& upload = _web_server.upload();
+
+  if (upload.status == UPLOAD_FILE_START) {
+    String filename = upload.filename;
+    // Make sure paths always start with "/"
+    if (!filename.startsWith("/")) {
+      filename = "/" + filename;
+    }
+    _upload_file = SPIFFS.open(filename, "w");
+    if (!_upload_file) {
+    	Serial.println("CREATE FAILED");
+      return;
+    }
+
+    Serial.println(String("Upload: START, filename: ") + filename);
+  } else if (upload.status == UPLOAD_FILE_WRITE) {
+    if (_upload_file) {
+      size_t bytesWritten = _upload_file.write(upload.buf, upload.currentSize);
+      if (bytesWritten != upload.currentSize) {
+        Serial.println("WRITE FAILED");
+        return;
+      }
+    }
+    Serial.println(String("Upload: WRITE, Bytes: ") + upload.currentSize);
+  } else if (upload.status == UPLOAD_FILE_END) {
+    if (_upload_file) {
+      _upload_file.close();
+    }
+    Serial.println(String("Upload: END, Size: ") + upload.totalSize);
+  }
+}
+
+void HTTPServer::responseWithFile(const char filename[], html_variables data)
+{
+	File file = SPIFFS.open(filename);
+	Serial.println(String("open file ") + filename);
+	String content;
+	content = file.readString();
+
+	for(const auto& substitute : data)
+	{
+		content.replace(substitute.first, substitute.second);
+	}
+
+	_web_server.send(200, "text/html", content);
+	file.close();
+}
+

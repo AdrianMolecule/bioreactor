@@ -25,7 +25,7 @@
             			
             <storageModule moduleId="cdtBuildSystem" version="4.0.0">
                 				
-                <configuration artifactName="${ProjName}" buildProperties="" description="" id="io.sloeber.core.toolChain.release.586980521" name="Release" optionalBuildProperties="" parent="org.eclipse.cdt.build.core.emptycfg">
+                <configuration artifactName="${ProjName}" buildProperties="" description="" id="io.sloeber.core.toolChain.release.586980521" name="Release" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
                     					
                     <folderInfo id="io.sloeber.core.toolChain.release.586980521.1044854956" name="/" resourcePath="">
                         						
@@ -37,9 +37,11 @@
                             							
                             <tool id="io.sloeber.tool.sketch.compiler.cpp.1750565389" name="Arduino C++ Compiler" superClass="io.sloeber.tool.sketch.compiler.cpp">
                                 								
-                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="io.sloeber.compiler.cpp.sketch.option.incpath.150713740" name="Include Paths (-I)" superClass="io.sloeber.compiler.cpp.sketch.option.incpath" valueType="includePath">
+                                <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="io.sloeber.compiler.cpp.sketch.option.incpath.150713740" name="Include Paths (-I)" superClass="io.sloeber.compiler.cpp.sketch.option.incpath" useByScannerDiscovery="false" valueType="includePath">
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/core/core}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/core/variant}&quot;"/>
                                     									
@@ -59,8 +61,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Stepper/src}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
@@ -76,6 +76,20 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -107,8 +121,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Stepper/src}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
@@ -124,6 +136,20 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -155,8 +181,6 @@
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
                                     									
-                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Stepper/src}&quot;"/>
-                                    									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
@@ -172,6 +196,20 @@
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
                                     									
                                     <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+                                    									
+                                    <listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
                                     								
                                 </option>
                                 								
@@ -193,7 +231,7 @@
                     					
                     <sourceEntries>
                         						
-                        <entry excluding="libraries/Wire/doc|libraries/WebSockets/travis|libraries/OneWire/util|libraries/OneWire/docs|libraries/Adafruit_GFX_Library/Fonts|libraries/Adafruit_GFX_Library/fontconvert|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
+                        <entry excluding="libraries/TimerFive/config|libraries/TimerOne/config|libraries/TimerFour/config|libraries/TimerThree/config|libraries/Wire/doc|libraries/WebSockets/travis|libraries/OneWire/util|libraries/OneWire/docs|libraries/Adafruit_GFX_Library/Fonts|libraries/Adafruit_GFX_Library/fontconvert|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name=""/>
                         					
                     </sourceEntries>
                     				
@@ -223,6 +261,14 @@
     	
     <storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
     	
-    <storageModule moduleId="refreshScope"/>
+    <storageModule moduleId="refreshScope" versionNumber="2">
+        		
+        <configuration configurationName="Release">
+            			
+            <resource resourceType="PROJECT" workspacePath="/bioreactor"/>
+            		
+        </configuration>
+        	
+    </storageModule>
     
 </cproject>

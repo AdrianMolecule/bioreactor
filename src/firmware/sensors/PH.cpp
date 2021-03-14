@@ -20,21 +20,27 @@
 
 #include "PH.h"
 #include "EEPROM.h"
+#include "esp_adc_cal.h"
 
-#define ESPADC 4096.0   //the esp Analog Digital Convertion value
-#define ESPVOLTAGE 3300 //the esp voltage supply value
 #define PH_3_VOLTAGE 2010
 
 using namespace sensor;
 
+static esp_adc_cal_characteristics_t gCharacteristics;
+
 PH::PH(adc1_channel_t ph_pin)
 {
     _temperature = 25.0;
-    _phValue = 7.0;
-    _acidVoltage = 3000; //2032.44;   //buffer solution 4.0 at 25C
-    _neutralVoltage = 2105; //2350; //1500.0; //buffer solution 7.0 at 25C
+    _acidVoltage = 1827; //1753;    //buffer solution 4.0 at 25C
+    _neutralVoltage = 1591; //1528; //buffer solution 6.88 at 25C
     _voltage = 1500.0;
     _ph_pin = ph_pin;
+
+	adc1_config_width(ADC_WIDTH_BIT_12);
+	adc1_config_channel_atten(ADC1_CHANNEL_3,ADC_ATTEN_DB_11);
+
+	esp_adc_cal_value_t type = esp_adc_cal_characterize(
+				ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, 1100, &gCharacteristics);
 }
 
 PH::~PH()
@@ -43,6 +49,8 @@ PH::~PH()
 
 void PH::begin()
 {
+
+
     //check if calibration values (neutral and acid) are stored in eeprom
     _neutralVoltage = EEPROM.readFloat(PHVALUEADDR); //load the neutral (pH = 7.0)voltage of the pH board from the EEPROM
     if (_neutralVoltage == float() || isnan(_neutralVoltage))
@@ -61,21 +69,22 @@ void PH::begin()
     }
 }
 
-float PH::readPH()
+float PH::readPH() const
 {
-	_voltage = adc1_get_raw(_ph_pin) / ESPADC * ESPVOLTAGE; // read the voltage
+	_voltage = adc1_get_raw(_ph_pin); // read the voltage
+	_voltage = esp_adc_cal_raw_to_voltage(_voltage, &gCharacteristics);
 
     //Serial.print("_neutraVoltage:");
     //Serial.print(_neutralVoltage);
     //Serial.print(", _acidVoltage:");
     //Serial.print(_acidVoltage);
-    float slope = (7.0 - 4.0) / ((_neutralVoltage - 1500.0) / 3.0 - (_acidVoltage - 1500.0) / 3.0); // two point: (_neutralVoltage,7.0),(_acidVoltage,4.0)
-    float intercept = 7.0 - slope * (_neutralVoltage - 1500.0) / 3.0;
+    float slope = (6.88 - 4.0) / ((_neutralVoltage - 1500.0) / 3.0 - (_acidVoltage - 1500.0) / 3.0); // two point: (_neutralVoltage,7.0),(_acidVoltage,4.0)
+    float intercept = 6.88 - slope * (_neutralVoltage - 1500.0) / 3.0;
     //Serial.print(", slope:");
     //Serial.print(slope);
     //Serial.print(", intercept:");
     //Serial.println(intercept);
-    _phValue = slope * (_voltage - 1500.0) / 3.0 + intercept; //y = k*x + b
+	float _phValue = slope * (_voltage - 1500.0) / 3.0 + intercept; //y = k*x + b
     //Serial.print("[readPH]... phValue ");
     //Serial.println(_phValue);
     return _phValue;

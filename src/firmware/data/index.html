@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>main</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dygraph/2.1.0/dygraph.min.css" />
+	<script src="/dygraph.min.js"></script>
+	<link rel="stylesheet" href="/dygraph.min.css" />
 	    <style type="text/css">
     #tep_g {
       position: absolute;
@@ -12,33 +12,136 @@
       top: 40px;
       bottom: 10px;
     }
-    #menuTable table {
-        width: 100%;
-    }
-    #menuTable td {
-        text-align: center;
-        vertical-align: middle;
-    }
     .chart { width: 500px; height: 300px; float: left; }
     
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
     </style>
     </head>
     <body>
-    <table width=100% id="menuTable"><tr><td><a href="/">Main</a></td><td><a href="/program">Program</a></td><td><a href="/settings">Settings</a></td></tr></table>
-    <div id="ph_g" class="chart"></div>
-    <div id="temp_g" class="chart"></div>
+    <iframe id="header" src="./header.html" style="border:none;width:100%;height:40px;"></iframe></br>
     
+    <div style="float: right;">
+        <form action="/" method="post">
+            <table style="border:1px">
+            <tr><td>Output</td><td>Status</td><td>Action</td></tr>
+            <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
+            <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" name="fet1">Enable</td></tr>
+            <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" name="fet2">Enable</td></tr>
+            <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
+                <select name="hbridge1">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge2</td><td> <div id="hbridge2_l"/> </td><td>
+                <select name="hbridge2">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge3</td><td> <div id="hbridge3_l"/> </td><td>
+                <select name="hbridge3">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>HBridge4</td><td> <div id="hbridge4_l"/> </td><td>
+                <select name="hbridge4">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+            </td></tr>
+            <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
+            </table>
+            <input type="submit" value="Apply">
+        </form>
+    </div>
+    <div id="ph_g" class="chart"></div>
+
+    <div id="temp_g" class="chart"></div>
 
     <script>
         var ph_data = [];
         var temp_data = [];
 
+        var first = true;
+        function setAction(json)
+        {
+            document.getElementsByName("fet1")[0].checked = json.fet[0];
+            document.getElementsByName("fet2")[0].checked = json.fet[1];
+            document.getElementsByName("hbridge1")[0].value = json.hbridge[0];
+            document.getElementsByName("hbridge2")[0].value = json.hbridge[1];
+            document.getElementsByName("hbridge3")[0].value = json.hbridge[2];
+            document.getElementsByName("hbridge4")[0].value = json.hbridge[3];
+            document.getElementsByName("led")[0].checked = json.led;
+            document.getElementsByName("motor")[0].checked = json.motor;
+        }
+        
+        function setStatus(json)
+        {
+       		document.getElementById('footer').contentWindow.UpdateStatus(json);
+
+            if(first)
+            {
+                setAction(json);
+                first = false;
+            }
+            if( json.temp[0] >= 1)
+            {
+                temp_data.push([new Date(), parseFloat(json.temp[0])]);
+            }
+            
+            ph_data.push([new Date(), parseFloat(json.ph)]);
+            
+            if( json.fet[0])
+            {
+                document.getElementById("fet1_l").innerHTML = "Enabled";
+            }
+            else
+                document.getElementById("fet1_l").innerHTML = "Disabled";
+                
+            if( json.fet[1] )
+            {
+                document.getElementById("fet2_l").innerHTML = "Enabled";
+            }
+            else
+                document.getElementById("fet2_l").innerHTML = "Disabled";
+                
+            document.getElementById("hbridge1_l").innerHTML = json.hbridge[0];
+            document.getElementById("hbridge2_l").innerHTML = json.hbridge[1];
+            document.getElementById("hbridge3_l").innerHTML = json.hbridge[2];
+            document.getElementById("hbridge4_l").innerHTML = json.hbridge[3];
+            
+            
+            if( json.led )
+            {
+                document.getElementById("led_l").innerHTML = "Enabled";
+            }
+            else
+                document.getElementById("led_l").innerHTML = "Disabled";
+                
+            if( json.motor )
+            {
+                document.getElementById("motor_l").innerHTML = "Enabled";
+            }
+            else
+                document.getElementById("motor_l").innerHTML = "Disabled";
+        }   
+        
         var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
                             {
                             drawPoints: true,
                             rollPeriod: 7,
                             valueRange: [0.0, 14.0],
-                            labels: ['Time', 'PH']
+                            labels: ['Time', 'PH'],
+                            title: "PH data"
                             });
 
                             
@@ -46,20 +149,22 @@
                             {
                             drawPoints: true,
                             rollPeriod: 7,
+                            title: "Temperature data",
+                            ylabel: "C&#xb0;",
                             labels: ['Time', 'Temperature']
                             });
-                         
+                            
         var ws = new WebSocket("ws://"+document.location.hostname+":81/");
         ws.onmessage = function (event) {
             var readings = JSON.parse(event.data);
             
-            ph_data.push([new Date(), parseFloat(readings.ph)]);
-            ph.updateOptions( {'file': ph_data } );
+            setStatus(readings);
             
-            temp_data.push([new Date(), parseFloat(readings.temp)]);
+            ph.updateOptions( {'file': ph_data } );
             temperature.updateOptions( {'file': temp_data } );
         };
 
     </script>
+    <iframe id="footer" src="./footer.html" style="border:none;width:100%;"></iframe>
     </body>
 </html>

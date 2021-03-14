@@ -12,10 +12,12 @@ namespace sensor
 
 		void init(unsigned dataPin);
 		float readCelcius() const;
+		uint8_t sensorCount() const;
 
 	private:
 		OneWire dataWire;
 		mutable DallasTemperature sensors;
+		uint8_t address0;
 	};
 
 }

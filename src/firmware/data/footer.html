@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <style type="text/css">
+        .dot {
+			height: 15px;
+			width: 15px;
+			background-color: #bbb;
+			border-radius: 50%;
+			display: inline-block;
+		}
+		.blink {
+		  animation: blinker 2s linear infinite;
+		}
+		
+		@keyframes blinker {
+		  50% {
+		    opacity: 0;
+		  }
+		}
+    </style>
+    <base target="_parent">
+    <script type="text/javascript">
+        var seconds = 0;
+        function UpdateStatus(json) 
+        {
+        	seconds = 0;
+           	if(json.reactor_enabled)
+        	{
+        		document.getElementById('program_status').innerHTML = '"' + json.program_active + '" program is running';
+        		document.getElementsByClassName('dot')[0].style.backgroundColor='#90EE90';
+        		document.getElementsByClassName('dot')[0].classList.add('blink');
+        	}
+        	else
+        	{
+        		document.getElementById('program_status').innerHTML = 'stopped';
+        		document.getElementsByClassName('dot')[0].style.backgroundColor='red';
+        		document.getElementsByClassName('dot')[0].classList.remove('blink');
+        	}
+			if( json.temp[0] < 1)
+                document.getElementById("temp_status").innerHTML = "N/A";
+            else
+            {
+                document.getElementById("temp_status").innerHTML = json.temp[0] + " C";
+            }
+            
+            document.getElementById("ph_status").innerHTML = json.ph;
+            
+            if( json.light == 54612 )
+                document.getElementById("light_status").innerHTML = "N/A";
+            else
+            {
+                document.getElementById("light_status").innerHTML = json.light + " Lux";
+            }
+        }
+        
+		function incrementSeconds() {
+			seconds += 1;
+		    document.getElementById('seconds_counter').innerText = seconds + " sec ago";
+		}
+
+		var cancel = setInterval(incrementSeconds, 1000);
+    </script>
+    </head>
+    <body>
+    </br>
+    <table style="text-align:center;width:100%;"><tr>
+		<td>Program: <span id="program_status"></span> <span class="dot"></span></td>
+		<td>Temp: <span id="temp_status"></span></td>
+		<td>PH: <span id="ph_status"></span></td>
+		<td>Light: <span id="light_status"></span></td>
+		<td>Last update: <span id='seconds_counter'> </span></td>
+	</tr></table>
+	</body>
+</html>
