@@ -3,6 +3,7 @@
 #include <array>
 #include <ESP_FlexyStepper.h>
 #include "../config.h"
+#include "pwm_device.h"
 
 enum class BridgeState
 {
@@ -17,7 +18,7 @@ public:
 	struct Devices
 	{
 		std::array<BridgeState, config::HBridge::pins.size()> hbridge;
-		std::array<bool, config::fet.size()> fet;
+		std::array<PWMDevice, config::fet.size()> fet;
 		bool led;
 		bool motor;
 	};

@@ -92,8 +92,8 @@ bool Actuators::changeFET(size_t num, bool is_enabled)
 	if(num >= config::fet.size())
 		return false;
 
-	digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
-	_devices_state.fet[num] = is_enabled;
+	//digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
+	_devices_state.fet[num].setPower(is_enabled ? 100 : 0);
 	return true;
 }
 
