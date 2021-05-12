@@ -117,15 +117,11 @@ void HTTPServer::onMain()
 	{
 		Actuators* act_mgr = _reactor_mgr->get_actuators();
 
-		if( _web_server.arg("fet1") == "on" )
-			act_mgr->changeFET(0, true);
-		else
-			act_mgr->changeFET(0, false);
+		unsigned short fet0_power = std::min<unsigned short>(_web_server.arg("fet0").toInt(), 100);
+		act_mgr->changeFET(0, fet0_power);
 
-		if( _web_server.arg("fet2") == "on" )
-			act_mgr->changeFET(1, true);
-		else
-			act_mgr->changeFET(1, false);
+		unsigned short fet1_power = std::min<unsigned short>(_web_server.arg("fet1").toInt(), 100);
+		act_mgr->changeFET(1, fet1_power);
 
 		act_mgr->changeHBridge(0, bridgeStateConvert(_web_server.arg("hbridge1")));
 		act_mgr->changeHBridge(1, bridgeStateConvert(_web_server.arg("hbridge2")));

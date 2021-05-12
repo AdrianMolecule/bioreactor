@@ -28,8 +28,18 @@
             <table style="border:1px">
             <tr><td>Output</td><td>Status</td><td>Action</td></tr>
             <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
-            <tr><td>FET1</td><td> <div id="fet1_l"/> </td><td><input type="checkbox" name="fet1">Enable</td></tr>
-            <tr><td>FET2</td><td> <div id="fet2_l"/> </td><td><input type="checkbox" name="fet2">Enable</td></tr>
+            <tr><td>FET0</td><td> <div id="fet0_l"/> </td>
+            	<td>
+            		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this.name);">
+            		<span id="fet0_value"></span>
+            	</td>
+            </tr>
+            <tr><td>FET1</td><td> <div id="fet1_l"/> </td>
+            	<td>
+            		<input type="range" name="fet1" value="0" min="0" max="100" step="10" oninput="setSliderValue(this.name);">
+            		<span id="fet1_value"></span>
+            	</td>
+            </tr>
             <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
                 <select name="hbridge1">
                 <option value="Off">Off</option>
@@ -70,12 +80,22 @@
     <script>
         var ph_data = [];
         var temp_data = [];
-
+        
+		function setSliderValue(name)
+		{
+			var slider = document.getElementsByName(name)[0];
+			var output = document.getElementById(name + "_value");
+			output.innerHTML = slider.value;
+		}
+		
         var first = true;
         function setAction(json)
         {
-            document.getElementsByName("fet1")[0].checked = json.fet[0];
-            document.getElementsByName("fet2")[0].checked = json.fet[1];
+            document.getElementsByName("fet0")[0].value = json.fet[0];
+            setSliderValue("fet0");
+            document.getElementsByName("fet1")[0].value = json.fet[1];
+            setSliderValue("fet1");
+            
             document.getElementsByName("hbridge1")[0].value = json.hbridge[0];
             document.getElementsByName("hbridge2")[0].value = json.hbridge[1];
             document.getElementsByName("hbridge3")[0].value = json.hbridge[2];
@@ -100,19 +120,8 @@
             
             ph_data.push([new Date(), parseFloat(json.ph)]);
             
-            if( json.fet[0])
-            {
-                document.getElementById("fet1_l").innerHTML = "Enabled";
-            }
-            else
-                document.getElementById("fet1_l").innerHTML = "Disabled";
-                
-            if( json.fet[1] )
-            {
-                document.getElementById("fet2_l").innerHTML = "Enabled";
-            }
-            else
-                document.getElementById("fet2_l").innerHTML = "Disabled";
+            document.getElementById("fet0_l").innerHTML = json.fet[0] + "%";
+            document.getElementById("fet1_l").innerHTML = json.fet[1] + "%";
                 
             document.getElementById("hbridge1_l").innerHTML = json.hbridge[0];
             document.getElementById("hbridge2_l").innerHTML = json.hbridge[1];

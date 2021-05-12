@@ -34,32 +34,32 @@
 		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/cores/esp32</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/cores/esp32</locationURI>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/variants/esp32</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/variants/esp32</locationURI>
 		</link>
 		<link>
 			<name>libraries/Adafruit_BusIO</name>
 			<type>2</type>
-			<location>/home/mi5/Arduino/libraries/Adafruit_BusIO</location>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_BusIO/1.7.3</locationURI>
 		</link>
 		<link>
 			<name>libraries/Adafruit_GFX_Library</name>
 			<type>2</type>
-			<location>/home/mi5/Arduino/libraries/Adafruit_GFX_Library</location>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_GFX_Library/1.10.7</locationURI>
 		</link>
 		<link>
 			<name>libraries/Adafruit_ST7735_and_ST7789_Library</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_ST7735_and_ST7789_Library/1.5.15</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_ST7735_and_ST7789_Library/1.7.2</locationURI>
 		</link>
 		<link>
 			<name>libraries/ArduinoJson</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ArduinoJson/6.15.2</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ArduinoJson/6.17.3</locationURI>
 		</link>
 		<link>
 			<name>libraries/BH1750FVI</name>
@@ -69,12 +69,12 @@
 		<link>
 			<name>libraries/DallasTemperature</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/DallasTemperature/3.8.0</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/DallasTemperature/3.9.0</locationURI>
 		</link>
 		<link>
 			<name>libraries/EEPROM</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/EEPROM</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/EEPROM</locationURI>
 		</link>
 		<link>
 			<name>libraries/ESP-FlexyStepper</name>
@@ -84,12 +84,17 @@
 		<link>
 			<name>libraries/ESPmDNS</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/ESPmDNS</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/ESPmDNS</locationURI>
 		</link>
 		<link>
 			<name>libraries/FS</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/FS</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/FS</locationURI>
+		</link>
+		<link>
+			<name>libraries/FreeRTOS</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/FreeRTOS/10.4.3-8</locationURI>
 		</link>
 		<link>
 			<name>libraries/OneWire</name>
@@ -99,52 +104,52 @@
 		<link>
 			<name>libraries/Preferences</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Preferences</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/Preferences</locationURI>
 		</link>
 		<link>
 			<name>libraries/SPI</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/SPI</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/SPI</locationURI>
 		</link>
 		<link>
 			<name>libraries/SPIFFS</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/SPIFFS</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/SPIFFS</locationURI>
 		</link>
 		<link>
 			<name>libraries/Ticker</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Ticker</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/Ticker</locationURI>
 		</link>
 		<link>
 			<name>libraries/Update</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Update</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/Update</locationURI>
 		</link>
 		<link>
 			<name>libraries/WebServer</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/WebServer</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/WebServer</locationURI>
 		</link>
 		<link>
 			<name>libraries/WebSockets</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/WebSockets/2.2.0</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/WebSockets/2.3.5</locationURI>
 		</link>
 		<link>
 			<name>libraries/WiFi</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/WiFi</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/WiFi</locationURI>
 		</link>
 		<link>
 			<name>libraries/WiFiClientSecure</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/WiFiClientSecure</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/WiFiClientSecure</locationURI>
 		</link>
 		<link>
 			<name>libraries/Wire</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.4/libraries/Wire</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/Wire</locationURI>
 		</link>
 		<link>
 			<name>libraries/arduino-timer</name>

@@ -35,7 +35,7 @@ bool WiFiConnect()
 		for(size_t tries = 0; tries < 10 && WiFi.status() != WL_CONNECTED; ++tries)
 		{
 			WiFi.begin(ssid.c_str(), password.c_str());
-			delay(1000);
+			delay(5000);
 			Serial.println("Connecting to '" + ssid + "'");
 		}
 
@@ -113,7 +113,7 @@ String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& s
 	const Actuators* act_mgr = reactor_mgr->get_actuators();
 
 	for(size_t i = 0; i < config::fet.size(); ++i)
-		state["fet"][i] = act_mgr->read().fet[i];
+		state["fet"][i] = act_mgr->read().fet[i].getPower();
 
 	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{

@@ -87,13 +87,13 @@ bool Actuators::changeHBridge(size_t num, BridgeState state)
 	return true;
 }
 
-bool Actuators::changeFET(size_t num, bool is_enabled)
+bool Actuators::changeFET(size_t num, unsigned short power)
 {
 	if(num >= config::fet.size())
 		return false;
 
 	//digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
-	_devices_state.fet[num].setPower(is_enabled ? 100 : 0);
+	_devices_state.fet[num].setPower(power);
 	return true;
 }
 

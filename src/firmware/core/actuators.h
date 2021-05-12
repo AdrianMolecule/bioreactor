@@ -30,7 +30,7 @@ public:
 	bool shutdown();
 
 	bool changeHBridge(size_t num, BridgeState state);
-	bool changeFET(size_t num, bool is_enabled);
+	bool changeFET(size_t num, unsigned short power);
 	bool changeLED(bool is_enabled);
 	bool changeMotor(bool is_enabled);
 	void runMotor();
