@@ -16,15 +16,14 @@ bool Actuators::initialize()
 	_stepper.setSpeedInStepsPerSecond(1000);
 	_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
 
-	for(auto& fet_pin : config::fet)
+	for(size_t i = 0; i < config::fet.size(); ++i)
 	{
-		pinMode(fet_pin, OUTPUT);
+		_devices_state.fet[i] = PWMDevice(config::fet[i]);
 	}
 
-	for(const auto& input : config::HBridge::pins)
+	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{
-		pinMode(input.A, OUTPUT);
-		pinMode(input.B, OUTPUT);
+		_devices_state.hbridge[i].pwm_ctrl = PWMDevice(config::HBridge::pins[i].A);
 	}
 
 	pinMode(config::HBridge::power, OUTPUT);
@@ -37,11 +36,11 @@ bool Actuators::shutdown()
 	bool result = true;
 
 	for(size_t i = 0; i < config::fet.size(); ++i)
-		result &= changeFET(i, false);
+		result &= changeFET(i, 0);
 
 	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{
-		result &= changeHBridge(i, BridgeState::OFF);
+		result &= changeHBridge(i, BridgeState::OFF, 0);
 	}
 
 	result &= powerHBridge(false);
@@ -56,44 +55,37 @@ bool Actuators::powerHBridge(bool is_enabled)
 	return true;
 }
 
-bool Actuators::changeHBridge(size_t num, BridgeState state)
+bool Actuators::changeHBridge(size_t num, BridgeState state, uint8_t power)
 {
 	if(num >= config::HBridge::pins.size())
 		return false;
 
-	bool a_key = false;
-	bool b_key = false;
-
-	if( state != BridgeState::OFF )
+	if( state != BridgeState::OFF && _devices_state.hbridge[num].state != state)
 	{
 		if( state == BridgeState::FORWARD )
 		{
-			a_key = true;
-			b_key = false;
+			_devices_state.hbridge[num].pwm_ctrl.reattachPin( config::HBridge::pins[num].A );
 		}
 		else
 		{
-			a_key = false;
-			b_key = true;
+			_devices_state.hbridge[num].pwm_ctrl.reattachPin( config::HBridge::pins[num].B );
 		}
 
 		powerHBridge(true);
 	}
 
-	digitalWrite(config::HBridge::pins[num].A, a_key);
-	digitalWrite(config::HBridge::pins[num].B, b_key);
-	_devices_state.hbridge[num] = state;
-
+	_devices_state.hbridge[num].state = state;
+	_devices_state.hbridge[num].pwm_ctrl.setPower(power);
+	Serial.printf("for bridge %d set power %d\n",num,power);
 	return true;
 }
 
-bool Actuators::changeFET(size_t num, unsigned short power)
+bool Actuators::changeFET(size_t num, uint8_t power)
 {
 	if(num >= config::fet.size())
 		return false;
 
-	//digitalWrite(config::fet[num], !is_enabled);	// reverse bool because FETs enabled by LOW signal
-	_devices_state.fet[num].setPower(power);
+	_devices_state.fet[num].setPower(PWMDevice::MAX_POWER - power);		// reverse power because FET is enabled by LOW signal
 	return true;
 }
 
@@ -123,9 +115,19 @@ void Actuators::runMotor()
 	_stepper.setTargetPositionRelativeInRevolutions(10000);
 }
 
-const Actuators::Devices& Actuators::read() const
+void Actuators::serializeState(JsonObject& state) const
 {
-	return _devices_state;
+	for(size_t i = 0; i < config::fet.size(); ++i)
+		state["fet"][i] = PWMDevice::MAX_POWER - _devices_state.fet[i].getPower();	// reverse power because FET is enabled by LOW signal
+
+	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
+	{
+		state["hbridge"][i]["state"] = bridgeStateConvert(_devices_state.hbridge[i].state);
+		state["hbridge"][i]["power"] = _devices_state.hbridge[i].pwm_ctrl.getPower();
+	}
+
+	state["led"] = _devices_state.led;
+	state["motor"] = _devices_state.motor;
 }
 
 const char* bridgeStateConvert(BridgeState state)
@@ -147,3 +149,4 @@ BridgeState bridgeStateConvert(const String& state)
 
 	return BridgeState::OFF;
 }
+

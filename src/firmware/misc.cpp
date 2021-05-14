@@ -104,31 +104,9 @@ String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& s
 	static StaticJsonDocument<400> state;
 	state.clear();
 
-	state["ph"] = sensor_data._ph;
-	state["temp"][0] = sensor_data._temp[0];
-	state["temp"][1] = 0; //sensors->readTemperature()[1];
-	state["temp"][2] = 0; //sensors->readTemperature()[2];
-	state["light"] = sensor_data._light;
-
-	const Actuators* act_mgr = reactor_mgr->get_actuators();
-
-	for(size_t i = 0; i < config::fet.size(); ++i)
-		state["fet"][i] = act_mgr->read().fet[i].getPower();
-
-	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
-	{
-		state["hbridge"][i] = bridgeStateConvert(act_mgr->read().hbridge[i]);
-	}
-
-	state["led"] = act_mgr->read().led;
-	state["motor"] = act_mgr->read().motor;
-	state["reactor_enabled"] = reactor_mgr->program_enabled();
-
-	const auto& programs = reactor_mgr->read_programs_list();
-	if(reactor_mgr->program_enabled() && !programs.empty())
-	{
-		state["program_active"] = programs[reactor_mgr->program_active()].name.c_str();
-	}
+	JsonObject object = state.to<JsonObject>();
+	sensor_data.serializeState(object);
+	reactor_mgr->serializeState(object);
 
 	String data;
 	serializeJson(state, data);

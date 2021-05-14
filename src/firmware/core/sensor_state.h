@@ -4,6 +4,8 @@
 #include <array>
 
 #include <BH1750FVI.h>
+#include <ArduinoJson.h>
+
 #include "sensors/DS18B20.h"
 #include "sensors/PH.h"
 
@@ -12,6 +14,15 @@ class SensorState
 public:
 	struct Readings
 	{
+		void serializeState(JsonObject& state) const
+		{
+			state["ph"] = _ph;
+			state["temp"][0] = _temp[0];
+			state["temp"][1] = 0; //sensors->readTemperature()[1];
+			state["temp"][2] = 0; //sensors->readTemperature()[2];
+			state["light"] = _light;
+		};
+
 		std::array<float, 3> _temp;
 		float _ph;
 		uint32_t _light;

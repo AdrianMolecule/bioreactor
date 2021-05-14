@@ -117,16 +117,25 @@ void HTTPServer::onMain()
 	{
 		Actuators* act_mgr = _reactor_mgr->get_actuators();
 
-		unsigned short fet0_power = std::min<unsigned short>(_web_server.arg("fet0").toInt(), 100);
-		act_mgr->changeFET(0, fet0_power);
+		act_mgr->changeFET(0, _web_server.arg("fet0").toInt());
+		act_mgr->changeFET(1, _web_server.arg("fet1").toInt());
 
-		unsigned short fet1_power = std::min<unsigned short>(_web_server.arg("fet1").toInt(), 100);
-		act_mgr->changeFET(1, fet1_power);
-
-		act_mgr->changeHBridge(0, bridgeStateConvert(_web_server.arg("hbridge1")));
-		act_mgr->changeHBridge(1, bridgeStateConvert(_web_server.arg("hbridge2")));
-		act_mgr->changeHBridge(2, bridgeStateConvert(_web_server.arg("hbridge3")));
-		act_mgr->changeHBridge(3, bridgeStateConvert(_web_server.arg("hbridge4")));
+		act_mgr->changeHBridge(0,
+				bridgeStateConvert(_web_server.arg("hbridge0")),
+				_web_server.arg("hbridge0_power").toInt()
+			);
+		act_mgr->changeHBridge(1,
+						bridgeStateConvert(_web_server.arg("hbridge1")),
+						_web_server.arg("hbridge1_power").toInt()
+					);
+		act_mgr->changeHBridge(2,
+						bridgeStateConvert(_web_server.arg("hbridge2")),
+						_web_server.arg("hbridge2_power").toInt()
+					);
+		act_mgr->changeHBridge(3,
+						bridgeStateConvert(_web_server.arg("hbridge3")),
+						_web_server.arg("hbridge3_power").toInt()
+					);
 
 		if( _web_server.arg("led") == "on" )
 			act_mgr->changeLED(true);

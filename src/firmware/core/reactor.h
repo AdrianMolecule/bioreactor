@@ -2,6 +2,7 @@
 
 #include <arduino-timer.h>
 #include <deque>
+#include <ArduinoJson.h>
 
 #include "actuators.h"
 #include "sensor_state.h"
@@ -31,6 +32,9 @@ public:
 
 	void sensor_reading();
 	void schedule_routines(unsigned short sensor_rate_sec);
+
+
+	void serializeState(JsonObject&) const;
 
 	std::deque<SensorState::Readings> _sensor_data;
 

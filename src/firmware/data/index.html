@@ -28,45 +28,57 @@
             <table style="border:1px">
             <tr><td>Output</td><td>Status</td><td>Action</td></tr>
             <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
-            <tr><td>FET0</td><td> <div id="fet0_l"/> </td>
+            <tr><td>FET1</td><td> <div id="fet0_l"/> </td>
             	<td>
-            		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this.name);">
+            		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             		<span id="fet0_value"></span>
             	</td>
             </tr>
-            <tr><td>FET1</td><td> <div id="fet1_l"/> </td>
+            <tr><td>FET2</td><td> <div id="fet1_l"/> </td>
             	<td>
-            		<input type="range" name="fet1" value="0" min="0" max="100" step="10" oninput="setSliderValue(this.name);">
+            		<input type="range" name="fet1" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             		<span id="fet1_value"></span>
             	</td>
             </tr>
-            <tr><td>HBridge1</td><td> <div id="hbridge1_l"/> </td><td>
+            <tr><td>HBridge1</td><td> <div id="hbridge0_l"/> </td><td>
+                <select name="hbridge0">
+                <option value="Off">Off</option>
+                <option value="Forward">Forward</option>
+                <option value="Reverse">Reverse</option>
+                </select>
+                </br>
+            	<input type="range" name="hbridge0_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
+            	<span id="hbridge0_power_value"></span>
+            </td></tr>
+            <tr><td>HBridge2</td><td> <div id="hbridge1_l"/> </td><td>
                 <select name="hbridge1">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
+                </br>
+            	<input type="range" name="hbridge1_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
+            	<span id="hbridge1_power_value"></span>
             </td></tr>
-            <tr><td>HBridge2</td><td> <div id="hbridge2_l"/> </td><td>
+            <tr><td>HBridge3</td><td> <div id="hbridge2_l"/> </td><td>
                 <select name="hbridge2">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
+                </br>
+            	<input type="range" name="hbridge2_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
+            	<span id="hbridge2_power_value"></span>
             </td></tr>
-            <tr><td>HBridge3</td><td> <div id="hbridge3_l"/> </td><td>
+            <tr><td>HBridge4</td><td> <div id="hbridge3_l"/> </td><td>
                 <select name="hbridge3">
                 <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
-            </td></tr>
-            <tr><td>HBridge4</td><td> <div id="hbridge4_l"/> </td><td>
-                <select name="hbridge4">
-                <option value="Off">Off</option>
-                <option value="Forward">Forward</option>
-                <option value="Reverse">Reverse</option>
-                </select>
+                </br>
+            	<input type="range" name="hbridge3_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
+            	<span id="hbridge3_power_value"></span>
             </td></tr>
             <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
             </table>
@@ -81,27 +93,32 @@
         var ph_data = [];
         var temp_data = [];
         
-		function setSliderValue(name)
+		function setSliderValue(slider)
 		{
-			var slider = document.getElementsByName(name)[0];
-			var output = document.getElementById(name + "_value");
+			var output = document.getElementById(slider.name + "_value");
 			output.innerHTML = slider.value;
 		}
 		
         var first = true;
         function setAction(json)
         {
-            document.getElementsByName("fet0")[0].value = json.fet[0];
-            setSliderValue("fet0");
-            document.getElementsByName("fet1")[0].value = json.fet[1];
-            setSliderValue("fet1");
+        	json.fet.forEach(function(value,index) {
+        		var fet_slider = document.getElementsByName("fet" + index)[0];
+        		fet_slider.value = json.fet[0];
+            	setSliderValue(fet_slider);
+        	});
             
-            document.getElementsByName("hbridge1")[0].value = json.hbridge[0];
-            document.getElementsByName("hbridge2")[0].value = json.hbridge[1];
-            document.getElementsByName("hbridge3")[0].value = json.hbridge[2];
-            document.getElementsByName("hbridge4")[0].value = json.hbridge[3];
+            json.hbridge.forEach(function(value, index) {
+                document.getElementsByName("hbridge" + index)[0].value = value.state;
+                
+                var bridge_slider = document.getElementsByName("hbridge" + index + "_power")[0];
+            	bridge_slider.value = value.power;
+            	setSliderValue(bridge_slider);
+            });
+
             document.getElementsByName("led")[0].checked = json.led;
             document.getElementsByName("motor")[0].checked = json.motor;
+            
         }
         
         function setStatus(json)
@@ -122,12 +139,12 @@
             
             document.getElementById("fet0_l").innerHTML = json.fet[0] + "%";
             document.getElementById("fet1_l").innerHTML = json.fet[1] + "%";
-                
-            document.getElementById("hbridge1_l").innerHTML = json.hbridge[0];
-            document.getElementById("hbridge2_l").innerHTML = json.hbridge[1];
-            document.getElementById("hbridge3_l").innerHTML = json.hbridge[2];
-            document.getElementById("hbridge4_l").innerHTML = json.hbridge[3];
             
+            json.hbridge.forEach(function(value,index) {
+            	document.getElementById("hbridge" + index + "_l").innerHTML = value.state;
+            	if(value.state != "Off")
+            		document.getElementById("hbridge" + index + "_l").innerHTML += " " + value.power + "%";
+            });
             
             if( json.led )
             {

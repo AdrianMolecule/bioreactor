@@ -163,3 +163,15 @@ void Reactor::schedule_routines(unsigned short sensor_rate_sec)
 	timer.cancel();
 	timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
 }
+
+void Reactor::serializeState(JsonObject& state) const
+{
+	_act_mgr->serializeState(state);
+
+	state["reactor_enabled"] = program_enabled();
+	const auto& programs = read_programs_list();
+	if(program_enabled() && !programs.empty())
+	{
+		state["program_active"] = programs[program_active()].name.c_str();
+	}
+}
