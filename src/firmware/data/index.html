@@ -18,6 +18,8 @@
         border: 1px solid black;
         border-collapse: collapse;
     }
+    
+    td span{display:block; text-align:center; margin:0 auto;}
     </style>
     </head>
     <body>
@@ -31,54 +33,56 @@
             <tr><td>FET1</td><td> <div id="fet0_l"/> </td>
             	<td>
             		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            		<span id="fet0_value"></span>
+            		</br>
+            		<span id="fet0_value">0 %</span>
             	</td>
             </tr>
             <tr><td>FET2</td><td> <div id="fet1_l"/> </td>
             	<td>
             		<input type="range" name="fet1" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            		<span id="fet1_value"></span>
+            		</br>
+            		<span id="fet1_value">0 %</span>
             	</td>
             </tr>
             <tr><td>HBridge1</td><td> <div id="hbridge0_l"/> </td><td>
                 <select name="hbridge0">
-                <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
                 </br>
             	<input type="range" name="hbridge0_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            	<span id="hbridge0_power_value"></span>
+            	</br>
+            	<span id="hbridge0_power_value">0 %</span>
             </td></tr>
             <tr><td>HBridge2</td><td> <div id="hbridge1_l"/> </td><td>
                 <select name="hbridge1">
-                <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
                 </br>
             	<input type="range" name="hbridge1_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            	<span id="hbridge1_power_value"></span>
+            	</br>
+            	<span id="hbridge1_power_value">0 %</span>
             </td></tr>
             <tr><td>HBridge3</td><td> <div id="hbridge2_l"/> </td><td>
                 <select name="hbridge2">
-                <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
                 </br>
             	<input type="range" name="hbridge2_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            	<span id="hbridge2_power_value"></span>
+            	</br>
+            	<span id="hbridge2_power_value">0 %</span>
             </td></tr>
             <tr><td>HBridge4</td><td> <div id="hbridge3_l"/> </td><td>
                 <select name="hbridge3">
-                <option value="Off">Off</option>
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
                 </select>
                 </br>
             	<input type="range" name="hbridge3_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
-            	<span id="hbridge3_power_value"></span>
+            	</br>
+            	<span id="hbridge3_power_value">0 %</span>
             </td></tr>
             <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
             </table>
@@ -96,7 +100,7 @@
 		function setSliderValue(slider)
 		{
 			var output = document.getElementById(slider.name + "_value");
-			output.innerHTML = slider.value;
+			output.innerHTML = slider.value + " %";
 		}
 		
         var first = true;
@@ -104,7 +108,7 @@
         {
         	json.fet.forEach(function(value,index) {
         		var fet_slider = document.getElementsByName("fet" + index)[0];
-        		fet_slider.value = json.fet[0];
+        		fet_slider.value = value;
             	setSliderValue(fet_slider);
         	});
             
@@ -137,13 +141,21 @@
             
             ph_data.push([new Date(), parseFloat(json.ph)]);
             
-            document.getElementById("fet0_l").innerHTML = json.fet[0] + "%";
-            document.getElementById("fet1_l").innerHTML = json.fet[1] + "%";
+            json.fet.forEach(function(value,index) {
+            	var fet_l = document.getElementById("fet" + index + "_l");
+            	if(value == 0)
+            		fet_l.innerHTML = "Off";
+            	else
+            		fet_l.innerHTML = value + " %";
+            });
             
             json.hbridge.forEach(function(value,index) {
-            	document.getElementById("hbridge" + index + "_l").innerHTML = value.state;
-            	if(value.state != "Off")
-            		document.getElementById("hbridge" + index + "_l").innerHTML += " " + value.power + "%";
+            	var bridge_l = document.getElementById("hbridge" + index + "_l");
+            	
+            	if(value.power == 0)
+            		bridge_l.innerHTML = "Off";
+            	else
+            		bridge_l.innerHTML = value.state + " " + value.power + "%";
             });
             
             if( json.led )

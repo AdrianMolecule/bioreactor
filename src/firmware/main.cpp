@@ -51,9 +51,7 @@ void setup() {
 	}
 
 	//disabling buzzer
-	ledcSetup(0, 5000, 8);
-	ledcAttachPin(config::buzzer_pin, 0);
-	ledcWriteTone(0, 0);
+	digitalWrite(config::buzzer_pin, LOW);
 
 	SensorState *sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
 	act_mgr = new Actuators();

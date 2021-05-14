@@ -8,7 +8,6 @@
 
 enum class BridgeState
 {
-	OFF,
 	FORWARD,
 	REVERSE
 };

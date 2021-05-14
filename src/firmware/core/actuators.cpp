@@ -27,6 +27,8 @@ bool Actuators::initialize()
 	}
 
 	pinMode(config::HBridge::power, OUTPUT);
+	powerHBridge(true);
+
 	pinMode(config::led_pin, OUTPUT);
 	return true;
 }
@@ -40,10 +42,9 @@ bool Actuators::shutdown()
 
 	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{
-		result &= changeHBridge(i, BridgeState::OFF, 0);
+		result &= changeHBridge(i, BridgeState::FORWARD, 0);
 	}
 
-	result &= powerHBridge(false);
 	result &= changeLED(false);
 	result &= changeMotor(false);
 	return result;
@@ -60,7 +61,7 @@ bool Actuators::changeHBridge(size_t num, BridgeState state, uint8_t power)
 	if(num >= config::HBridge::pins.size())
 		return false;
 
-	if( state != BridgeState::OFF && _devices_state.hbridge[num].state != state)
+	if(_devices_state.hbridge[num].state != state)
 	{
 		if( state == BridgeState::FORWARD )
 		{
@@ -70,13 +71,11 @@ bool Actuators::changeHBridge(size_t num, BridgeState state, uint8_t power)
 		{
 			_devices_state.hbridge[num].pwm_ctrl.reattachPin( config::HBridge::pins[num].B );
 		}
-
-		powerHBridge(true);
 	}
 
 	_devices_state.hbridge[num].state = state;
 	_devices_state.hbridge[num].pwm_ctrl.setPower(power);
-	Serial.printf("for bridge %d set power %d\n",num,power);
+
 	return true;
 }
 
@@ -134,19 +133,15 @@ const char* bridgeStateConvert(BridgeState state)
 {
 	if( state == BridgeState::FORWARD )
 		return "Forward";
-	else if( state == BridgeState::REVERSE )
-		return "Reverse";
 
-	return "Off";
+	return "Reverse";
 }
 
 BridgeState bridgeStateConvert(const String& state)
 {
 	if( state == "Forward" )
 		return BridgeState::FORWARD;
-	else if( state == "Reverse" )
-		return BridgeState::REVERSE;
 
-	return BridgeState::OFF;
+	return BridgeState::REVERSE;
 }
 
