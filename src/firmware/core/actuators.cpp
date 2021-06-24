@@ -5,6 +5,7 @@ Actuators::Actuators()
 {
 	initialize();
 	shutdown();
+	powerHBridge(true);
 }
 
 bool Actuators::initialize()
@@ -24,10 +25,11 @@ bool Actuators::initialize()
 	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
 	{
 		_devices_state.hbridge[i].pwm_ctrl = PWMDevice(config::HBridge::pins[i].A);
+		pinMode(config::HBridge::pins[i].B, OUTPUT);
+		digitalWrite(config::HBridge::pins[i].B, LOW);
 	}
 
 	pinMode(config::HBridge::power, OUTPUT);
-	powerHBridge(true);
 
 	pinMode(config::led_pin, OUTPUT);
 	return true;
@@ -61,6 +63,9 @@ bool Actuators::changeHBridge(size_t num, BridgeState state, uint8_t power)
 	if(num >= config::HBridge::pins.size())
 		return false;
 
+	if(_devices_state.hbridge[num].state == state && power == _devices_state.hbridge[num].pwm_ctrl.getPower())
+		return true;
+
 	if(_devices_state.hbridge[num].state != state)
 	{
 		if( state == BridgeState::FORWARD )
@@ -73,6 +78,7 @@ bool Actuators::changeHBridge(size_t num, BridgeState state, uint8_t power)
 		}
 	}
 
+	Serial.printf("Actuators::changeHBridge: set %d old_power %d power %d\n",num, _devices_state.hbridge[num].pwm_ctrl.getPower(), power);
 	_devices_state.hbridge[num].state = state;
 	_devices_state.hbridge[num].pwm_ctrl.setPower(power);
 
@@ -84,7 +90,13 @@ bool Actuators::changeFET(size_t num, uint8_t power)
 	if(num >= config::fet.size())
 		return false;
 
-	_devices_state.fet[num].setPower(PWMDevice::MAX_POWER - power);		// reverse power because FET is enabled by LOW signal
+	const uint8_t actual_power = PWMDevice::MAX_POWER - power;
+
+	if(actual_power == _devices_state.fet[num].getPower())
+		return true;
+
+	Serial.printf("Actuators::changeFET: set %d power %d\n",num, power);
+	_devices_state.fet[num].setPower(actual_power);		// reverse power because FET is enabled by LOW signal
 	return true;
 }
 
@@ -137,7 +149,7 @@ const char* bridgeStateConvert(BridgeState state)
 	return "Reverse";
 }
 
-BridgeState bridgeStateConvert(const String& state)
+BridgeState bridgeStateConvert(const String&& state)
 {
 	if( state == "Forward" )
 		return BridgeState::FORWARD;

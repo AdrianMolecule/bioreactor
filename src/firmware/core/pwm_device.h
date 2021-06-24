@@ -8,7 +8,7 @@ class PWMDevice {
 public:
 	static constexpr uint8_t MAX_POWER = 100;
 	static constexpr uint8_t RESOLUTION = 10; //Resolution 8 does not seem to work, 10, 12, 15
-	static constexpr uint8_t FREQUENCY_OF_CHANGING_PWM = 30000;
+	static constexpr uint32_t FREQUENCY_OF_CHANGING_PWM = 30000;
 
 	PWMDevice() = default;
 	PWMDevice(uint8_t pin1);

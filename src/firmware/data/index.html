@@ -13,38 +13,41 @@
       bottom: 10px;
     }
     .chart { width: 500px; height: 300px; float: left; }
+    .hidden {display : none;}
     
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
     }
     
-    td span{display:block; text-align:center; margin:0 auto;}
+    .tdtext {display:block; text-align:center; margin:0 auto;}
     </style>
     </head>
     <body>
     <iframe id="header" src="./header.html" style="border:none;width:100%;height:40px;"></iframe></br>
     
     <div style="float: right;">
-        <form action="/" method="post">
+        <form action="/" method="post" onChange="actionSend();" id="action_form">
             <table style="border:1px">
             <tr><td>Output</td><td>Status</td><td>Action</td></tr>
-            <tr><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
-            <tr><td>FET1</td><td> <div id="fet0_l"/> </td>
+            
+            <tr class="displayed"><td colspan=3><span class="tdtext">Loading...</span></td></tr>
+            <tr class="hidden"><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
+            <tr class="hidden"><td>FET1</td><td> <div id="fet0_l"/> </td>
             	<td>
             		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             		</br>
-            		<span id="fet0_value">0 %</span>
+            		<span class="tdtext" id="fet0_value">0 %</span>
             	</td>
             </tr>
-            <tr><td>FET2</td><td> <div id="fet1_l"/> </td>
+            <tr class="hidden"><td>FET2</td><td> <div id="fet1_l"/> </td>
             	<td>
             		<input type="range" name="fet1" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             		</br>
-            		<span id="fet1_value">0 %</span>
+            		<span class="tdtext" id="fet1_value">0 %</span>
             	</td>
             </tr>
-            <tr><td>HBridge1</td><td> <div id="hbridge0_l"/> </td><td>
+            <tr class="hidden"><td>HBridge1</td><td> <div id="hbridge0_l"/> </td><td>
                 <select name="hbridge0">
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
@@ -52,9 +55,9 @@
                 </br>
             	<input type="range" name="hbridge0_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             	</br>
-            	<span id="hbridge0_power_value">0 %</span>
+            	<span class="tdtext" id="hbridge0_power_value">0 %</span>
             </td></tr>
-            <tr><td>HBridge2</td><td> <div id="hbridge1_l"/> </td><td>
+            <tr class="hidden"><td>HBridge2</td><td> <div id="hbridge1_l"/> </td><td>
                 <select name="hbridge1">
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
@@ -62,9 +65,9 @@
                 </br>
             	<input type="range" name="hbridge1_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             	</br>
-            	<span id="hbridge1_power_value">0 %</span>
+            	<span class="tdtext" id="hbridge1_power_value">0 %</span>
             </td></tr>
-            <tr><td>HBridge3</td><td> <div id="hbridge2_l"/> </td><td>
+            <tr class="hidden"><td>HBridge3</td><td> <div id="hbridge2_l"/> </td><td>
                 <select name="hbridge2">
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
@@ -72,9 +75,9 @@
                 </br>
             	<input type="range" name="hbridge2_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             	</br>
-            	<span id="hbridge2_power_value">0 %</span>
+            	<span class="tdtext" id="hbridge2_power_value">0 %</span>
             </td></tr>
-            <tr><td>HBridge4</td><td> <div id="hbridge3_l"/> </td><td>
+            <tr class="hidden"><td>HBridge4</td><td> <div id="hbridge3_l"/> </td><td>
                 <select name="hbridge3">
                 <option value="Forward">Forward</option>
                 <option value="Reverse">Reverse</option>
@@ -82,11 +85,10 @@
                 </br>
             	<input type="range" name="hbridge3_power" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
             	</br>
-            	<span id="hbridge3_power_value">0 %</span>
+            	<span class="tdtext" id="hbridge3_power_value">0 %</span>
             </td></tr>
-            <tr><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
+            <tr class="hidden"><td>LED</td><td> <div id="led_l"/> </td><td><input type="checkbox" name="led">Enable</td></tr>
             </table>
-            <input type="submit" value="Apply">
         </form>
     </div>
     <div id="ph_g" class="chart"></div>
@@ -123,6 +125,11 @@
             document.getElementsByName("led")[0].checked = json.led;
             document.getElementsByName("motor")[0].checked = json.motor;
             
+			var elements = document.querySelectorAll('.hidden');
+			for(var i=0; i<elements.length; i++){
+			    elements[i].style.display = "table-row";
+			}
+			document.querySelectorAll('.displayed')[0].style.display = "none";
         }
         
         function setStatus(json)
@@ -202,6 +209,30 @@
             temperature.updateOptions( {'file': temp_data } );
         };
 
+		function actionSend()
+		{
+			var msg = {
+				fet : [ 
+						document.getElementsByName("fet0")[0].value, 
+				   		document.getElementsByName("fet1")[0].value 
+				],
+				hbridge : [],
+			    led: document.getElementsByName("led")[0].checked,
+			    motor: document.getElementsByName("motor")[0].checked,
+			  };
+	
+			for(i=0; i<4; ++i)
+			{
+				msg['hbridge'].push(
+					[
+						document.getElementsByName("hbridge" + i)[0].value,
+			    		document.getElementsByName("hbridge" + i + "_power")[0].value
+			    	]
+			    );
+			}
+	
+	  		ws.send(JSON.stringify(msg));
+		}
     </script>
     <iframe id="footer" src="./footer.html" style="border:none;width:100%;"></iframe>
     </body>

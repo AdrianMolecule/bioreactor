@@ -17,6 +17,7 @@ PWMDevice::PWMDevice(uint8_t pin1) : _power{0}, _pin{pin1}
 	// configure PWM functionality
 	ledcSetup(_channel, FREQUENCY_OF_CHANGING_PWM, RESOLUTION);
 	// attach the channel to the GPIO2 to be controlled
+	Serial.printf("PWMDevice::PWMDevice: attach %d to channel %d\n", _pin, _channel);
 	ledcAttachPin(_pin, _channel);
 }
 

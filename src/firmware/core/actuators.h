@@ -51,4 +51,4 @@ private:
 };
 
 const char* bridgeStateConvert(BridgeState state);
-BridgeState bridgeStateConvert(const String& state);
+BridgeState bridgeStateConvert(const String&& state);

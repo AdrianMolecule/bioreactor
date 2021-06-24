@@ -45,7 +45,7 @@ void Reactor::program_step()
 
 	if(_sensors->readTemperature()[0] < active.temp)
 	{
-		_act_mgr->changeFET(0, true);
+		_act_mgr->changeFET(0, 100);
 	}
 	else
 	{

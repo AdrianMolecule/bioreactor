@@ -11,7 +11,8 @@ using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
 : _ws_server(webSocketPort),
-  _web_server(HTTPPort)
+  _web_server(HTTPPort),
+  _reactor_mgr(nullptr)
 {
 
 }
@@ -93,19 +94,43 @@ void HTTPServer::onWSEvent(uint8_t num,
   {
     case WStype_DISCONNECTED:
     	_ws_connections.erase(num);
-      Serial.printf("[%u] Disconnected!\n", num);
+      Serial.printf("HTTPServer::onWSEvent: [%u] Disconnected!\n", num);
       break;
     case WStype_CONNECTED:
       {
     	  _ws_connections.insert(num);
         IPAddress ip { _ws_server.remoteIP(num) };
-        Serial.printf("[%u] Connection from ", num);
+        Serial.printf("HTTPServer::onWSEvent: [%u] Connection from ", num);
         Serial.println(ip.toString());
       }
       break;
     case WStype_TEXT:
-      Serial.printf("[%u] Text: %s\n", num, payload);
-      break;
+	{
+		Serial.printf("HTTPServer::onWSEvent: [%u] Text: %s\n", num, payload);
+
+		static StaticJsonDocument<400> state;
+		state.clear();
+		DeserializationError error = deserializeJson(state, payload);
+
+		if (error)
+		{
+			Serial.printf("deserializeJson() failed: %s\n", error.c_str());
+		    break;
+		}
+
+		Actuators* act_mgr = _reactor_mgr->get_actuators();
+
+		for(size_t i = 0; i < state["fet"].size(); ++i)
+			act_mgr->changeFET(i, state["fet"][i]);
+
+		for(size_t i = 0; i < state["hbridge"].size(); ++i)
+			act_mgr->changeHBridge(i, bridgeStateConvert(static_cast<const char*>(state["hbridge"][i][0])), state["hbridge"][i][1] );
+
+		act_mgr->changeLED(state["led"]);
+		act_mgr->changeMotor(state["motor"]);
+
+		break;
+	}
     default:
       break;
   }
