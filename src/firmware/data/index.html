@@ -180,13 +180,58 @@
                 document.getElementById("motor_l").innerHTML = "Disabled";
         }   
         
+        
+        // ====================  graph methods and initialization
+        
+		var target_draw = function(canvas, area, g){   
+			if(g.numRows() < 1)
+				return;
+				   
+			var canvas_low_y = g.toDomYCoord( g.getOption('targetRange')[0] );
+			var canvas_high_y = g.toDomYCoord( g.getOption('targetRange')[1] );
+			canvas_high_y = Math.max( canvas_high_y, 0);
+			
+			var min_x = g.toDomXCoord( g.xAxisRange()[0] );
+				
+			canvas.fillStyle = "yellow";
+			
+			var target_height = canvas_low_y - canvas_high_y;
+			canvas.fillRect(min_x, canvas_high_y, area.w, target_height);
+	 	};
+	 	
+	 	function legendFormatter(data) {
+			var html = "<span style='background-color: yellow;'>&nbsp;&nbsp;&nbsp;&nbsp;</span> desired value";
+			if (data.x == null) 
+			{
+    			// This happens when there's no selection and {legend: 'always'} is set.
+    			html += '<br>' + data.series.map(function(series) { return series.dashHTML + ' ' + series.labelHTML }).join('<br>');
+			    return html;
+  			}
+
+			data.series.forEach(function(series) 
+			{
+    			if (!series.isVisible) return;
+    			var labeledData = series.labelHTML + ': ' + series.yHTML;
+    			if (series.isHighlighted) 
+    			{
+      				labeledData = '<b>' + labeledData + '</b>';
+    			}
+    			html += '<br>' + series.dashHTML + ' ' + labeledData;
+  			});
+  			return html;
+		}
+	 	
         var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
                             {
                             drawPoints: true,
                             rollPeriod: 7,
                             valueRange: [0.0, 14.0],
+                            targetRange: [6.7, 7.1],
                             labels: ['Time', 'PH'],
-                            title: "PH data"
+                            title: "PH data",
+                            underlayCallback: target_draw,
+                            legendFormatter: legendFormatter,
+                            legend: 'always',
                             });
 
                             
@@ -196,9 +241,15 @@
                             rollPeriod: 7,
                             title: "Temperature data",
                             ylabel: "C&#xb0;",
-                            labels: ['Time', 'Temperature']
+                            labels: ['Time', 'Temperature'],
+                            targetRange: [20.2, 20.8],
+                            underlayCallback: target_draw,
+                            legendFormatter: legendFormatter,
+                            legend: 'always',
                             });
-                            
+
+		// ====================  websocket handling
+		
         var ws = new WebSocket("ws://"+document.location.hostname+":81/");
         ws.onmessage = function (event) {
             var readings = JSON.parse(event.data);
@@ -209,6 +260,8 @@
             temperature.updateOptions( {'file': temp_data } );
         };
 
+		// ====================  form submution preprocessing
+		
 		function actionSend()
 		{
 			var msg = {
