@@ -91,9 +91,12 @@
             </table>
         </form>
     </div>
-    <div id="ph_g" class="chart"></div>
-
-    <div id="temp_g" class="chart"></div>
+    <div>
+	    <div id="ph_g" class="chart"></div>
+	</div>
+	<div>
+	    <div id="temp_g" class="chart" style="display: inline-block;"></div>
+	</div>
 
     <script>
         var ph_data = [];
@@ -143,10 +146,10 @@
             }
             if( json.temp[0] >= 1)
             {
-                temp_data.push([new Date(), parseFloat(json.temp[0])]);
+                temp_data.push([json.timestamp, parseFloat(json.temp[0])]);
             }
             
-            ph_data.push([new Date(), parseFloat(json.ph)]);
+            ph_data.push([json.timestamp, parseFloat(json.ph)]);
             
             json.fet.forEach(function(value,index) {
             	var fet_l = document.getElementById("fet" + index + "_l");
@@ -253,6 +256,16 @@
         var ws = new WebSocket("ws://"+document.location.hostname+":81/");
         ws.onmessage = function (event) {
             var readings = JSON.parse(event.data);
+            
+            if( !readings.hasOwnProperty("timestamp") )
+            {
+            	readings.timestamp = new Date();
+            }
+            else
+            {
+            	//convert unix timestamp to human readable date
+            	readings.timestamp = new Date(readings.timestamp*1000);
+            }
             
             setStatus(readings);
             

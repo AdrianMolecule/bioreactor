@@ -50,6 +50,8 @@ void setup() {
 		display->print(host);
 	}
 
+	initBoardTime();
+
 	//disabling buzzer
 	digitalWrite(config::buzzer_pin, LOW);
 

@@ -8,6 +8,7 @@
 #include <ArduinoJson.h>
 #include <core/actuators.h>
 #include <esp_heap_caps.h>
+#include <esp_sntp.h>
 
 bool WiFiConnect()
 {
@@ -99,14 +100,17 @@ void saveServerSettings(const unsigned short sensor_rate)
 	preferences.end();
 }
 
-String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data)
+String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data, time_t timestamp)
 {
-	static StaticJsonDocument<400> state;
+	static StaticJsonDocument<500> state;
 	state.clear();
 
 	JsonObject object = state.to<JsonObject>();
 	sensor_data.serializeState(object);
 	reactor_mgr->serializeState(object);
+
+	if(timestamp)
+		object["timestamp"] = timestamp;
 
 	String data;
 	serializeJson(state, data);
@@ -143,5 +147,17 @@ void dumpMemoryStatistic()
 {
 	//heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
 	heap_caps_print_heap_info(MALLOC_CAP_32BIT);
+}
+
+
+void initBoardTime()
+{
+	sntp_setoperatingmode(SNTP_OPMODE_POLL);
+	sntp_setservername(0, "pool.ntp.org");
+	sntp_init();
+
+	// Set timezone to Ottawa
+	setenv("TZ", "UTC", 1);
+	tzset();
 }
 

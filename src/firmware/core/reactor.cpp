@@ -6,12 +6,15 @@
 Reactor::Reactor(const SensorState* sensors, Actuators* act_mgr, unsigned short sensor_read_rate) : _program{ act_mgr },
 	_sensors{ sensors },
 	_act_mgr{ act_mgr },
-	_program_enabled{false}
+	_program_enabled{false},
+	_sensor_read_rate{ sensor_read_rate }
 {
 	build_program_list();
 
 
-	schedule_routines(sensor_read_rate);
+	schedule_routines(_sensor_read_rate);
+	_sensor_data.new_data_available = false;
+	_sensor_data.start_time = 0;
 }
 
 bool Reactor::program_enabled() const
@@ -155,13 +158,24 @@ void Reactor::update_program_list(ProgramSettings& settings, bool enabled)
 
 void Reactor::sensor_reading()
 {
-	_sensor_data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+	_sensor_data.data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+	_sensor_data.new_data_available = true;
+
+	while(_sensor_data.data.size() > 100)
+	{
+		_sensor_data.data.pop_front();
+		_sensor_data.start_time += _sensor_read_rate;
+	}
 }
 
 void Reactor::schedule_routines(unsigned short sensor_rate_sec)
 {
 	timer.cancel();
 	timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
+
+	_sensor_read_rate = sensor_rate_sec;
+	_sensor_data.data.clear();
+	time(&_sensor_data.start_time);
 }
 
 void Reactor::serializeState(JsonObject& state) const

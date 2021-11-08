@@ -36,7 +36,14 @@ public:
 
 	void serializeState(JsonObject&) const;
 
-	std::deque<SensorState::Readings> _sensor_data;
+
+	struct SensorReadings
+	{
+		//uint8_t program_id;
+		time_t start_time;
+		std::deque<SensorState::Readings> data;
+		bool new_data_available;
+	} _sensor_data;
 
 private:
 	void build_program_list();
@@ -53,4 +60,5 @@ private:
 	Actuators* _act_mgr;
 	uint8_t _program_active;
 	bool _program_enabled;
+	unsigned short _sensor_read_rate;
 };

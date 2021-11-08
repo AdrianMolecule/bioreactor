@@ -68,11 +68,12 @@ void HTTPServer::loop()
 	_web_server.handleClient();
 	_ws_server.loop();
 
-	while(!_reactor_mgr->_sensor_data.empty())
+
+	if(_reactor_mgr->_sensor_data.new_data_available)
 	{
-		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.back());
+		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.data.back());
 		sendWebSockData(data);
-		_reactor_mgr->_sensor_data.pop_back();
+		_reactor_mgr->_sensor_data.new_data_available = false;
 	}
 }
 
@@ -84,7 +85,7 @@ void HTTPServer::sendWebSockData(String data)
 	}
 }
 
-void HTTPServer::onWSEvent(uint8_t num,
+void HTTPServer::onWSEvent(uint8_t client_id,
                       WStype_t type,
                       uint8_t * payload,
                       size_t length)
@@ -93,20 +94,35 @@ void HTTPServer::onWSEvent(uint8_t num,
   switch(type)
   {
     case WStype_DISCONNECTED:
-    	_ws_connections.erase(num);
-      Serial.printf("HTTPServer::onWSEvent: [%u] Disconnected!\n", num);
+    	_ws_connections.erase(client_id);
+      Serial.printf("HTTPServer::onWSEvent: [%u] Disconnected!\n", client_id);
       break;
     case WStype_CONNECTED:
       {
-    	  _ws_connections.insert(num);
-        IPAddress ip { _ws_server.remoteIP(num) };
-        Serial.printf("HTTPServer::onWSEvent: [%u] Connection from ", num);
+    	_ws_connections.insert(client_id);
+        IPAddress ip { _ws_server.remoteIP(client_id) };
+        Serial.printf("HTTPServer::onWSEvent: [%u] Connection from ", client_id);
         Serial.println(ip.toString());
+
+    	unsigned short sensor_rate_sec = -1;
+    	getServerSettings(sensor_rate_sec);
+
+    	time_t readings_time = _reactor_mgr->_sensor_data.start_time;
+        for(const auto& it : _reactor_mgr->_sensor_data.data)
+    	{
+    		String data = serializeState(_reactor_mgr, it, readings_time);
+
+    		_ws_server.sendTXT(client_id, data);
+    		readings_time += sensor_rate_sec;
+    	}
+
+        Serial.println("HTTPServer::onWSEvent: sensor data is sent");
+
       }
       break;
     case WStype_TEXT:
 	{
-		Serial.printf("HTTPServer::onWSEvent: [%u] Text: %s\n", num, payload);
+		Serial.printf("HTTPServer::onWSEvent: [%u] Text: %s\n", client_id, payload);
 
 		static StaticJsonDocument<400> state;
 		state.clear();
