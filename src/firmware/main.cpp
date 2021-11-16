@@ -66,13 +66,21 @@ void setup() {
 
 void loop()
 {
+	static size_t i = 0;
 	reactor_mgr->program_step();
 
 	//Serial.println(data);
 	//dumpMemoryStatistic();
+	if(i % 6000 == 0)
+	{
+		dumpFlashStatistic();
+		i = 0;
+	}
+	++i;
 
 	server.loop();
 
 	delay(10);
+	//dumpMemoryStatistic();
 }
 

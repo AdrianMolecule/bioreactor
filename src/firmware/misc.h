@@ -23,6 +23,7 @@ void resetMemory();
 //---- state to Json converter
 String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data, time_t timestamp = 0);
 void dumpMemoryStatistic();
+void dumpFlashStatistic();
 
 void initBoardTime();
 

@@ -18,6 +18,7 @@ public:
 
 	void init(Reactor* reactor_mgr);
 	void loop();
+
 	void sendWebSockData(String data);
 
 private:
@@ -30,6 +31,8 @@ private:
 	void onFirmwareUpload();
 	void handleFileUpload();
 	void responseWithFile(const char filename[], html_variables data);
+	void responseWithProgramFile();
+	void onBatchView();
 
 	WebSocketsServer _ws_server;
 	WebServer _web_server;

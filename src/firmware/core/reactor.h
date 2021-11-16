@@ -42,6 +42,7 @@ public:
 		//uint8_t program_id;
 		time_t start_time;
 		std::deque<SensorState::Readings> data;
+		std::deque<SensorState::Readings> file_cache;
 		bool new_data_available;
 	} _sensor_data;
 

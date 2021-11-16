@@ -9,6 +9,7 @@
 #include <core/actuators.h>
 #include <esp_heap_caps.h>
 #include <esp_sntp.h>
+#include "SPIFFS.h"
 
 bool WiFiConnect()
 {
@@ -147,6 +148,11 @@ void dumpMemoryStatistic()
 {
 	//heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
 	heap_caps_print_heap_info(MALLOC_CAP_32BIT);
+}
+
+void dumpFlashStatistic()
+{
+	Serial.printf("SPIFFS total %d, available %d\n", SPIFFS.totalBytes(), SPIFFS.totalBytes() - SPIFFS.usedBytes());
 }
 
 

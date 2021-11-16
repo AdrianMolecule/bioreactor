@@ -47,6 +47,10 @@ void HTTPServer::init(Reactor* reactor_mgr)
 			std::bind(&HTTPServer::handleFileUpload, this)
 	);
 
+	_web_server.on("/program_history", std::bind(&HTTPServer::responseWithProgramFile, this));
+
+	_web_server.on("/batchviewer", std::bind(&HTTPServer::onBatchView, this) );
+
 	if(!SPIFFS.begin(true))
 	{
 		Serial.println("An Error has occurred while mounting SPIFFS");
@@ -320,3 +324,52 @@ void HTTPServer::responseWithFile(const char filename[], html_variables data)
 	file.close();
 }
 
+void HTTPServer::responseWithProgramFile()
+{
+	File file = SPIFFS.open(String("/") + _web_server.arg("file"));
+
+	if(!file)
+	{
+		Serial.println("HTTPServer::responseWithProgramFile: file doesn't exist");
+		return;
+	}
+	Serial.println("HTTPServer::responseWithProgramFile: send data");
+	SensorState::Readings sensor_data;
+	constexpr size_t struct_length = sizeof(SensorState::Readings);
+
+	_web_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+	_web_server.send(200, "text/plain", "");
+
+	String data;
+	_web_server.sendContent("[");
+	while( file.available() )
+	{
+		file.read((uint8_t*)&sensor_data, struct_length);
+
+    	static StaticJsonDocument<200> sensor_json;
+    	sensor_json.clear();
+
+    	JsonObject object = sensor_json.to<JsonObject>();
+
+    	sensor_data.serializeState(object);
+
+		serializeJson(sensor_json, data);
+
+		_web_server.sendContent(data);
+		data = ",";		// append a comma separator for the next cycle iteration
+	}
+
+    _web_server.sendContent("]");
+}
+
+void HTTPServer::onBatchView()
+{
+	html_variables data;
+
+	if(_web_server.arg("current").toInt() == 1)
+		data["##filename##"] = "currentrun";
+	else
+		data["##filename##"] = "lastrun";
+
+	responseWithFile("/viewer.html", data);
+}
