@@ -20,6 +20,10 @@ uint32_t SensorState::readLight() const
 		l += _light.GetLightIntensity();
 	}
 	sampleLux = l / (float)times;
+
+	if(sampleLux == 54612)
+		return 0;
+
 	return sampleLux;
 }
 
@@ -36,6 +40,9 @@ std::array<float, 3> SensorState::readTemperature() const
 
 float SensorState::readPH() const
 {
+	if(_ph.readPH() > 12.)
+		return 0.;
+
 	return _ph.readPH();
 }
 

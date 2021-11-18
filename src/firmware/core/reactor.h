@@ -62,4 +62,7 @@ private:
 	uint8_t _program_active;
 	bool _program_enabled;
 	unsigned short _sensor_read_rate;
+
+	static constexpr size_t FILE_CACHE_SIZE = 5;
+	static constexpr size_t UI_HISTORY_SIZE = 100;
 };

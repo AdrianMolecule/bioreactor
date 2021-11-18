@@ -16,11 +16,16 @@ public:
 	{
 		void serializeState(JsonObject& state) const
 		{
-			state["ph"] = _ph;
-			state["temp"][0] = _temp[0];
+			if(_ph > 0)
+				state["ph"] = _ph;
+
+			if(_temp[0] > 0)
+				state["temp"][0] = _temp[0];
 			state["temp"][1] = 0; //sensors->readTemperature()[1];
 			state["temp"][2] = 0; //sensors->readTemperature()[2];
-			state["light"] = _light;
+
+			if(_light > 0)
+				state["light"] = _light;
 		};
 
 		std::array<float, 3> _temp;

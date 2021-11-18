@@ -91,16 +91,20 @@
             </table>
         </form>
     </div>
-    <div>
-	    <div id="ph_g" class="chart"></div>
+	<div>
+	    <div id="temp_g" class="chart"></div>
 	</div>
 	<div>
-	    <div id="temp_g" class="chart" style="display: inline-block;"></div>
+	    <div id="od_g" class="chart" style="display: inline-block;"></div>
 	</div>
-
+	<div>
+	    <div id="ph_g" class="chart"></div>
+	</div>
+	
     <script>
         var ph_data = [];
         var temp_data = [];
+        var od_data = [];
         
 		function setSliderValue(slider)
 		{
@@ -144,12 +148,15 @@
                 setAction(json);
                 first = false;
             }
-            if( json.temp[0] >= 1)
-            {
-                temp_data.push([json.timestamp, parseFloat(json.temp[0])]);
-            }
             
-            ph_data.push([json.timestamp, parseFloat(json.ph)]);
+            if( json.temp[0] )
+                temp_data.push([json.timestamp, parseFloat(json.temp[0])]);
+            
+            if( json.ph )
+            	ph_data.push([json.timestamp, parseFloat(json.ph)]);
+            
+            if( json.light )
+            	od_data.push([json.timestamp, parseInt(json.light)]);
             
             json.fet.forEach(function(value,index) {
             	var fet_l = document.getElementById("fet" + index + "_l");
@@ -231,7 +238,7 @@
                             valueRange: [0.0, 14.0],
                             targetRange: [6.7, 7.1],
                             labels: ['Time', 'PH'],
-                            title: "PH data",
+                            title: "PH",
                             underlayCallback: target_draw,
                             legendFormatter: legendFormatter,
                             legend: 'always',
@@ -242,11 +249,22 @@
                             {
                             drawPoints: true,
                             rollPeriod: 7,
-                            title: "Temperature data",
+                            title: "Temperature",
                             ylabel: "C&#xb0;",
                             labels: ['Time', 'Temperature'],
                             targetRange: [20.2, 20.8],
                             underlayCallback: target_draw,
+                            legendFormatter: legendFormatter,
+                            legend: 'always',
+                            });
+                            
+        var od = new Dygraph(document.getElementById("od_g"), temp_data,
+                            {
+                            drawPoints: true,
+                            rollPeriod: 7,
+                            title: "Optical density",
+                            ylabel: "Lux",
+                            labels: ['Time', 'light'],
                             legendFormatter: legendFormatter,
                             legend: 'always',
                             });
@@ -271,6 +289,7 @@
             
             ph.updateOptions( {'file': ph_data } );
             temperature.updateOptions( {'file': temp_data } );
+            od.updateOptions( {'file': od_data } );
         };
 
 		// ====================  form submution preprocessing

@@ -37,21 +37,21 @@
         		document.getElementsByClassName('dot')[0].style.backgroundColor='red';
         		document.getElementsByClassName('dot')[0].classList.remove('blink');
         	}
-			if( json.temp[0] < 1)
-                document.getElementById("temp_status").innerHTML = "N/A";
-            else
-            {
+			if( json.temp[0] )
                 document.getElementById("temp_status").innerHTML = json.temp[0] + " C";
-            }
-            
-            document.getElementById("ph_status").innerHTML = json.ph;
-            
-            if( json.light == 54612 )
-                document.getElementById("light_status").innerHTML = "N/A";
             else
-            {
+                document.getElementById("temp_status").innerHTML = "N/A";
+            
+            if( json.ph )
+				document.getElementById("ph_status").innerHTML = json.ph;
+            else
+                document.getElementById("ph_status").innerHTML = "N/A";
+            	
+            
+            if( json.light )
                 document.getElementById("light_status").innerHTML = json.light + " Lux";
-            }
+            else
+                document.getElementById("light_status").innerHTML = "N/A";
         }
         
 		function incrementSeconds() {
@@ -67,8 +67,8 @@
     <table style="text-align:center;width:100%;"><tr>
 		<td>Program: <span id="program_status"></span> <span class="dot"></span></td>
 		<td>Temp: <span id="temp_status"></span></td>
-		<td>PH: <span id="ph_status"></span></td>
 		<td>Light: <span id="light_status"></span></td>
+		<td>PH: <span id="ph_status"></span></td>
 		<td>Last update: <span id='seconds_counter'> </span></td>
 	</tr></table>
 	</body>

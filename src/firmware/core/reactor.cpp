@@ -106,14 +106,16 @@ void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 {
 	if(_program_enabled != enabled)
 	{
-		Serial.println("rename currentrun to lastrun");
-		SPIFFS.remove("/lastrun");
-		SPIFFS.rename("/currentrun", "/lastrun");
 		if(enabled)
 		{
 			Serial.println("create currentrun");
 			File current = SPIFFS.open("/currentrun", FILE_WRITE);
 			current.close();
+		}
+		else
+		{
+			SPIFFS.remove("/lastrun");
+			SPIFFS.rename("/currentrun", "/lastrun");
 		}
 	}
 
@@ -170,26 +172,27 @@ void Reactor::update_program_list(ProgramSettings& settings, bool enabled)
 void Reactor::sensor_reading()
 {
 	_sensor_data.data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+
+	if( program_enabled() )
+		_sensor_data.file_cache.push_back(_sensor_data.data.front());
+
 	_sensor_data.new_data_available = true;
 
-	Serial.printf("file cache %d\n", _sensor_data.file_cache.size());
-	if(_sensor_data.file_cache.size() > 5)
+
+	if(_sensor_data.file_cache.size() > FILE_CACHE_SIZE)
 	{
 		File file = SPIFFS.open("/currentrun", FILE_APPEND);
 		for(const auto& sensor_data : _sensor_data.file_cache)
 		{
 			file.write((const uint8_t*)&sensor_data, sizeof sensor_data);
 		}
-		Serial.println("finished updating currentrun file");
+		Serial.println("Reactor::sensor_reading: currentrun file updated");
 		file.close();
 		_sensor_data.file_cache.clear();
 	}
 
-	while(_sensor_data.data.size() > 5)
+	while(_sensor_data.data.size() > UI_HISTORY_SIZE)
 	{
-		if( program_enabled() )
-			_sensor_data.file_cache.push_back(_sensor_data.data.front());
-
 		_sensor_data.data.pop_front();
 		_sensor_data.start_time += _sensor_read_rate;
 	}
