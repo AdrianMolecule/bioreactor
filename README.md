@@ -1,5 +1,5 @@
 # bioreactor
-Bioreactor 
+Hi there! Welcome to the Bioreactor repository. Below you can find a brief info about setting up the device, for other questions feel to shoot [us](https://github.com/liquidatom) a message.
 
 
 
