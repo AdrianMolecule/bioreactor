@@ -11,7 +11,8 @@ using namespace std::placeholders;
 
 HTTPServer::HTTPServer(uint16_t HTTPPort, uint16_t webSocketPort)
 : _ws_server(webSocketPort),
-  _web_server(HTTPPort)
+  _web_server(HTTPPort),
+  _reactor_mgr(nullptr)
 {
 
 }
@@ -46,6 +47,10 @@ void HTTPServer::init(Reactor* reactor_mgr)
 			std::bind(&HTTPServer::handleFileUpload, this)
 	);
 
+	_web_server.on("/program_history", std::bind(&HTTPServer::responseWithProgramFile, this));
+
+	_web_server.on("/batchviewer", std::bind(&HTTPServer::onBatchView, this) );
+
 	if(!SPIFFS.begin(true))
 	{
 		Serial.println("An Error has occurred while mounting SPIFFS");
@@ -67,11 +72,12 @@ void HTTPServer::loop()
 	_web_server.handleClient();
 	_ws_server.loop();
 
-	while(!_reactor_mgr->_sensor_data.empty())
+
+	if(_reactor_mgr->_sensor_data.new_data_available)
 	{
-		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.back());
+		String data = serializeState(_reactor_mgr, _reactor_mgr->_sensor_data.data.back());
 		sendWebSockData(data);
-		_reactor_mgr->_sensor_data.pop_back();
+		_reactor_mgr->_sensor_data.new_data_available = false;
 	}
 }
 
@@ -83,7 +89,7 @@ void HTTPServer::sendWebSockData(String data)
 	}
 }
 
-void HTTPServer::onWSEvent(uint8_t num,
+void HTTPServer::onWSEvent(uint8_t client_id,
                       WStype_t type,
                       uint8_t * payload,
                       size_t length)
@@ -92,20 +98,59 @@ void HTTPServer::onWSEvent(uint8_t num,
   switch(type)
   {
     case WStype_DISCONNECTED:
-    	_ws_connections.erase(num);
-      Serial.printf("[%u] Disconnected!\n", num);
+    	_ws_connections.erase(client_id);
+      Serial.printf("HTTPServer::onWSEvent: [%u] Disconnected!\n", client_id);
       break;
     case WStype_CONNECTED:
       {
-    	  _ws_connections.insert(num);
-        IPAddress ip { _ws_server.remoteIP(num) };
-        Serial.printf("[%u] Connection from ", num);
+    	_ws_connections.insert(client_id);
+        IPAddress ip { _ws_server.remoteIP(client_id) };
+        Serial.printf("HTTPServer::onWSEvent: [%u] Connection from ", client_id);
         Serial.println(ip.toString());
+
+    	unsigned short sensor_rate_sec = -1;
+    	getServerSettings(sensor_rate_sec);
+
+    	time_t readings_time = _reactor_mgr->_sensor_data.start_time;
+        for(const auto& it : _reactor_mgr->_sensor_data.data)
+    	{
+    		String data = serializeState(_reactor_mgr, it, readings_time);
+
+    		_ws_server.sendTXT(client_id, data);
+    		readings_time += sensor_rate_sec;
+    	}
+
+        Serial.println("HTTPServer::onWSEvent: sensor data is sent");
+
       }
       break;
     case WStype_TEXT:
-      Serial.printf("[%u] Text: %s\n", num, payload);
-      break;
+	{
+		Serial.printf("HTTPServer::onWSEvent: [%u] Text: %s\n", client_id, payload);
+
+		static StaticJsonDocument<400> state;
+		state.clear();
+		DeserializationError error = deserializeJson(state, payload);
+
+		if (error)
+		{
+			Serial.printf("deserializeJson() failed: %s\n", error.c_str());
+		    break;
+		}
+
+		Actuators* act_mgr = _reactor_mgr->get_actuators();
+
+		for(size_t i = 0; i < state["fet"].size(); ++i)
+			act_mgr->changeFET(i, state["fet"][i]);
+
+		for(size_t i = 0; i < state["hbridge"].size(); ++i)
+			act_mgr->changeHBridge(i, bridgeStateConvert(static_cast<const char*>(state["hbridge"][i][0])), state["hbridge"][i][1] );
+
+		act_mgr->changeLED(state["led"]);
+		act_mgr->changeMotor(state["motor"]);
+
+		break;
+	}
     default:
       break;
   }
@@ -113,36 +158,6 @@ void HTTPServer::onWSEvent(uint8_t num,
 
 void HTTPServer::onMain()
 {
-	if(_web_server.method() == HTTPMethod::HTTP_POST)
-	{
-		Actuators* act_mgr = _reactor_mgr->get_actuators();
-
-		if( _web_server.arg("fet1") == "on" )
-			act_mgr->changeFET(0, true);
-		else
-			act_mgr->changeFET(0, false);
-
-		if( _web_server.arg("fet2") == "on" )
-			act_mgr->changeFET(1, true);
-		else
-			act_mgr->changeFET(1, false);
-
-		act_mgr->changeHBridge(0, bridgeStateConvert(_web_server.arg("hbridge1")));
-		act_mgr->changeHBridge(1, bridgeStateConvert(_web_server.arg("hbridge2")));
-		act_mgr->changeHBridge(2, bridgeStateConvert(_web_server.arg("hbridge3")));
-		act_mgr->changeHBridge(3, bridgeStateConvert(_web_server.arg("hbridge4")));
-
-		if( _web_server.arg("led") == "on" )
-			act_mgr->changeLED(true);
-		else
-			act_mgr->changeLED(false);
-
-		if( _web_server.arg("motor") == "on" )
-			act_mgr->changeMotor(true);
-		else
-			act_mgr->changeMotor(false);
-	}
-
 	Serial.println("connected " + _web_server.uri());
 	responseWithFile("/index.html", {});
 }
@@ -309,3 +324,52 @@ void HTTPServer::responseWithFile(const char filename[], html_variables data)
 	file.close();
 }
 
+void HTTPServer::responseWithProgramFile()
+{
+	File file = SPIFFS.open(String("/") + _web_server.arg("file"));
+
+	if(!file)
+	{
+		Serial.println("HTTPServer::responseWithProgramFile: file doesn't exist");
+		return;
+	}
+	Serial.println("HTTPServer::responseWithProgramFile: send data");
+	SensorState::Readings sensor_data;
+	constexpr size_t struct_length = sizeof(SensorState::Readings);
+
+	_web_server.setContentLength(CONTENT_LENGTH_UNKNOWN);
+	_web_server.send(200, "text/plain", "");
+
+	String data;
+	_web_server.sendContent("[");
+	while( file.available() )
+	{
+		file.read((uint8_t*)&sensor_data, struct_length);
+
+    	static StaticJsonDocument<200> sensor_json;
+    	sensor_json.clear();
+
+    	JsonObject object = sensor_json.to<JsonObject>();
+
+    	sensor_data.serializeState(object);
+
+		serializeJson(sensor_json, data);
+
+		_web_server.sendContent(data);
+		data = ",";		// append a comma separator for the next cycle iteration
+	}
+
+    _web_server.sendContent("]");
+}
+
+void HTTPServer::onBatchView()
+{
+	html_variables data;
+
+	if(_web_server.arg("current").toInt() == 1)
+		data["##filename##"] = "currentrun";
+	else
+		data["##filename##"] = "lastrun";
+
+	responseWithFile("/viewer.html", data);
+}

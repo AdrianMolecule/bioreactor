@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Program</title>
+        <script src="/dygraph.min.js"></script>
+		<link rel="stylesheet" href="/dygraph.min.css" />
+	    <style type="text/css">
+    		.chart { width: 800px; height: 400px;}
+    	</style>
+    </head>
+    <body>
+    <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
+
+	<div>
+	    <div id="temp_g" class="chart"></div>
+	</div>
+	<div>
+		<div id="od_g" class="chart" ></div>
+	</div>
+	<br>
+    <div>
+	    <div id="ph_g" class="chart"></div>
+	</div>
+		
+	<script>
+		var ph_data = [];
+        var temp_data = [];
+        var od_data = [];
+        
+        var ph = new Dygraph(document.getElementById("ph_g"), ph_data,
+                    {
+                    drawPoints: true,
+                    rollPeriod: 7,
+                    valueRange: [0.0, 14.0],
+                    targetRange: [6.7, 7.1],
+                    labels: ['Time', 'PH'],
+                    title: "PH",
+                    legend: 'always',
+                    });
+                            
+        var temperature = new Dygraph(document.getElementById("temp_g"), temp_data,
+                    {
+                    drawPoints: true,
+                    rollPeriod: 7,
+                    title: "Temperature",
+                    ylabel: "C&#xb0;",
+                    labels: ['Time', 'Temperature'],
+                    targetRange: [20.2, 20.8],
+                    legend: 'always',
+                    });
+         var od = new Dygraph(document.getElementById("od_g"), temp_data,
+                    {
+                    drawPoints: true,
+                    rollPeriod: 7,
+                    title: "Optical density",
+                    ylabel: "Lux",
+                    labels: ['Time', 'light'],
+                    legend: 'always',
+                    });
+                    
+        function load(url, callback) 
+        {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4 && xhr.status === 200) callback(xhr.responseText);
+			};
+			xhr.open("GET", url);
+			xhr.send();
+		}
+		load("http://"+document.location.hostname+"/program_history?file=##filename##", function (contents) {
+			var json = JSON.parse(contents);
+			for (var i = 0; i < json.length; i++)
+			{
+			    if( json[i].temp[0] )
+	                temp_data.push([i, parseFloat(json[i].temp[0])]);
+            
+            	if( json[i].ph )
+            		ph_data.push([i, parseFloat(json[i].ph)]);
+            		
+            	if( json[i].light )
+            		od_data.push([i, parseFloat(json[i].light)]);
+			}
+			
+        	ph.updateOptions( {'file': ph_data } );
+        	temperature.updateOptions( {'file': temp_data } );
+        	od.updateOptions( {'file': od_data } );
+		});
+
+	</script>
+	<br><br><br>
+    Download data as <a href="/program_history?file=##filename##" download>JSON</a>
+
+    </body>
+</html>

@@ -2,16 +2,19 @@
 
 #include <Preferences.h>
 #include "misc.h"
+#include "SPIFFS.h"
 
 Reactor::Reactor(const SensorState* sensors, Actuators* act_mgr, unsigned short sensor_read_rate) : _program{ act_mgr },
 	_sensors{ sensors },
 	_act_mgr{ act_mgr },
-	_program_enabled{false}
+	_program_enabled{false},
+	_sensor_read_rate{ sensor_read_rate }
 {
 	build_program_list();
 
-
-	schedule_routines(sensor_read_rate);
+	_sensor_data.new_data_available = false;
+	_sensor_data.start_time = 0;
+	schedule_routines(_sensor_read_rate);
 }
 
 bool Reactor::program_enabled() const
@@ -45,7 +48,7 @@ void Reactor::program_step()
 
 	if(_sensors->readTemperature()[0] < active.temp)
 	{
-		_act_mgr->changeFET(0, true);
+		_act_mgr->changeFET(0, 100);
 	}
 	else
 	{
@@ -101,9 +104,22 @@ Reactor::ProgramSettings Reactor::read_single_program(uint8_t id)
 
 void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 {
-	_program_enabled = enabled;
+	if(_program_enabled != enabled)
+	{
+		if(enabled)
+		{
+			Serial.println("create currentrun");
+			File current = SPIFFS.open("/currentrun", FILE_WRITE);
+			current.close();
+		}
+		else
+		{
+			SPIFFS.remove("/lastrun");
+			SPIFFS.rename("/currentrun", "/lastrun");
+		}
+	}
 
-	if(!_program_enabled)
+	if(!enabled)
 	{
 		_act_mgr->shutdown();
 	}
@@ -155,11 +171,51 @@ void Reactor::update_program_list(ProgramSettings& settings, bool enabled)
 
 void Reactor::sensor_reading()
 {
-	_sensor_data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+	_sensor_data.data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
+
+	if( program_enabled() )
+		_sensor_data.file_cache.push_back(_sensor_data.data.front());
+
+	_sensor_data.new_data_available = true;
+
+
+	if(_sensor_data.file_cache.size() > FILE_CACHE_SIZE)
+	{
+		File file = SPIFFS.open("/currentrun", FILE_APPEND);
+		for(const auto& sensor_data : _sensor_data.file_cache)
+		{
+			file.write((const uint8_t*)&sensor_data, sizeof sensor_data);
+		}
+		Serial.println("Reactor::sensor_reading: currentrun file updated");
+		file.close();
+		_sensor_data.file_cache.clear();
+	}
+
+	while(_sensor_data.data.size() > UI_HISTORY_SIZE)
+	{
+		_sensor_data.data.pop_front();
+		_sensor_data.start_time += _sensor_read_rate;
+	}
 }
 
 void Reactor::schedule_routines(unsigned short sensor_rate_sec)
 {
 	timer.cancel();
 	timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
+
+	_sensor_read_rate = sensor_rate_sec;
+	_sensor_data.data.clear();
+	time(&_sensor_data.start_time);
+}
+
+void Reactor::serializeState(JsonObject& state) const
+{
+	_act_mgr->serializeState(state);
+
+	state["reactor_enabled"] = program_enabled();
+	const auto& programs = read_programs_list();
+	if(program_enabled() && !programs.empty())
+	{
+		state["program_active"] = programs[program_active()].name.c_str();
+	}
 }

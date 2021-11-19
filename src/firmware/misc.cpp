@@ -8,6 +8,8 @@
 #include <ArduinoJson.h>
 #include <core/actuators.h>
 #include <esp_heap_caps.h>
+#include <esp_sntp.h>
+#include "SPIFFS.h"
 
 bool WiFiConnect()
 {
@@ -35,7 +37,7 @@ bool WiFiConnect()
 		for(size_t tries = 0; tries < 10 && WiFi.status() != WL_CONNECTED; ++tries)
 		{
 			WiFi.begin(ssid.c_str(), password.c_str());
-			delay(1000);
+			delay(5000);
 			Serial.println("Connecting to '" + ssid + "'");
 		}
 
@@ -99,36 +101,17 @@ void saveServerSettings(const unsigned short sensor_rate)
 	preferences.end();
 }
 
-String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data)
+String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data, time_t timestamp)
 {
-	static StaticJsonDocument<400> state;
+	static StaticJsonDocument<500> state;
 	state.clear();
 
-	state["ph"] = sensor_data._ph;
-	state["temp"][0] = sensor_data._temp[0];
-	state["temp"][1] = 0; //sensors->readTemperature()[1];
-	state["temp"][2] = 0; //sensors->readTemperature()[2];
-	state["light"] = sensor_data._light;
+	JsonObject object = state.to<JsonObject>();
+	sensor_data.serializeState(object);
+	reactor_mgr->serializeState(object);
 
-	const Actuators* act_mgr = reactor_mgr->get_actuators();
-
-	for(size_t i = 0; i < config::fet.size(); ++i)
-		state["fet"][i] = act_mgr->read().fet[i];
-
-	for(size_t i = 0; i < config::HBridge::pins.size(); ++i)
-	{
-		state["hbridge"][i] = bridgeStateConvert(act_mgr->read().hbridge[i]);
-	}
-
-	state["led"] = act_mgr->read().led;
-	state["motor"] = act_mgr->read().motor;
-	state["reactor_enabled"] = reactor_mgr->program_enabled();
-
-	const auto& programs = reactor_mgr->read_programs_list();
-	if(reactor_mgr->program_enabled() && !programs.empty())
-	{
-		state["program_active"] = programs[reactor_mgr->program_active()].name.c_str();
-	}
+	if(timestamp)
+		object["timestamp"] = timestamp;
 
 	String data;
 	serializeJson(state, data);
@@ -165,5 +148,22 @@ void dumpMemoryStatistic()
 {
 	//heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
 	heap_caps_print_heap_info(MALLOC_CAP_32BIT);
+}
+
+void dumpFlashStatistic()
+{
+	Serial.printf("SPIFFS total %d, available %d\n", SPIFFS.totalBytes(), SPIFFS.totalBytes() - SPIFFS.usedBytes());
+}
+
+
+void initBoardTime()
+{
+	sntp_setoperatingmode(SNTP_OPMODE_POLL);
+	sntp_setservername(0, "pool.ntp.org");
+	sntp_init();
+
+	// Set timezone to Ottawa
+	setenv("TZ", "UTC", 1);
+	tzset();
 }
 

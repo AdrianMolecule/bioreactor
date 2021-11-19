@@ -18,11 +18,12 @@ public:
 
 	void init(Reactor* reactor_mgr);
 	void loop();
+
 	void sendWebSockData(String data);
 
 private:
 	using html_variables = std::unordered_map<const char*, String>;
-	void onWSEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
+	void onWSEvent(uint8_t client_id, WStype_t type, uint8_t * payload, size_t length);
 	void onMain();
 	void onSettings();
 	void onProgram();
@@ -30,6 +31,8 @@ private:
 	void onFirmwareUpload();
 	void handleFileUpload();
 	void responseWithFile(const char filename[], html_variables data);
+	void responseWithProgramFile();
+	void onBatchView();
 
 	WebSocketsServer _ws_server;
 	WebServer _web_server;

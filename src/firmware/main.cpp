@@ -50,10 +50,10 @@ void setup() {
 		display->print(host);
 	}
 
+	initBoardTime();
+
 	//disabling buzzer
-	ledcSetup(0, 5000, 8);
-	ledcAttachPin(config::buzzer_pin, 0);
-	ledcWriteTone(0, 0);
+	digitalWrite(config::buzzer_pin, LOW);
 
 	SensorState *sensors = new SensorState(config::sensor::ph_adc, config::sensor::temp_pin);
 	act_mgr = new Actuators();
@@ -66,13 +66,21 @@ void setup() {
 
 void loop()
 {
+	static size_t i = 0;
 	reactor_mgr->program_step();
 
 	//Serial.println(data);
 	//dumpMemoryStatistic();
+	if(i % 6000 == 0)
+	{
+		dumpFlashStatistic();
+		i = 0;
+	}
+	++i;
 
 	server.loop();
 
 	delay(10);
+	//dumpMemoryStatistic();
 }
 

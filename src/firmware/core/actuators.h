@@ -2,11 +2,12 @@
 
 #include <array>
 #include <ESP_FlexyStepper.h>
+#include <ArduinoJson.h>
 #include "../config.h"
+#include "pwm_device.h"
 
 enum class BridgeState
 {
-	OFF,
 	FORWARD,
 	REVERSE
 };
@@ -14,10 +15,16 @@ enum class BridgeState
 class Actuators
 {
 public:
+	struct BridgeDevice
+	{
+		BridgeState state;
+		PWMDevice pwm_ctrl;
+	};
+
 	struct Devices
 	{
-		std::array<BridgeState, config::HBridge::pins.size()> hbridge;
-		std::array<bool, config::fet.size()> fet;
+		std::array<BridgeDevice, config::HBridge::pins.size()> hbridge;
+		std::array<PWMDevice, config::fet.size()> fet;
 		bool led;
 		bool motor;
 	};
@@ -28,14 +35,13 @@ public:
 
 	bool shutdown();
 
-	bool changeHBridge(size_t num, BridgeState state);
-	bool changeFET(size_t num, bool is_enabled);
+	bool changeHBridge(size_t num, BridgeState state, uint8_t power);
+	bool changeFET(size_t num, uint8_t power);
 	bool changeLED(bool is_enabled);
 	bool changeMotor(bool is_enabled);
 	void runMotor();
 
-	//motor
-	const Devices& read() const;
+	void serializeState(JsonObject&) const;
 
 private:
 	bool powerHBridge(bool is_enabled);
@@ -45,4 +51,4 @@ private:
 };
 
 const char* bridgeStateConvert(BridgeState state);
-BridgeState bridgeStateConvert(const String& state);
+BridgeState bridgeStateConvert(const String&& state);

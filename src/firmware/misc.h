@@ -21,7 +21,10 @@ void saveServerSettings(const unsigned short sensor_rate);
 void resetMemory();
 
 //---- state to Json converter
-String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data);
+String serializeState(const Reactor* reactor_mgr, const SensorState::Readings& sensor_data, time_t timestamp = 0);
 void dumpMemoryStatistic();
+void dumpFlashStatistic();
+
+void initBoardTime();
 
 #endif
