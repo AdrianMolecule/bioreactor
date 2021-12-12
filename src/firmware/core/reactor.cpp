@@ -111,9 +111,12 @@ void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 			Serial.println("create currentrun");
 			File current = SPIFFS.open("/currentrun", FILE_WRITE);
 			current.close();
+			_sensor_data.file_cache.clear();
 		}
 		else
 		{
+			dump_file_cache();
+
 			SPIFFS.remove("/lastrun");
 			SPIFFS.rename("/currentrun", "/lastrun");
 		}
@@ -174,21 +177,14 @@ void Reactor::sensor_reading()
 	_sensor_data.data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
 
 	if( program_enabled() )
-		_sensor_data.file_cache.push_back(_sensor_data.data.front());
+		_sensor_data.file_cache.push_back(_sensor_data.data.back());
 
 	_sensor_data.new_data_available = true;
 
 
 	if(_sensor_data.file_cache.size() > FILE_CACHE_SIZE)
 	{
-		File file = SPIFFS.open("/currentrun", FILE_APPEND);
-		for(const auto& sensor_data : _sensor_data.file_cache)
-		{
-			file.write((const uint8_t*)&sensor_data, sizeof sensor_data);
-		}
-		Serial.println("Reactor::sensor_reading: currentrun file updated");
-		file.close();
-		_sensor_data.file_cache.clear();
+		dump_file_cache();
 	}
 
 	while(_sensor_data.data.size() > UI_HISTORY_SIZE)
@@ -218,4 +214,17 @@ void Reactor::serializeState(JsonObject& state) const
 	{
 		state["program_active"] = programs[program_active()].name.c_str();
 	}
+}
+
+void Reactor::dump_file_cache()
+{
+	File file = SPIFFS.open("/currentrun", FILE_APPEND);
+	for(const auto& sensor_data : _sensor_data.file_cache)
+	{
+		file.write((const uint8_t*)&sensor_data, sizeof sensor_data);
+	}
+	Serial.println("Reactor::dump_file_cache: currentrun file is updated");
+	file.close();
+
+	_sensor_data.file_cache.clear();
 }

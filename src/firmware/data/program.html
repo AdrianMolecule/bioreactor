@@ -55,7 +55,7 @@
     <body>
     <iframe src="./header.html" style="border:none;width:100%;"></iframe></br>
 
-	<h4>Change program settings</h4>
+	<h3>Change program settings</h3>
     <label for="cars">Programs:</label>
 	<select id="programs" onchange="fillProgramData(this.value);">
 	</select>
@@ -76,7 +76,7 @@
         <input type="submit" onClick="document.getElementById('enabled').value = (document.getElementById('enabled').value * 1 + 1) % 2;" id="submit_button" value="Start">
         <input type="submit" id="update_button" value="Update">
     </form>
-    </br><h4>New program setup</h4>
+    </br></br><h3>New program setup</h3>
     <form action="/program" method="post" name="new_program">
     	<label for="name">Name:</label>
         <input type="text" name="name"><br><br>

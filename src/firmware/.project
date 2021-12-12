@@ -42,14 +42,29 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/variants/esp32</locationURI>
 		</link>
 		<link>
+			<name>libraries/AccelStepper</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/AccelStepper/1.61.0</locationURI>
+		</link>
+		<link>
 			<name>libraries/Adafruit_BusIO</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_BusIO/1.7.3</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_BusIO/1.9.1</locationURI>
 		</link>
 		<link>
 			<name>libraries/Adafruit_GFX_Library</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_GFX_Library/1.10.7</locationURI>
+		</link>
+		<link>
+			<name>libraries/Adafruit_MCP23017_Arduino_Library</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_MCP23017_Arduino_Library/2.0.2</locationURI>
+		</link>
+		<link>
+			<name>libraries/Adafruit_PWM_Servo_Driver_Library</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Adafruit_PWM_Servo_Driver_Library/2.4.0</locationURI>
 		</link>
 		<link>
 			<name>libraries/Adafruit_ST7735_and_ST7789_Library</name>
@@ -82,6 +97,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP-FlexyStepper/1.4.3</locationURI>
 		</link>
 		<link>
+			<name>libraries/ESP32Servo</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP32Servo/0.9.0</locationURI>
+		</link>
+		<link>
 			<name>libraries/ESPmDNS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/ESPmDNS</locationURI>
@@ -90,6 +110,11 @@
 			<name>libraries/FS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/FS</locationURI>
+		</link>
+		<link>
+			<name>libraries/FastLED</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/FastLED/3.4.0</locationURI>
 		</link>
 		<link>
 			<name>libraries/FreeRTOS</name>
@@ -115,6 +140,11 @@
 			<name>libraries/SPIFFS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/SPIFFS</locationURI>
+		</link>
+		<link>
+			<name>libraries/Servo</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Servo/1.1.7</locationURI>
 		</link>
 		<link>
 			<name>libraries/Ticker</name>

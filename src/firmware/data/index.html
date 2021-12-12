@@ -252,7 +252,7 @@
                             title: "Temperature",
                             ylabel: "C&#xb0;",
                             labels: ['Time', 'Temperature'],
-                            targetRange: [20.2, 20.8],
+                            targetRange: [26.2, 26.6],
                             underlayCallback: target_draw,
                             legendFormatter: legendFormatter,
                             legend: 'always',
@@ -261,12 +261,12 @@
         var od = new Dygraph(document.getElementById("od_g"), temp_data,
                             {
                             drawPoints: true,
-                            rollPeriod: 7,
                             title: "Optical density",
                             ylabel: "Lux",
                             labels: ['Time', 'light'],
                             legendFormatter: legendFormatter,
                             legend: 'always',
+                            logscale: true,
                             });
 
 		// ====================  websocket handling

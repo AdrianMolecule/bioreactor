@@ -50,6 +50,7 @@ private:
 	void build_program_list();
 	ProgramSettings read_single_program(uint8_t number);
 	void update_program_list(ProgramSettings& settings, bool enabled);
+	void dump_file_cache();
 
 	std::vector<ProgramSettings> programs;
 	Program::Basic _program;
@@ -63,6 +64,6 @@ private:
 	bool _program_enabled;
 	unsigned short _sensor_read_rate;
 
-	static constexpr size_t FILE_CACHE_SIZE = 5;
+	static constexpr size_t FILE_CACHE_SIZE = 100;
 	static constexpr size_t UI_HISTORY_SIZE = 100;
 };
