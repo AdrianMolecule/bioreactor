@@ -10,6 +10,7 @@ Actuators::Actuators()
 
 bool Actuators::initialize()
 {
+	pinMode(config::motor::power, OUTPUT);
 	pinMode(config::motor::step,OUTPUT);
 	pinMode(config::motor::direction,OUTPUT);
 
@@ -109,7 +110,7 @@ bool Actuators::changeLED(bool is_enabled)
 
 bool Actuators::changeMotor(bool is_enabled)
 {
-	digitalWrite(config::motor::power, is_enabled);
+	digitalWrite(config::motor::power, !is_enabled);
 
 	if(is_enabled && !_stepper.isStartedAsService())
 		_stepper.startAsService();
