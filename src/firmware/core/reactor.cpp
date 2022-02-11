@@ -33,7 +33,7 @@ Actuators* Reactor::get_actuators() const
 
 void Reactor::program_step()
 {
-	timer.tick();
+	scheduler_timer.tick();
 	_act_mgr->runMotor();
 
 	if( !program_enabled() )
@@ -104,21 +104,16 @@ Reactor::ProgramSettings Reactor::read_single_program(uint8_t id)
 
 void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 {
+	// do it once per program cycle
 	if(_program_enabled != enabled)
 	{
 		if(enabled)
 		{
-			Serial.println("create currentrun");
-			File current = SPIFFS.open("/currentrun", FILE_WRITE);
-			current.close();
-			_sensor_data.file_cache.clear();
+			//storage.start();
 		}
 		else
 		{
-			dump_file_cache();
-
-			SPIFFS.remove("/lastrun");
-			SPIFFS.rename("/currentrun", "/lastrun");
+			storage.stop();
 		}
 	}
 
@@ -176,28 +171,25 @@ void Reactor::sensor_reading()
 {
 	_sensor_data.data.emplace_back(SensorState::Readings({_sensors->readTemperature(), _sensors->readPH(), _sensors->readLight()}));
 
-	if( program_enabled() )
-		_sensor_data.file_cache.push_back(_sensor_data.data.back());
 
-	_sensor_data.new_data_available = true;
-
-
-	if(_sensor_data.file_cache.size() > FILE_CACHE_SIZE)
-	{
-		dump_file_cache();
-	}
+	storage.push_data( _sensor_data.data.back() );
 
 	while(_sensor_data.data.size() > UI_HISTORY_SIZE)
 	{
 		_sensor_data.data.pop_front();
-		_sensor_data.start_time += _sensor_read_rate;
+		time(&_sensor_data.start_time);
+
+		_sensor_data.start_time -= _sensor_read_rate * ( _sensor_data.data.size() - 1 );
+
 	}
+
+	_sensor_data.new_data_available = true;
 }
 
 void Reactor::schedule_routines(unsigned short sensor_rate_sec)
 {
-	timer.cancel();
-	timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
+	scheduler_timer.cancel();
+	scheduler_timer.every(sensor_rate_sec*1000, +[](Reactor *instance) { instance->sensor_reading(); return true;}, this);
 
 	_sensor_read_rate = sensor_rate_sec;
 	_sensor_data.data.clear();
@@ -216,15 +208,4 @@ void Reactor::serializeState(JsonObject& state) const
 	}
 }
 
-void Reactor::dump_file_cache()
-{
-	File file = SPIFFS.open("/currentrun", FILE_APPEND);
-	for(const auto& sensor_data : _sensor_data.file_cache)
-	{
-		file.write((const uint8_t*)&sensor_data, sizeof sensor_data);
-	}
-	Serial.println("Reactor::dump_file_cache: currentrun file is updated");
-	file.close();
 
-	_sensor_data.file_cache.clear();
-}
