@@ -109,7 +109,7 @@ void Reactor::save_program(ProgramSettings& settings, bool enabled, bool is_new)
 	{
 		if(enabled)
 		{
-			//storage.start();
+			storage.start();
 		}
 		else
 		{

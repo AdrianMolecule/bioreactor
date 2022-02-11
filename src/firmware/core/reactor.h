@@ -7,6 +7,7 @@
 #include "actuators.h"
 #include "sensor_state.h"
 #include "program/basic.h"
+#include "config.h"
 
 #include "SPIFFS.h"
 class SensorDataCache
@@ -29,7 +30,7 @@ public:
 
 	void start()
 	{
-		if(started)
+		if(!config::SENSOR_HISTORY_ENABLED || started)
 			return;
 
 		file_cache.clear();

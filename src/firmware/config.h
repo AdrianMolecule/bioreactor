@@ -50,6 +50,9 @@ namespace config
 
 	constexpr unsigned char led_pin = 19;
 	constexpr unsigned char buzzer_pin = 12;
+
+	//------- program behavior config
+	constexpr bool SENSOR_HISTORY_ENABLED = false;
 };
 
 #endif
