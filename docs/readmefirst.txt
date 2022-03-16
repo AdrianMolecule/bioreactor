@@ -1,5 +1,0 @@
-Please be aware this is work in progress and sometimes the most recent version is under the cloud storage for the specific application.
-For electronics you can find descriptive pdf files for all the boards and the corresponding schematics and PCB layouts under electronics. They don't change a lot, so most likely what you see in here is the latest stable board.
-For mechanics you can find the Fusion 360 files for the main body under mechanics. Some of the smaller parts that are 3d printed are designed using Tinkercad. Newer ones are done in Fusion 360 or OpenCad as we move away from Tinkercad.
-Most of the images and some videos are under docs images. Sometimes an image is worth 1000 words.
-We also have a spreadsheet with the parts yet that is a little bit of a moving target as we enhance the design and experiment with newer parts.
