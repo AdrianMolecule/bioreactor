@@ -1,0 +1,1347 @@
+from ast import Str
+from asyncio.constants import DEBUG_STACK_DEPTH
+from distutils.debug import DEBUG
+import json
+from re import X
+from tkinter import E
+import adsk.core, adsk.fusion, adsk.cam
+import traceback, math, enum,os, sys,math
+from itertools import chain
+from queue import Queue
+from itertools import permutations
+import re
+
+sys.path.append(os.path.dirname(__file__))
+
+# global set of event handlers to keep them referenced for the duration of the command
+handlers = []
+app = adsk.core.Application.get()
+
+if app: 
+    ui:adsk.core.UserInterface = app.userInterface
+design = adsk.fusion.Design.cast(app.activeProduct)
+# for printing to text commands 
+palettes = ui.palettes
+textPalette = palettes.itemById("TextCommands")
+# forceUpdate = forceUpdate
+textPalette.isVisible = True     
+parameters:adsk.fusion.UserParameters =None
+dimensionOrientation = adsk.fusion.DimensionOrientations.AlignedDimensionOrientation
+DIM_DIST_CM=.2# the distance between a line and it's dimension label
+
+DEBUG_SKIP_INPUTS=False     
+
+class OpId(enum.Enum): 
+    LENGTH=20; DEPTH=21;HEIGHT=22; THICKNESS=23; TOOL_DIAMETER=25; TOOTH_WIDTH=26; KERF=27; COMPONENT=28
+    STOCK_X_DIMENSION=29; STOCK_Y_DIMENSION=30;DELTA_FROM_BOTTOM=31; MANUAL_LAYOUT=32
+    REPEATS_L_TMP=50
+    CREATE_COMPONENTS=0; CREATE_BODIES=1;CREATE_EMPTY_CONTENTS=2; CREATE_CONSTRAINTS=3; CLEAR_PREVIOUSLY_GENERATED_ITEMS=5
+    DEBUG=6; JUST_CLEAR_PREVIOUSLY_GENERATED_ITEMS=8; DEBUG_JUST_ONE_PART=7;CREATE_MANUFACTURING=9;JUST_CREATE_MANUFACTURING=10
+    CREATE_LAYOUT=11;LASER=12
+    VERSION_PARAMETER=101; JUST_BUILD_TEST=102
+
+VERSION="1.2.0"
+
+def getBaseFolder():
+    pathsJson = json.loads(app.executeTextCommand(u'paths.get'))  
+    p=pathsJson['userDataDirectory']
+    par=os.path.abspath(os.path.join(p, os.pardir))  
+    par=os.path.abspath(os.path.join(par, os.pardir))  
+    return   par
+
+def getSettingsFilePath():
+    baseFolder=getBaseFolder()
+    if baseFolder==None:
+        ui.messageBox("Can not find the base directory so we abandon creation of settings file")
+        return None # to get out
+    f=os.path.join(baseFolder, 'Autodesk Fusion 360', 'API',"Scripts",'AdrianBox','tmpboxsettings.json')          
+    return f
+
+# for power box lAST CUT KERF WAS -.15 BUT i  THINK -.10 IS BETTER
+# CAN={OpId.LENGTH:90,OpId.DEPTH:85,OpId.HEIGHT:50, OpId.THICKNESS:3.175, OpId.TOOL_DIAMETER:2.01,OpId.TOOTH_WIDTH:10,OpId.KERF:-.16,OpId.DELTA_FROM_BOTTOM:-0.1}
+class OpType(enum.Enum): UI_BOOL=1;TMP_MEASURE=2;UI_MEASURE=3;UI_STRING=4;UI_RADIO_SELECTION=5
+
+class StoredOption:   # inputId    # text    # resourceFolder    # initialValue
+    def __init__(self, id:OpId, text:str, value:float, type:OpType):
+        self.id=id
+        self.value=value
+        self.text=text
+        self.type=type
+
+class StoredOptions:    
+    # for OS
+    defaultNumericValues={OpId.LENGTH.name:150,OpId.DEPTH.name:120,OpId.HEIGHT.name:50, OpId.THICKNESS.name:3.175, OpId.TOOL_DIAMETER.name:2.01,OpId.TOOTH_WIDTH.name:10,
+    OpId.KERF.name:-.17,OpId.DELTA_FROM_BOTTOM.name:-0.1, OpId.STOCK_X_DIMENSION.name:304.8, OpId.STOCK_Y_DIMENSION.name:609.6, "version":VERSION}
+
+    def fileLoadSettings(self):
+        try: 
+            f= getSettingsFilePath()
+            fil= open(f,"r")
+            if f==None:
+                return            
+            self.defaultNumericValues = json.load(fil)
+            # if VERSION!=CAP["version"]:
+            #     return
+            print(self.defaultNumericValues["version"])
+            fil.close()           
+        except Exception as ex:
+            print('unable to open tmpboxsettings.json file so the settings cannot be saved between re-runs'+str(ex))    
+
+    def __init__(self):
+        self.optionsMap:dict={}
+        self.fileLoadSettings() 
+        self.addOption(OpId.LENGTH,'Length (mm)',self.defaultNumericValues[OpId.LENGTH.name], OpType.UI_MEASURE)
+        self.addOption(OpId.DEPTH,'Depth (mm)',self.defaultNumericValues[OpId.DEPTH.name],  OpType.UI_MEASURE)
+        self.addOption(OpId.HEIGHT,'Height (mm)',self.defaultNumericValues[OpId.HEIGHT.name], OpType.UI_MEASURE)       
+        self.addOption(OpId.THICKNESS,'Thickness (mm)',self.defaultNumericValues[OpId.THICKNESS.name], OpType.UI_MEASURE)        
+        self.addOption(OpId.TOOL_DIAMETER,'Tool Diameter (mm)',self.defaultNumericValues[OpId.TOOL_DIAMETER.name], OpType.UI_MEASURE)        
+        self.addOption(OpId.TOOTH_WIDTH,'Target Tooth Width (mm)',self.defaultNumericValues[OpId.TOOTH_WIDTH.name], OpType.UI_MEASURE)        
+        self.addOption(OpId.KERF,'Kerf (mm)- can be negative',self.defaultNumericValues[OpId.KERF.name], OpType.UI_MEASURE) 
+        self.addOption(OpId.DELTA_FROM_BOTTOM,
+        'Additional fine adjustment of bone centers from bottom of holes(mm)- positive makes smaller bottom indents',self.defaultNumericValues[OpId.DELTA_FROM_BOTTOM.name], OpType.UI_MEASURE)
+        self.addOption(OpId.STOCK_X_DIMENSION,'Stock X Dimension *',self.defaultNumericValues[OpId.STOCK_X_DIMENSION.name], OpType.UI_MEASURE) 
+        self.addOption(OpId.STOCK_Y_DIMENSION,'Stock Y Dimension',self.defaultNumericValues[OpId.STOCK_Y_DIMENSION.name], OpType.UI_MEASURE)
+        self.addOption(OpId.COMPONENT,'Default Component- empty for root',"", OpType.UI_STRING) 
+        self.addOption(OpId.REPEATS_L_TMP,'temp hidden',-1, OpType.TMP_MEASURE),
+                # repeatsx=math.ceil(math.ceil(( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) - ( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) % 2 - 1 ) )) / 2) 
+                # , None), 
+                #
+        self.addOption(OpId.CREATE_COMPONENTS,'Create Components',False, OpType.UI_BOOL),                
+        self.addOption(OpId.CREATE_BODIES,'Create Bodies',2, OpType.UI_RADIO_SELECTION), #I think 2 becomes 1 which is combined bodies
+        self.addOption(OpId.CREATE_EMPTY_CONTENTS,'Create Empty Contents',False,  OpType.UI_BOOL),        
+        self.addOption(OpId.CREATE_CONSTRAINTS,'Create Constraints',False,  OpType.UI_BOOL),
+        self.addOption(OpId.CLEAR_PREVIOUSLY_GENERATED_ITEMS,'Clear Previously Generated Items',True, OpType.UI_BOOL),     
+        self.addOption(OpId.JUST_CLEAR_PREVIOUSLY_GENERATED_ITEMS, 'Just Clear Previously Generated Items',False,  OpType.UI_BOOL),     
+        self.addOption(OpId.CREATE_CONSTRAINTS,'Create Constraints',True, OpType.UI_BOOL),     
+        self.addOption(OpId.CREATE_MANUFACTURING,'Create Manufacturing Operations (skeleton)\nmust have one pre-existing setup',False,  OpType.UI_BOOL),     
+        self.addOption(OpId.JUST_CREATE_MANUFACTURING,'Just Create Manufacturing Operations (skeleton)\nmust have one pre-existing setup',False,  OpType.UI_BOOL),     
+        self.addOption(OpId.DEBUG_JUST_ONE_PART,'Debug Just One Part',False, OpType.UI_BOOL) , 
+        self.addOption(OpId.MANUAL_LAYOUT,'Enter a Manual Layout like TTFF_ss',"", OpType.UI_STRING),
+        self.addOption(OpId.LASER,'Just Laser Cutting profile',False, OpType.UI_BOOL) , 
+        self.addOption(OpId.JUST_BUILD_TEST,'Build a test cut for three kerf values',False, OpType.UI_BOOL) ,
+        self.addOption(OpId.DEBUG,'Debug',True, OpType.UI_BOOL) 
+    
+    def addOption(self, id:OpId, text:str, value:float, type:OpType):
+            self.optionsMap[id] = StoredOption(id,text,value, type)    
+
+    def getOption(self, constantId:OpId): 
+            return self.optionsMap[constantId]
+            
+    def getVal(self, constantId:OpId): 
+            return self.optionsMap[constantId].value
+
+    def setVal(self, constantId:StoredOption, newVal): 
+            self.optionsMap[constantId].value=newVal
+
+    def uploadOptionValuesToUiPopup(self, uiInputs:adsk.core.CommandInputs):  
+        storedOption:StoredOption=None 
+        for storedOption in self.optionsMap.values():
+            if storedOption.type==OpType.UI_MEASURE:
+                uiInputs.addValueInput(storedOption.id.name, storedOption.text,"mm", adsk.core.ValueInput.createByString(str(storedOption.value))   )
+            elif storedOption.type==OpType.UI_BOOL:    
+                uiInputs.addBoolValueInput(storedOption.id.name, storedOption.text, True , '',storedOption.value)
+            elif storedOption.type==OpType.UI_STRING: 
+                uiInputs.addStringValueInput(storedOption.id.name, storedOption.text, storedOption.value)
+            elif storedOption.type==OpType.UI_RADIO_SELECTION:
+                # uiInputs.addBoolValueInput(storedOption.id.name, storedOption.text, True , '',storedOption.value)                
+                groupCmdInput = uiInputs.addGroupCommandInput(storedOption.id.name, storedOption.text)
+                groupCmdInput.isExpanded = True
+                groupCmdInput.isEnabledCheckBoxDisplayed = False
+                groupChildInputs = groupCmdInput.children
+                # Create radio button group input.
+                radioButtonGroup = groupChildInputs.addRadioButtonGroupCommandInput('radioButtonGroup', 'Radio button group')
+                radioButtonItems = radioButtonGroup.listItems
+                radioButtonItems.add("No Bodies", True if storedOption.value==0 else False)
+                radioButtonItems.add("Merged Bodies", True if storedOption.value==1 else False)
+                radioButtonItems.add("Two Bodies", True if storedOption.value==2 else False)   
+        addVersionParameter()                               
+
+    def saveToDisk(self):
+        self.defaultNumericValues[OpId.LENGTH.name]=self.optionsMap[OpId.LENGTH].value
+        self.defaultNumericValues[OpId.DEPTH.name]=self.optionsMap[OpId.DEPTH].value
+        self.defaultNumericValues[OpId.HEIGHT.name]=self.optionsMap[OpId.HEIGHT].value
+        self.defaultNumericValues[OpId.THICKNESS.name]=self.optionsMap[OpId.THICKNESS].value
+        self.defaultNumericValues[OpId.TOOL_DIAMETER.name]=self.optionsMap[OpId.TOOL_DIAMETER].value
+        self.defaultNumericValues[OpId.TOOTH_WIDTH.name]=self.optionsMap[OpId.TOOTH_WIDTH].value
+        self.defaultNumericValues[OpId.KERF.name]=self.optionsMap[OpId.KERF].value
+        self.defaultNumericValues[OpId.DELTA_FROM_BOTTOM.name]=self.optionsMap[OpId.DELTA_FROM_BOTTOM].value
+        self.defaultNumericValues[OpId.STOCK_X_DIMENSION.name]=self.optionsMap[OpId.STOCK_X_DIMENSION].value
+        self.defaultNumericValues[OpId.STOCK_Y_DIMENSION.name]=self.optionsMap[OpId.STOCK_Y_DIMENSION].value
+        try:
+            f= getSettingsFilePath()
+            fil= open(f,"w+")
+            if fil==None:
+                uiPrint('Unable to open boxsettings file so the settings cannot be saved between re-runs:')
+                return
+            with fil as write:
+                json.dump( self.defaultNumericValues , write )            
+            fil.close()
+        except Exception as ex:
+            uiPrint('Unable to open boxsettings file so the settings cannot be saved between re-runs:\n'+str(ex))       
+
+    def updateOptionValuesFromUI(self, uiPopupInputs:adsk.core.CommandInputs):
+        # change store value with the UI value# update from UI pop-up
+        storedOption:StoredOption=None
+        for storedOption in self.optionsMap.values():
+                # add the new param that are not in UI
+            if storedOption.id==OpId.REPEATS_L_TMP:
+                storedOption.value=float(-1)
+                if addParameter(storedOption) ==False:
+                    return False           
+            elif type(uiPopupInputs[storedOption.id.name]) is adsk.core.ValueCommandInput:
+                storedOption.value=float(uiPopupInputs[storedOption.id.name].expression.split()[0])  
+                if addParameter(storedOption) ==False:
+                    return False                
+            elif type(uiPopupInputs[storedOption.id.name]) is adsk.core.StringValueCommandInput:    
+                storedOption.value=uiPopupInputs[storedOption.id.name].value                 
+            elif type(uiPopupInputs[storedOption.id.name]) is adsk.core.BoolValueCommandInput:    
+                storedOption.value=uiPopupInputs[storedOption.id.name].value                 
+            elif type(uiPopupInputs[storedOption.id.name]) is adsk.core.GroupCommandInput:
+                if uiPopupInputs[storedOption.id.name].children[0].listItems.item(0).isSelected:
+                        storedOption.value=0
+                elif  uiPopupInputs[storedOption.id.name].children[0].listItems.item(1).isSelected:
+                        storedOption.value=1
+                elif  uiPopupInputs[storedOption.id.name].children[0].listItems.item(2).isSelected:
+                        storedOption.value=2
+                # print( "selected option is ",storedOption.value)  
+            else:
+                print("Unknown type of input"+type(uiPopupInputs[storedOption.id.name]))
+        self.saveToDisk()
+        return True
+
+    def checkInputs(self):
+        return False # todo add check code
+
+storedOptions:StoredOptions=StoredOptions()
+
+## returns False for Fail
+def addParameter(storedOption:StoredOption):
+    name =getParameterName(storedOption.id)
+    p:adsk.fusion.UserParameter=parameters.itemByName(name)
+    if p!=None:
+        print("Found existing param:"+name+ "we'll just update the value")
+        # p.deleteMe()
+        p.value=storedOption.value/10 # Adrian support for inch
+        return True
+    try:
+        parameters.add(name,adsk.core.ValueInput.createByString(str(storedOption.value)),'mm',storedOption.text)
+        return True
+    except:
+        ui.messageBox('addParameter failed for:'+name+ " You probably already have an USED parameter with the same name in the project.\n You can rename or delete the old parameter.") 
+        return False
+
+def addVersionParameter():
+    name ='Version_info'
+    p=parameters.itemByName(name)
+    if p!=None:
+        p.deleteMe()
+    try:
+        textList=[VERSION]
+        o:StoredOption=None
+        for o in storedOptions.optionsMap.values():
+            textList.append(o.id.name+" "+str(o.value))
+        text='\n'.join(textList)
+        parameters.add(name,adsk.core.ValueInput.createByString("0") ," mm ",text)
+        return True
+    except:
+        ui.messageBox('addParameter failed for:'+name+ " You probably already have a parameter with the same name in the project.\n You can rename or delete the old parameter.") 
+        return False
+        abort()
+
+CREATED_ENTIY_PREFIX='b '
+  
+class Directions(enum.Enum): RIGHT =1; LEFT = 2; UP = 3; DOWN=4
+class StartWith(enum.Enum): HOLE=0; TOOTH=1
+
+def buildTop(cornerOrigin:tuple, length, depth, thickness, toothWidth,toolDiameter,kerf,holeWidth, name):
+    component=createOrGetNewComponent(name)
+    sketchLines=newSketch(component, name+ ' lines');  sketchLines.isComputeDeferred = True
+    sketchCircles=newSketch(component, name+ ' circles');  sketchCircles.isComputeDeferred = True
+    addRectangle(sketchCircles, cornerOrigin, (length,depth))    # add a rectangle around or selection     
+    # distances1=genDistances(OpId.REPEATS_L_TMP, length, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)#todo
+    distances1=genDistances(length, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+    # RIGHT(length)
+    direction=Directions.RIGHT
+    currentOrigin=cornerOrigin
+    points=preparePoints(distances1, currentOrigin, direction, thickness)
+    firstPoint=sketchLines.sketchPoints.add(adsk.core.Point3D.create(points[0][0],points[0][1]))
+    startPointLineR, endPointLineR=drawLinesForOneSide(sketchLines, points, firstPoint, None)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH, direction )    
+    # UP(depth)
+    direction=Directions.UP
+    distances2=genDistances(depth, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+    currentOrigin=(length+cornerOrigin[0],0+cornerOrigin[1])
+    points=preparePoints(distances2, currentOrigin, direction, -thickness)
+    startPointLineU, endPointLineU=drawLinesForOneSide(sketchLines, points, None, None)#endPointLineR, None)TODO
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH,  direction) 
+    # LEFT(length)
+    direction=Directions.LEFT
+    currentOrigin=(0+cornerOrigin[0],depth+cornerOrigin[1])
+    points=preparePoints(distances1, currentOrigin, direction,-thickness)
+    startPointLineL,endPointLineL=drawLinesForOneSide(sketchLines, points, None, endPointLineU) 
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH,direction) 
+    # DOWN(depth)
+    direction=Directions.DOWN
+    currentOrigin=(0+cornerOrigin[0],0+cornerOrigin[1])
+    points=preparePoints(distances2, currentOrigin, direction, +thickness)
+    startPointLineD,endPointLineD=drawLinesForOneSide(sketchLines, points, startPointLineR, startPointLineL)#???? mmm
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)    
+    sketchLines.isComputeDeferred = False
+    sketchCircles.isComputeDeferred = False     
+    return sketchLines , sketchCircles
+
+def buildFront(cornerOrigin, length, height, thickness, toothWidth,toolDiameter,kerf,holeWidth, name):
+    component=createOrGetNewComponent(name)
+    # as it starts with hole FirstLineOrigin is cornerOrigin-thickness
+    sketchLines=newSketch(component, name+ ' lines');sketchLines.isComputeDeferred = True
+    sketchCircles=newSketch(component, name+ ' circles'); sketchCircles.isComputeDeferred = True
+    addRectangle(sketchCircles, cornerOrigin, (length,height))    # add a rectangle around or selection     
+    # RIGHT
+    direction=Directions.RIGHT
+    distances1=genDistances(length, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+    points=preparePoints(distances1, (cornerOrigin[0],cornerOrigin[1]+thickness), direction, -thickness)
+    points=adjustPoints(points, [thickness,0] )
+    startPointLineR,endPointLineR=drawLinesForOneSide(sketchLines, points, None, None) 
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, True,direction)  
+    # UP
+    direction=Directions.UP
+    distances2=genDistances(height, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+    points=preparePoints(distances2, (cornerOrigin[0]+length-thickness,cornerOrigin[1]),direction, thickness)
+    points=adjustPoints(points, [0,thickness] )    
+    startPointLineU,endPointLineU=drawLinesForOneSide(sketchLines, points, None, None)#endPointLineR, None) TODO
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf,StartWith.HOLE , direction) 
+    # LEFT
+    direction=Directions.LEFT
+    currentOrigin=(cornerOrigin[0],height+cornerOrigin[1]-thickness)
+    points=preparePoints(distances1, currentOrigin, direction, +thickness)
+    points=adjustPoints(points, [thickness,0] )
+    startPointLineL,endPointLineL=drawLinesForOneSide(sketchLines, points, None, endPointLineU) 
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.HOLE,direction) 
+    # DOWN
+    direction=Directions.DOWN
+    currentOrigin=(cornerOrigin[0]+thickness,cornerOrigin[1])
+    points=preparePoints(distances2, currentOrigin, direction, -thickness)
+    points=adjustPoints(points, [0,thickness] )       
+    startPointLineD,endPointLineD=drawLinesForOneSide(sketchLines, points, startPointLineR, startPointLineL)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.HOLE,direction)    
+    sketchLines.isComputeDeferred = False
+    sketchCircles.isComputeDeferred = False    
+    return sketchLines, sketchCircles
+
+def buildVLeft(cornerOrigin, depth, height, thickness, toothWidth,toolDiameter,kerf,holeWidth, name):
+    component=createOrGetNewComponent(name)
+    sketchLines=newSketch(component, name+ ' lines');sketchLines.isComputeDeferred = True
+    sketchCircles=newSketch(component, name+ ' circles');sketchCircles.isComputeDeferred = True    
+    addRectangle(sketchCircles, cornerOrigin, (height, depth))    # add a rectangle around or selection     
+    # we do right(height) up(length) left(-height) down(-length)
+    # directions are just because of Layout but could be changed
+    distances1=genDistances(height, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+    # RIGHT
+    direction=Directions.RIGHT
+    points=preparePoints(distances1, cornerOrigin, direction, thickness)
+    points=adjustPoints(points, [thickness,0] )
+    startPointLineR,endPointLineR=drawLinesForOneSide(sketchLines, points, None, None)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2,kerf, StartWith.TOOTH, direction)  
+    # UP
+    direction=Directions.UP
+    distances2=genDistances(depth, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+    points=preparePoints(distances2, (cornerOrigin[0]+ height-thickness, cornerOrigin[1]), direction, thickness)
+    points=adjustPoints(points, [0,0] )   
+    startPointLineU,endPointLineU=drawLinesForOneSide(sketchLines, points, None, None) #endPointLineR, None) TODO
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.HOLE, direction)   
+    # LEFT
+    direction=Directions.LEFT
+    points=preparePoints(distances1, (cornerOrigin[0],cornerOrigin[1]+depth),direction,-thickness)
+    points=adjustPoints(points, [thickness,0] )
+    startPointLineL,endPointLineL=drawLinesForOneSide(sketchLines, points, None, endPointLineU) 
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)      
+    # DOWN
+    direction=Directions.DOWN
+    points=preparePoints(distances2, (cornerOrigin[0]+thickness, cornerOrigin[1]), direction, -thickness)
+    startPointLineD,endPointLineD=drawLinesForOneSide(sketchLines, points, startPointLineR, startPointLineL)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.HOLE, direction)   
+    sketchLines.isComputeDeferred = False
+    sketchCircles.isComputeDeferred = False    
+    return sketchLines, sketchCircles      
+
+#since sides have edges that start both with holes and teeth we can not use the same method or both the horizontal and vertical drawings. H or V are relative to model xy where V is higher on Y 
+def buildHLeft(cornerOrigin, depth, height, thickness, toothWidth,toolDiameter,kerf,holeWidth, name): 
+    component=createOrGetNewComponent(name)
+    sketchLines=newSketch(component, name+ ' lines');sketchLines.isComputeDeferred = True
+    sketchCircles=newSketch(component, name+ ' circles');sketchCircles.isComputeDeferred = True 
+    addRectangle(sketchCircles, cornerOrigin, (depth,height))    # add a rectangle around or selection       
+    # we do right(height) up(length) left(-height) down(-length)
+    # directions are just because of Layout but could be changed
+    distances1=genDistances(depth, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+    # RIGHT
+    direction=Directions.RIGHT # I'm not sure i this is really Right or maybe visually is upwards because of Horizontality
+    points=preparePoints(distances1, (cornerOrigin[0],cornerOrigin[1]+thickness), direction, -thickness)    
+    startPointLineR,endPointLineR=drawLinesForOneSide(sketchLines, points, None, None)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2,kerf, StartWith.HOLE, direction)  
+    # UP
+    direction=Directions.UP
+    distances2=genDistances(height, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+    points=preparePoints(distances2, (depth+cornerOrigin[0], 0+cornerOrigin[1]), direction, -thickness)
+    points=adjustPoints(points, [0,+thickness] )   
+    startPointLineU, endPointLineU=drawLinesForOneSide(sketchLines, points, None, None) #endPointLineR, None)TODO
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)   
+    # LEFT 
+    direction=Directions.LEFT
+    points=preparePoints(distances1, (cornerOrigin[0],height+cornerOrigin[1]-thickness), direction, +thickness)    
+    startPointLineL,endPointLineL=drawLinesForOneSide(sketchLines, points, None, endPointLineU) 
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.HOLE, direction)      
+    # DOWN
+    direction=Directions.DOWN
+    points=preparePoints(distances2, (cornerOrigin[0],cornerOrigin[1]), direction, +thickness)
+    points=adjustPoints(points, [0,+thickness] )  
+    startPointLineD,endPointLineD=drawLinesForOneSide(sketchLines, points, startPointLineR, startPointLineL)
+    drawCirclesForOneSide(sketchCircles, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)   
+    sketchLines.isComputeDeferred = False  
+    sketchCircles.isComputeDeferred = False  
+    return sketchLines, sketchCircles     
+
+def createStock(horiz,vert, thickness):
+    sketchStock:adsk.fusion.Sketch=newSketch(DEFAULT_COMPONENT, CREATED_ENTIY_PREFIX+ ' stock')
+    p1=createPoint(0,0)
+    p2=createPoint(horiz,vert) 
+    sketchStock.sketchCurves.sketchLines.addTwoPointRectangle(p1, p2)
+    distance = adsk.core.ValueInput.createByReal(thickness)
+    b=buildBodyBySketchExtrusion(DEFAULT_COMPONENT, sketchStock, distance, False)
+    sketchStock.isVisible=False
+    return b.boundingBox.maxPoint.x
+
+def drawCirclesForOneSide(sketch:adsk.fusion.Sketch, points, toolRadius, kerf, startWith, direction):
+    boneCenterToBottom=toolRadius  / math.sqrt(2)-0*kerf/2-getParVal(OpId.DELTA_FROM_BOTTOM)
+    boneCenterToSide=toolRadius / math.sqrt(2) + 1.2 * kerf/2
+    if boneCenterToBottom<0 or boneCenterToSide<0:
+        ui.messageBox( 'boneCenterToBottom<0 or boneCenterToSide<0', boneCenterToBottom, boneCenterToSide)     
+    if startWith==StartWith.TOOTH:#add circle starting 3rd point for 2 points then skip 2
+        if direction==Directions.RIGHT: #  x is plus and y is minus
+            adjustX=[boneCenterToSide, -boneCenterToSide]# 0 or the first point and 1 or the second then repeat
+            adjustY=[-boneCenterToBottom,-boneCenterToBottom]
+        elif direction==Directions.UP:
+            adjustX=[boneCenterToBottom, boneCenterToBottom]# 0 or the first point and 1 or the second then repeat
+            adjustY=[boneCenterToSide,-boneCenterToSide]
+        elif direction==Directions.LEFT:
+            adjustX=[boneCenterToSide, -boneCenterToSide]# 0 or the first point and 1 or the second then repeat
+            adjustY=[boneCenterToBottom,boneCenterToBottom]
+        elif direction==Directions.DOWN:
+            adjustX=[-boneCenterToBottom, -boneCenterToBottom]# 0 or the first point and 1 or the second then repeat
+            adjustY=[boneCenterToSide,-boneCenterToSide]
+        for i in range(2, len(points)-1,4):
+            center=adsk.core.Point3D.create(points[i][0]+adjustX[0],points[i][1]+adjustY[0])
+            circle=sketch.sketchCurves.sketchCircles.addByCenterRadius(center,toolRadius )
+            addRadiusDimension(sketch,circle,center)  
+            center=adsk.core.Point3D.create(points[i+1][0]+adjustX[1],points[i+1][1]+adjustY[1])
+            circle=sketch.sketchCurves.sketchCircles.addByCenterRadius(center,toolRadius )            
+            addRadiusDimension(sketch,circle,center)  
+    else:   # start with hole
+        if direction==Directions.RIGHT: #  x is plus and y is minus
+            adjustX=[-boneCenterToSide, boneCenterToSide]# 0 or the first point and 1 or the second then repeat
+            adjustY=[-boneCenterToBottom,-boneCenterToBottom]
+        elif direction==Directions.UP:
+            adjustX=[boneCenterToBottom, boneCenterToBottom]# 0 or the irst point and 1 or the second then repeat
+            adjustY=[-boneCenterToSide,boneCenterToSide]
+        elif direction==Directions.LEFT:
+            adjustX=[-boneCenterToSide, boneCenterToSide]# 0 or the irst point and 1 or the second then repeat
+            adjustY=[boneCenterToBottom,boneCenterToBottom]
+        elif direction==Directions.DOWN:
+            adjustX=[-boneCenterToBottom, -boneCenterToBottom]# 0 or the irst point and 1 or the second then repeat
+            adjustY=[-boneCenterToSide,boneCenterToSide]
+        center=adsk.core.Point3D.create(points[1][0]+adjustX[0],points[1][1]+adjustY[0])
+        circle:adsk.core.Point3D.SketchCircle =sketch.sketchCurves.sketchCircles.addByCenterRadius(center,toolRadius )
+        addRadiusDimension(sketch,circle,center) 
+        for i in range(4, len(points)-1,4):
+            center=adsk.core.Point3D.create(points[i][0]+adjustX[1],points[i][1]+adjustY[1])
+            circle=sketch.sketchCurves.sketchCircles.addByCenterRadius(center,toolRadius )
+            addRadiusDimension(sketch,circle,center)             
+            if i!=len(points)-2: #skip adding last point which is in corner outside our scope
+                center=adsk.core.Point3D.create(points[i+1][0]+adjustX[0],points[i+1][1]+adjustY[0])
+                circle=sketch.sketchCurves.sketchCircles.addByCenterRadius(center,toolRadius )
+                addRadiusDimension(sketch,circle,center)                  
+
+def drawLinesForOneSide(sketch:adsk.fusion.Sketch, points, firstPointToLink:adsk.fusion.SketchPoint, lastPointToLink:adsk.fusion.SketchPoint):
+    sketch.isComputeDeferred = True
+    lines = sketch.sketchCurves.sketchLines
+    firstPoint=firstPointToLink
+    previousEndPoint=firstPointToLink
+    for i in range(1, len(points)):# Loop ignores the first point if provided from outside
+        if previousEndPoint==None:
+            previousEndPoint=sketch.sketchPoints.add(adsk.core.Point3D.create(points[0][0], points[0][1], 0))
+            ep=adsk.core.Point3D.create(points[i][0], points[i][1], 0)
+            currentEndPoint=sketch.sketchPoints.add(ep)         
+            line=lines.addByTwoPoints(previousEndPoint, currentEndPoint)
+            firstPoint=line.startSketchPoint 
+            addDimension(previousEndPoint, currentEndPoint, ep,sketch) 
+        else:
+            ep=adsk.core.Point3D.create(points[i][0], points[i][1], 0)
+            if i==len(points)-1 and lastPointToLink!=None: 
+                tmpEndPoint=lastPointToLink 
+            else:                
+                tmpEndPoint=sketch.sketchPoints.add(ep)
+            line=lines.addByTwoPoints(previousEndPoint, tmpEndPoint)
+            addDimension(previousEndPoint, tmpEndPoint, ep  ,sketch)        
+        previousEndPoint=line.endSketchPoint
+        if storedOptions.getVal(OpId.CREATE_CONSTRAINTS):
+            constraints = sketch.geometricConstraints
+            if line.startSketchPoint.geometry.x != line.endSketchPoint.geometry.x:
+                constraints.addHorizontal(line)   
+            else:
+                constraints.addVertical(line)  
+            # print('line between ', lastX, lastY,'and', points[i][0],points[i][1])
+        # endPoint=line.endPoint
+        #https://help.autodesk.com/view/fusion360/ENU/?guid=GUID-98e163be-fd07-11e4-9c39-3417ebd3d5beS
+    sketch.isComputeDeferred = False
+    return firstPoint, previousEndPoint
+
+def test():
+    return False
+
+def addDimension(ap0:adsk.fusion.SketchPoint, ap1:adsk.fusion.SketchPoint, textPoint,sketch:adsk.fusion.Sketch): 
+    xs=ap0.geometry.x
+    ys=ap0.geometry.y
+    xe=ap1.geometry.x
+    ye=ap1.geometry.y
+    if ys==ye: # horizontal
+        textPoint = adsk.core.Point3D.create(xs+(xe-xs)/2, ys-DIM_DIST_CM, 0)    
+        dim:adsk.fusion.SketchDimension=sketch.sketchDimensions.addDistanceDimension(ap0, ap1, dimensionOrientation, textPoint)    
+    else:            
+        textPoint = adsk.core.Point3D.create( xs-DIM_DIST_CM, ys+(ye-ys)/2,0)    
+        dim=sketch.sketchDimensions.addDistanceDimension(ap0, ap1, dimensionOrientation, textPoint)  
+    if dim.parameter.value==.3175: 
+        dim.parameter.expression = getParameterName(OpId.THICKNESS)
+
+def addRadiusDimension(sketch:adsk.fusion.Sketch,circle:adsk.fusion.SketchCircle, centerPoint:adsk.core.Point3D): 
+    textPoint=adsk.core.Point3D.create(centerPoint.x+.1,centerPoint.y,0)
+    dim= sketch.sketchDimensions.addDiameterDimension (circle, textPoint)    
+    dim.parameter.expression = getParameterName(OpId.TOOL_DIAMETER)
+    
+def startHere( length, depth, height, thickness, idealToothWidth,toolDiameter,kerf, stockX,stockY): 
+    holeWidth=idealToothWidth + kerf
+    toothWidth=idealToothWidth - kerf
+    if storedOptions.getVal(OpId.JUST_BUILD_TEST):
+        buildTest(length, depth, height, thickness,toolDiameter,kerf, toothWidth, holeWidth, stockX,stockY)
+        return  
+    lay=storedOptions.getVal(OpId.MANUAL_LAYOUT).strip()
+    if lay!="":  
+        if checkLayoutString(lay) ==False:    
+            return 
+        buildLayout(storedOptions.getVal(OpId.MANUAL_LAYOUT),length, depth, height,  (0,0), stockX, stockY, thickness, toothWidth, toolDiameter, kerf,holeWidth) 
+    if stockX<depth:
+        ui.messageBox("The width of the stock is less than the depth so we cannot cut this box out of this stock!")  #, icon=3)#adsk.core.MessageBoxIconTypes.WarningIconType)
+        return
+    buildLayout(None,length, depth, height,  (0,0), stockX, stockY, thickness, toothWidth, toolDiameter, kerf,holeWidth) 
+
+# def buildAProjection(  thickness,toolDiameter,kerf, toothWidth, holeWidth, xDistStock,yDistStock):
+#     name=CREATED_ENTIY_PREFIX+'test'
+#     createStock(xDistStock, yDistStock, thickness)  
+#     cornerOrigin=(-1,0)
+#     name='test'
+#     component=DEFAULT_COMPONENT
+#     sketchLines=newSketch(component, name)
+#     # sketchLines.isComputeDeferred = True    
+#     distances2=genDistances(10, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+#     direction=Directions.DOWN
+#     currentOrigin=(cornerOrigin[0],cornerOrigin[1])
+#     points=preparePoints(distances2, currentOrigin, direction, +.4)
+#     fp1,lp1=drawLinesForOneSide(sketchLines, points, None, None)
+#     drawCirclesForOneSide(sketchLines, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)    
+
+#     cornerOrigin=(cornerOrigin[0]-toolDiameter-thickness,cornerOrigin[1])
+#     direction=Directions.UP
+#     distances2=genDistances(depth, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+#     points=preparePoints(distances2, cornerOrigin, direction, thickness)
+#     fp2,lp2=drawLinesForOneSide(sketchLines, points, None, None) 
+#     drawCirclesForOneSide(sketchLines, points, toolDiameter/2, kerf, StartWith.HOLE,  direction)  
+#     line=sketchLines.sketchCurves.sketchLines.addByTwoPoints(fp1,fp2)
+#     line=sketchLines.sketchCurves.sketchLines.addByTwoPoints(lp1,lp2)
+#     distance = adsk.core.ValueInput.createByReal(thickness)
+
+#     fullBody:adsk.fusion.BRepBody=buildBodyBySketchExtrusion(component,sketchLines, distance, True) 
+#     # createSimpleBody()
+#     project(fullBody)
+
+def buildTest(length, depth, height, thickness,toolDiameter,kerf, toothWidth, holeWidth, xDistStock,yDistStock):
+    name=CREATED_ENTIY_PREFIX+'test'
+    createStock(xDistStock, yDistStock, thickness)  
+    component=createOrGetNewComponent(name)
+    sketchLines=newSketch(component, name);sketchLines.isComputeDeferred = True
+    cornerOrigin=(-1,0)
+    buildTestHelper(cornerOrigin, length, depth, height, thickness,toolDiameter,kerf/2, toothWidth, holeWidth)
+    cornerOrigin=(-3,0)    
+    buildTestHelper(cornerOrigin, length, depth, height, thickness,toolDiameter,kerf/2*.7, toothWidth, holeWidth)
+    cornerOrigin=(-5,0)    
+    buildTestHelper(cornerOrigin, length, depth, height, thickness,toolDiameter,kerf/2*1.3, toothWidth, holeWidth)
+    ui.messageBox("Three test cuts with three test values for the kerf were created\nThe actual bodies represent the scrap parts between the teeths and corresponding holes\nThe closest pair of zig-zags to the origin (normally the most right one) uses the kerf, the next one a kerf that is .7 of the given kerf and the last one a 1.3 kerf which means the largest play\nIn manufacturing mode select contour and then change to inside cutting by pressing once on all the red arrow visible in the select Geometry/Contour selection\nUse a scrap piece of material where Y can span several teeths to make these three vertical test cuts\nSome of that vertical can result in air cutting if the scrap is not large enough as long as it includes several teeths")
+
+def buildTestHelper(cornerOrigin, length, depth, height, thickness,toolDiameter,kerf, toothWidth, holeWidth):
+    name='test'
+    component=createOrGetNewComponent(name)
+    sketchLines=newSketch(component, name);sketchLines.isComputeDeferred = True    
+
+    distances2=genDistances(depth, StartWith.TOOTH, toothWidth, thickness, kerf, holeWidth)
+    direction=Directions.DOWN
+    currentOrigin=(cornerOrigin[0],cornerOrigin[1])
+    points=preparePoints(distances2, currentOrigin, direction, +thickness)
+    fp1,lp1=drawLinesForOneSide(sketchLines, points, None, None)
+    drawCirclesForOneSide(sketchLines, points, toolDiameter/2, kerf, StartWith.TOOTH, direction)    
+
+    cornerOrigin=(cornerOrigin[0]-toolDiameter-thickness,cornerOrigin[1])
+    direction=Directions.UP
+    distances2=genDistances(depth, StartWith.HOLE, toothWidth, thickness, kerf, holeWidth)
+    points=preparePoints(distances2, cornerOrigin, direction, thickness)
+    fp2,lp2=drawLinesForOneSide(sketchLines, points, None, None) 
+    drawCirclesForOneSide(sketchLines, points, toolDiameter/2, kerf, StartWith.HOLE,  direction)          
+    line=sketchLines.sketchCurves.sketchLines.addByTwoPoints(fp1,fp2)
+    line=sketchLines.sketchCurves.sketchLines.addByTwoPoints(lp1,lp2)
+    distance = adsk.core.ValueInput.createByReal(thickness)
+    fullBody=buildBodyBySketchExtrusion(component,sketchLines, distance, True)   
+
+def cleanUpPreviouslyGeneratedItems():
+    cleanUpOneComponent(DEFAULT_COMPONENT)
+    for occurance in DEFAULT_COMPONENT.occurrences:#  components have occurances that we see in UI
+       cleanUpOneComponent(occurance.component)
+    for oId in range(0, len(DEFAULT_COMPONENT.occurrences)-1):#  components have occurances that we see in UI
+        try:
+            deleteElement(DEFAULT_COMPONENT.occurrences.item(oId))    
+        except Exception as ex:
+            uiPrint('exception while deleting component, exception message :\n'+str(ex))            
+
+    def cleanOperations():
+        setups=getSetups()
+        if setups ==None or setups.count==0:       
+            return
+        setup=getSetups().item(0)
+        operation:adsk.cam.Operation =None
+        for operation in setup.allOperations:
+            if operation.name.startswith(CREATED_ENTIY_PREFIX):
+                print (operation.name, "- we supress this operation")
+                operation.isSupressed=True
+        return
+
+def cleanUpOneComponent(component:adsk.fusion.Component):
+    try:
+        for elementToDelete in component.features.combineFeatures:
+            deleteElement(elementToDelete)   
+        for elementToDelete in component.features.extrudeFeatures:
+            deleteElement(elementToDelete)   
+        bodiesToDel=list(component.bRepBodies)
+        elementToDelete=None
+        for elementToDelete in reversed(bodiesToDel):
+            if elementToDelete.name.startswith(CREATED_ENTIY_PREFIX):
+                deleteElement(elementToDelete)   
+        sToDel=list(component.sketches)
+        for elementToDelete in sToDel:
+            if elementToDelete.name.startswith  (CREATED_ENTIY_PREFIX):
+                 if elementToDelete.name.lower().find("content")>=0 and ( elementToDelete.sketchPoints.count>1  or elementToDelete.sketchCurves.sketchLines.count!=0 or elementToDelete.sketchTexts.count!=0 ):
+                    print('Content Element:',elementToDelete.name, " type of", type(elementToDelete), "is not empty so we keep")
+                 else:
+                    deleteElement(elementToDelete)
+    except Exception as ex:
+        uiPrint('exception in delete, exception message :\n'+str(ex))                 
+                 
+def deleteElement(e):
+    if e.name.startswith(CREATED_ENTIY_PREFIX) :
+        if storedOptions.getVal(OpId.DEBUG):
+            print('Delete Element:',e.name, "of type", type(e))            
+            name=e.name
+            valid=e.isValid
+        try:
+            e.deleteMe() 
+        except Exception as ex:
+            uiPrint('exception while deleting '+name+ ' that had valid flag='+str(valid)+ ' exception message :\n'+str(ex))
+    
+def moveExt(component, extrudes, axis, distance):
+    if axis not in ('x', 'y', 'z'):
+        raise ValueError("Axis must be one of x, y, z.")
+    entities1 = adsk.core.ObjectCollection.create()
+    entities1.add(extrudes.bodies.item(0))
+    # Create a transform to do move
+    i=adsk.core.Matrix3D.create()
+    transform:adsk.core.Matrix3D= adsk.core.Matrix3D.create()
+    #  transform.
+    t= adsk.core.Matrix3D.create()
+    transform.translation = adsk.core.Vector3D.create(
+        distance if axis == 'x' else 0.0,
+        distance if axis == 'y' else 0.0,
+        distance if axis == 'z' else 0.0,
+    )
+    # Create a move feature
+    moveFeats = component.features.moveFeatures
+    moveFeatureInput = moveFeats.createInput(entities1, transform)
+    moveFeats.add(moveFeatureInput)
+
+def createBodiesAndProjections(sketches, thickness):
+    sketchLines=sketches[0]
+    sketchCircles=sketches[1]
+    if storedOptions.getVal(OpId.CREATE_BODIES)==0:# no bodies
+        return
+    if sketchLines.profiles.count==0 or sketchCircles.profiles.count==0 :
+        ui.messageBox('no profiles for the lines or circles so we can not extrude '+  sketchLines.name+' or ' +sketchCircles.name)
+        return
+    component =sketchLines.parentComponent
+    # Extrude lines profile
+    distance = adsk.core.ValueInput.createByReal(thickness)
+    laserBody=buildBodyBySketchExtrusion(component,sketchLines, distance, True)    
+    cheeseBody=buildBodiesHollyCheese(sketchCircles, distance)
+    combines:adsk.fusion.CombineFeatures = component.features.combineFeatures
+    circleToolBodiesCollection:adsk.core.ObjectCollection = adsk.core.ObjectCollection.create()     
+    circleToolBodiesCollection.add(cheeseBody)
+    if storedOptions.getVal(OpId.CREATE_BODIES)==2:# one for laser and one for drill
+         return
+    if storedOptions.getVal(OpId.CREATE_BODIES)==1:# combined final bodies
+        combineInput = combines.createInput(laserBody, circleToolBodiesCollection)
+        combineInput.operation = adsk.fusion.FeatureOperations.IntersectFeatureOperation
+        # combineInput.isKeepToolBodies=True
+        resultCombine:adsk.fusion.Feature =combines.add(combineInput)
+        resultCombine.name=sketchLines.name+ ' final combine feature'  
+        # if resultCombine.bodies.count==0:
+        name=sketchLines.name[:sketchLines.name.index("lines")]
+        resultCombine.bodies.item(0).name=name+ ' body'
+        project(resultCombine.bodies.item(0), component, name+" projection")
+
+def project(what:adsk.fusion.Base, component, name):
+    targetSketch:adsk.fusion.Sketch=newSketch(component, name)
+    p:adsk.fusion.Profile
+    try:
+        targetSketch.project(what)# https://help.autodesk.com/view/fusion360/ENU/?guid=GUID-776c271e-ee3e-11e4-a5eb-3417ebd3d5b
+    except:
+        print('Failed:\n{}'.format(traceback.format_exc()))   
+
+def buildBodiesHollyCheese(sketchCircles, distance):
+    # extrude circles
+    circleAndLinesProfiles = adsk.core.ObjectCollection.create() 
+    circleProfile:adsk.fusion.Profile
+    for circleProfile in sketchCircles.profiles: # many
+        loop:adsk.fusion.ProfileLoop=circleProfile.profileLoops[0]
+        if loop.profileCurves.count==4:# the rectangle has 4
+            circleAndLinesProfiles.add(circleProfile)      
+    extrudes:adsk.fusion.ExtrudeFeatures = sketchCircles.parentComponent.features.extrudeFeatures
+    extCirclesInput = extrudes.createInput( circleAndLinesProfiles, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    extCirclesInput.setDistanceExtent(False, distance)
+    resultCirclesExtrude:adsk.fusion.Feature =extrudes.add(extCirclesInput)
+    for body in resultCirclesExtrude.bodies:
+        body.name=sketchCircles.name+ ' cheese body'
+    resultCirclesExtrude.name=sketchCircles.name+ ' extrude'
+    return resultCirclesExtrude.bodies.item(0)
+
+def buildBodyBySketchExtrusion(component, sketch, distance, isVisible):
+    lineProfiles = adsk.core.ObjectCollection.create()        
+    for lineProfile in sketch.profiles:# this is actually just one
+        lineProfiles.add(lineProfile)       
+    extrudes:adsk.fusion.ExtrudeFeatures = component.features.extrudeFeatures
+    extLinesInput = extrudes.createInput( lineProfiles, adsk.fusion.FeatureOperations.NewBodyFeatureOperation)
+    extLinesInput.setDistanceExtent(False, distance)
+    resultLinesExtrude:adsk.fusion.Feature =extrudes.add(extLinesInput)
+    baseBody=resultLinesExtrude.bodies.item(0)
+    baseBody.name=sketch.name+ ' body'
+    baseBody.isVisible=isVisible
+    resultLinesExtrude.name=sketch.name+ ' body extrude'
+    return baseBody 
+
+def getComponent(inputs):
+    if not inputs['COMPONENT'].value == '':    
+        # Get the root component of the active design
+        rootComp = DEFAULT_COMPONENT
+        allOccs = rootComp.occurrences
+        transform = adsk.core.Matrix3D.create()
+        # Create a component under root component
+        occ1 = allOccs.addNewComponent(transform)
+        occ1.component.name = inputs['componentInput'].value
+        return occ1.component
+    else:
+        return DEFAULT_COMPONENT
+
+def createOrGetNewComponent(name): 
+        # Get the root component of the active design
+        if storedOptions.getVal(OpId.CREATE_COMPONENTS)==False:
+            return DEFAULT_COMPONENT
+        rootComp = DEFAULT_COMPONENT
+        allOccs = rootComp.occurrences
+        transform = adsk.core.Matrix3D.create()
+        # Create a component under root component
+        occ1 = allOccs.addNewComponent(transform)
+        occ1.component.name=name+ ' component'
+        return occ1.component
+
+def  genDistances(edgeDimension, startWith, toothWidth, thickness, kerf, holeWidth):
+    # repeats=int(getParVal(opId.REPEATS_L_TMP)) TODO
+    repeats=math.ceil(math.ceil(( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) - ( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) % 2 - 1 ) )) / 2) 
+    if startWith==StartWith.TOOTH:
+        toothShoulder=( edgeDimension - (toothWidth+ kerf) * (math.ceil(( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) - ( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) % 2 - 1 ) ))) ) / 2 - kerf/2
+        distances=[toothShoulder]
+        # run starting with tooth 
+        for repeatNumber in range(1, repeats):
+            distances.append(holeWidth)
+            distances.append( toothWidth )
+        distances.append(holeWidth)
+        distances.append(toothShoulder)
+    else:
+        # run starting with hole 
+        # heightShoulderHole then REPEAT fingerWidth - 2 * kerf then holewidth END REPEAT  heightShoulderHole
+        holeShoulder=( edgeDimension - (toothWidth+kerf) * (math.ceil(( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) - ( ( math.floor(( edgeDimension - 2 * thickness ) / toothWidth) - 2 ) % 2 - 1 ) ))) ) / 2 + kerf/2
+        distances=[holeShoulder]
+        # list add 0 then add toothSholder then add tooth  width
+        for repeatNumber in range(1, repeats):
+            # print (repeatNumber)
+            distances.append( toothWidth ) # Real Tooth Width
+            distances.append(holeWidth)
+        distances.append( toothWidth )
+        distances.append(holeShoulder)
+        # print(distances)
+    return distances
+
+# thicknessValue is + or - thickness depending where it goes from the initial line    
+def preparePoints(distances, firstLineOrigin, direction, signedThicknessValue):
+    points=list()
+    points.append ((firstLineOrigin[0] , firstLineOrigin[1])) #corner
+    if direction ==Directions.RIGHT or direction ==Directions.LEFT:
+        yStartLineOrigin=firstLineOrigin[1]
+        yTheOtherWay=firstLineOrigin[1]+signedThicknessValue
+        currentX=firstLineOrigin[0]+distances[0]
+        points.append ( (currentX, yStartLineOrigin)) # right for shoulder end point
+        points.append ( (currentX , yTheOtherWay)) # up or the first hole for shoulder end point
+        for i in range(1, len(distances)-2,2):
+            currentX=currentX+distances[i] 
+            points.append ( (currentX , yTheOtherWay))# go right to do the bottom of hole
+            points.append ( (currentX , yStartLineOrigin))# go down to finish  hole
+            currentX=currentX+distances[i+1] 
+            # print('last dist in loop',i+1)
+            points.append ( (currentX , yStartLineOrigin))# go right to do edge tooth
+            points.append ( (currentX , yTheOtherWay))# go down to finish tooth   
+        lastHoleDistance=distances[len(distances)-2]# bad
+        currentX= currentX+lastHoleDistance
+        points.append (( currentX,yTheOtherWay)) # go right to do the bottom of last hole      
+        points.append (( currentX ,yStartLineOrigin)) # go right to finish last hole and prepare for shoulder    
+        points.append ( (currentX+distances[len(distances)-1] , yStartLineOrigin)) # horiz for shoulder end point
+    elif direction ==Directions.UP or direction ==Directions.DOWN:
+        currentY=firstLineOrigin[1]
+        xFirstLineOrigin=firstLineOrigin[0]
+        xTheOtherWay=firstLineOrigin[0]+signedThicknessValue
+        currentY=currentY+distances[0]
+        points.append ( (xFirstLineOrigin, currentY)) # up for shoulder end point
+        points.append ( (xTheOtherWay,currentY)) # horiz for the first hole for shoulder end point
+        for i in range(1, len(distances)-2,2):
+            currentY=currentY+distances[i] 
+            points.append ( ( xTheOtherWay,currentY))# go ? to do the bottom of hole
+            points.append ( ( xFirstLineOrigin,currentY))# go ? to finish  hole
+            currentY=currentY+distances[i+1] 
+            # print('last dist in loop',i+1)
+            points.append ( (xFirstLineOrigin,currentY ))# go ? to do edge tooth
+            points.append ( (xTheOtherWay, currentY))# go ? to finish tooth   
+        # print('dist dist after loyBottomp inde',len(distances)-2)
+        currentY= currentY+distances[len(distances)-2]#lastHoleDistance
+        points.append (( xTheOtherWay, currentY)) # go ? to do the bottom of last hole      
+        points.append (( xFirstLineOrigin, currentY )) # go ? to finish last hole and prepare for shoulder    
+        points.append ( (xFirstLineOrigin, currentY+distances[len(distances)-1] )) # horiz for shoulder end point
+    return points
+
+# change by thickness the x or the ys of the first and last point which are the corner of the bouding rectangle in case the edge starts with a hole
+def  adjustPoints(points, byWhat):
+    adjustedPoints=list()
+    adjustedPoints.append((points[0][0]+byWhat[0],points[0][1]+byWhat[1]))
+    for i in range(1, len(points)-1):# range is exclusive of last index
+        adjustedPoints.append(points[i])
+    lastPoint=points[len(points)-1] 
+    adjustedPoints.append((lastPoint[0]-byWhat[0],lastPoint[1]-byWhat[1]))
+    return adjustedPoints
+
+def uiPrint(text):    
+    print(text)   
+    textPalette.writeText(text)
+    adsk.doEvents() 
+
+def getTestPoints():
+    startY=-2# cm because it's internal unit
+    diTest=[(0,startY),(1.5,startY),(1.5,startY+.3),(1.5+.95,startY+.3),(1.5+.95,startY+.3-.3)]
+    return diTest  
+
+def newSketch( component, name):
+    sketch = component.sketches.add(component.xYConstructionPlane)
+    sketch.name=name
+    return sketch
+
+def createEmptyContent(component, cornerOrigin:tuple, xDist, yDist,name):
+    if storedOptions.getVal(OpId.CREATE_EMPTY_CONTENTS)==False:
+        return
+    contentSketch:adsk.fusion.Sketch=newSketch(component, name+ ' content')
+    p1:adsk.core.Point3D=createPoint(cornerOrigin[0], cornerOrigin[1])
+    p2=createPoint(cornerOrigin[0]+xDist, cornerOrigin[1]+yDist)
+    sketchLinesList=contentSketch.sketchCurves.sketchLines.addTwoPointRectangle(p1,p2 )
+    for line in sketchLinesList:
+            line.isConstruction=True
+    return contentSketch
+
+def createPoint(x,y):
+    return adsk.core.Point3D.create(x,y,0)
+
+def createPointTuple(t:tuple):
+    return adsk.core.Point3D.create(t[0],t[1],0)
+
+# exits script when returning False
+def createManufacturingOperations():
+    if storedOptions.getVal(OpId.CREATE_MANUFACTURING)==False and storedOptions.getVal(OpId.JUST_CREATE_MANUFACTURING)==False:
+        return  True
+    setups=getSetups()
+    if setups==None:
+         ui.messageBox("Please go to cam section and create an empty setup and back to design to create an empty cam project( curtosie of Autodesk)")
+         abort()
+         return False
+    if setups.count==0:
+        ui.messageBox("Setups is empty, please create a setup and retry")
+        abort()
+        return False
+    setup:adsk.cam.Setup=setups.item(0)
+    for op in setup.allOperations:
+        if op.name.startswith(CREATED_ENTIY_PREFIX):
+            ui.messageBox( "Previous Box operations exist! The must be manually removed before regenerating any new one\n That avoids unwanted removal of previous work")
+            abort()
+            return False
+    setup.name=CREATED_ENTIY_PREFIX+" setup"
+    localPath=getBaseFolder()
+    if localPath==None:
+        ui.messageBox("Can not find the template directory so we abandon creation of empty templates")
+        return None # to get out
+    localPath=localPath+'/CAM360/templates/'
+    boxCountourTemplateFilename = localPath+"b box contour.f3dhsm-template" 
+    pauseTemplateFilename = localPath+"b box pause.f3dhsm-template"     
+    drillTemplateFilename = localPath+"b box drill.f3dhsm-template" 
+    # C:\Users\ad\AppData\Roaming\Autodesk\Autodesk Fusion 360\API\Scripts\AdrianBox\..\..\..\..\cam360\templates
+    # Check if the template exists (from the path specified above). Show an error if it doesn't exist.
+    if not os.path.exists(boxCountourTemplateFilename):
+        ui.messageBox("The template '" + boxCountourTemplateFilename + "' does not exist")
+        return None
+    if not os.path.exists(drillTemplateFilename):
+        ui.messageBox("The template '" + drillTemplateFilename + "' does not exist")
+        return None
+    if not os.path.exists(pauseTemplateFilename):
+        ui.messageBox("The template '" + pauseTemplateFilename + "' does not exist")
+        return None        
+    parts=("top ","bottom ","front ","back ","left ","right ")
+    for part in parts:
+        results = setup.createFromTemplate(boxCountourTemplateFilename)   
+        operation:adsk.cam.Operation = results.item(0)
+        operation.name = CREATED_ENTIY_PREFIX+ part+"content"
+           
+        results = setup.createFromTemplate(pauseTemplateFilename)   
+        operation:adsk.cam.Operation = results.item(0)
+        operation.name =  CREATED_ENTIY_PREFIX+ "pause"  
+
+        if storedOptions.getVal(OpId.CREATE_BODIES)==2:# one for laser and one for drill
+            results = setup.createFromTemplate(drillTemplateFilename)   
+            operation:adsk.cam.Operation = results.item(0)
+            operation.name = CREATED_ENTIY_PREFIX+ part+"drill"
+            # 
+            results = setup.createFromTemplate(pauseTemplateFilename)   
+            operation:adsk.cam.Operation = results.item(0)
+            operation.name = CREATED_ENTIY_PREFIX+ "pause"   
+
+        results = setup.createFromTemplate(boxCountourTemplateFilename)   
+        operation:adsk.cam.Operation = results.item(0)
+        operation.name = CREATED_ENTIY_PREFIX+ part+"box"
+
+        results = setup.createFromTemplate(pauseTemplateFilename)   
+        operation:adsk.cam.Operation = results.item(0)
+        operation.name = CREATED_ENTIY_PREFIX+ "pause"   
+    if storedOptions.getVal(OpId.JUST_CREATE_MANUFACTURING):
+        return  False        
+
+def getSetups():
+    # Get the CAM product 
+    doc:adsk.core.Document = app.activeDocument
+    products = doc.products
+    cam = adsk.cam.CAM.cast(products.itemByProductType("CAMProductType"))
+    if cam==None:
+        return None  
+    setups:adsk.cam.Setups = cam.setups
+    # List of all setups
+    if setups==None:
+        ui.messageBox(" no setups")
+        return None
+    return setups
+
+def dumpOperation(operation:adsk.cam.Operation):
+    print(operation.attributes.groupNames)
+    print(type(operation))
+    for propertyValue in operation.attributes:
+        print('attribute'+type(propertyValue))
+    # Change the operation name
+    param:adsk.cam.CAMParameter=None
+
+    for param in operation.parameters:      
+        print("parameter:",param.name, str(param.value))
+        val:adsk.cam.ParameterValue=param.value
+    return
+
+def buildLayout(bestLayout, l, d, h, origin,xDistStock, yDistStock, thickness, toothWidth, toolDiameter, kerf, holeWidth):
+    yDistStock=createStock(xDistStock, yDistStock, thickness)  
+    if yDistStock==None:
+        return None
+    if bestLayout==None:
+        bestLayouts=calculateLayouts(l, d, h, xDistStock,toolDiameter)
+        strList=list()
+        for p in bestLayouts:
+            strList.append(p[0])
+        strList.sort()
+        al=strList[0]
+        for p in bestLayouts:
+            if p[0]==al:
+                origin=(0,0)
+                buildLayoutSketch(l, d, h, origin, al, thickness, toothWidth, toolDiameter, kerf,holeWidth)
+    else:
+        buildLayoutSketch(l, d, h, origin, bestLayout, thickness, toothWidth, toolDiameter, kerf,holeWidth)
+
+def buildLayoutSketch(l, d, h,origin, bestLayout, thickness, toothWidth,toolDiameter,kerf,holeWidth):
+    uiPrint("Creating layout:"+bestLayout)
+    letters=list(bestLayout)
+    pileWidthsQueue=rebuildDistanceQueueFromLayoutLetters(bestLayout,l,d,h)
+    sketchLayout:adsk.fusion.Sketch=newSketch(DEFAULT_COMPONENT, CREATED_ENTIY_PREFIX+ ' layout')
+    sketchLayout.isVisible=False
+    top=True;front=True;left=True
+    for letter in letters:
+        if letter=="T": 
+                cornerDist=(d,l)
+                sketches=buildTop(origin, d, l, thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("top" if top else "bottom"))
+                top=False
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)
+                createBodiesAndProjections(sketches,thickness)
+                addRectangle(sketchLayout, origin, cornerDist)
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1]
+                if storedOptions.getVal(OpId.DEBUG_JUST_ONE_PART):
+                    return   
+        elif letter=="t":
+                cornerDist=(l,d)
+                sketches=buildTop(origin, l, d, thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("top" if top else "bottom"))
+                top=False
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)                
+                createBodiesAndProjections(sketches,thickness)
+                addRectangle(sketchLayout, origin, cornerDist)  
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1] 
+                if storedOptions.getVal(OpId.DEBUG_JUST_ONE_PART):
+                    return                                         
+        elif letter=="F":
+                cornerDist=(h,l)
+                sketches=buildFront(origin, h,l, thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("front" if front else "back"))
+                front=False
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)                
+                createBodiesAndProjections(sketches,thickness)
+                addRectangle(sketchLayout, origin, cornerDist)
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1] 
+        elif letter=="f":
+                cornerDist=(l,h)
+                sketches=buildFront(origin, l,h, thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("front" if front else "back"))
+                front=False
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)                
+                createBodiesAndProjections(sketches,thickness)
+                addRectangle(sketchLayout, origin, cornerDist)
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1] 
+        elif letter=="S":
+                cornerDist=(h,d)
+                sketches=buildVLeft(origin, d,h ,thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("left" if left else "right"))
+                left=False  
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)            
+                createBodiesAndProjections(sketches,thickness)                
+                addRectangle(sketchLayout, origin, cornerDist)
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1] 
+        elif letter=="s":
+                cornerDist=(d,h)
+                sketches=buildHLeft(origin, d,h, thickness, toothWidth,toolDiameter,kerf,holeWidth,CREATED_ENTIY_PREFIX+("left" if left else "right"))      
+                left=False  
+                createEmptyContent(sketches[0].parentComponent, origin, cornerDist[0],cornerDist[1],sketches[0].name)         
+                createBodiesAndProjections(sketches,thickness)                
+                addRectangle(sketchLayout, origin, cornerDist)
+                origin=origin[0]+cornerDist[0]+toolDiameter,origin[1] 
+        elif letter=="_":
+            origin=(0,origin[1]+pileWidthsQueue.get()+toolDiameter)
+        else:
+            ui.messageBox("letter in:"+letters+" should be TFStfsx _ but this is:"+letter)     
+    return 
+
+def rebuildDistanceQueueFromLayoutLetters(letters, l, d, h)->Queue:
+    queue:Queue=Queue()
+    distOnX:float=0
+    for le in letters:
+        if le=="T":
+            distOnX=max(distOnX,l)
+        elif le=="t":
+            distOnX=max(distOnX,d)
+        elif le=="F":
+            distOnX=max(distOnX,l)  
+        elif le=="f":
+            distOnX=max(distOnX,h)        
+        elif le=="S":
+            distOnX=max(distOnX,d)      
+        elif le=="s":
+            distOnX=max(distOnX,h)  
+        elif le=="_":
+            queue.put(distOnX)
+            distOnX=0
+    queue.put(distOnX)    
+    return queue     
+
+def addRectangle(sketch, origin:tuple, cornerDist:tuple):
+    p1=createPointTuple(origin)
+    p2=createPointTuple((origin[0]+cornerDist[0],origin[1]+cornerDist[1])) 
+    sketch.sketchCurves.sketchLines.addTwoPointRectangle(p1, p2)    
+
+def getParameterName(parameter:OpId):
+    return CREATED_ENTIY_PREFIX.replace(' ','_')+parameter.name.lower().capitalize()
+    # return parameter.name.lower().capitalize()
+
+def  getParVal(parId:OpId):
+    return   parameters.itemByName(getParameterName(parId)).value
+
+class APoint:  
+    def __init__(self, x:float, y:float, parameterId:OpId ):
+        self.x=x
+        self.y=y
+        self.parameterId=parameterId
+
+def abort():
+    # ui.terminateActiveCommand()
+    # adsk.terminate()
+    return
+
+class AdrianBoxCommandExecuteHandler(adsk.core.CommandEventHandler):
+    def __init__(self):
+        super().__init__()
+    def notify(self, args):
+        try:
+            command = args.firingEvent.sender
+            uiPopupInputs = {}
+            for input in command.commandInputs:
+                uiPopupInputs[input.id] = input
+            # Get current design
+            design = app.activeProduct
+            if not design:
+                ui.messageBox('No active Fusion design', 'No Design')
+                return
+            if not DEBUG_SKIP_INPUTS:
+                component=getComponent(uiPopupInputs)
+            else:
+                component=DEFAULT_COMPONENT
+            # Built it!            
+            if DEBUG_SKIP_INPUTS==False:
+                if storedOptions.updateOptionValuesFromUI(uiPopupInputs)==False or storedOptions.checkInputs()==True:
+                    return
+                if storedOptions.getVal(OpId.JUST_CLEAR_PREVIOUSLY_GENERATED_ITEMS):
+                    return                          
+            if createManufacturingOperations()==False:
+                return
+            if test():
+                return
+            startHere(  
+                storedOptions.getVal(OpId.LENGTH)/10,               
+                storedOptions.getVal(OpId.DEPTH)/10 ,                  
+                storedOptions.getVal(OpId.HEIGHT)/10,               
+                storedOptions.getVal(OpId.THICKNESS)/10 ,                  
+                storedOptions.getVal(OpId.TOOTH_WIDTH)/10,               
+                storedOptions.getVal(OpId.TOOL_DIAMETER)/10,               
+                storedOptions.getVal(OpId.KERF)/10 ,                  
+                storedOptions.getVal(OpId.STOCK_X_DIMENSION)/10,               
+                storedOptions.getVal(OpId.STOCK_Y_DIMENSION)/10
+            )                   
+            #str(thicknessParam.value), "mm" adrian
+            args.isValidResult = True
+        except:
+            if ui:
+                ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+def val(p,l, d, h, ): #advance and width
+    if p=='T':#TT
+        return (d,l )
+    elif p=='t':#
+        return (l,d)
+    elif p=='F':
+        return h,l        
+    elif p=='f':
+        return l,h 
+    elif p=='S':
+        return h,d        
+    elif p=='s':
+        return d,h  
+
+def findBest(stock,ps:list, l, d, h, t)->list:
+    best=math.ceil(6*max(l,d,h))
+    count=0
+    bestPerms=list()
+    permValid=True
+    for permLetters in ps:
+        # if "".join(permLetters)=="TTFFSS":
+        #     print()      
+        disOnY=0
+        permTotalWidth=0
+        maxWidthPerPile=0
+        expandedPermLetters=list()
+        for le in permLetters:               
+            advance,width=val(le,l, d, h,)
+            if advance>stock:
+                # this permutation contains an orientation that can not fit the stock width so we abandon it
+                permValid=False
+                break; 
+            if disOnY!=0:
+                advance=advance+t
+            disOnY=disOnY+advance
+            if disOnY>stock:
+                expandedPermLetters.append("_"+str(maxWidthPerPile)+" "+le)
+                disOnY=advance
+                permTotalWidth=permTotalWidth+maxWidthPerPile  
+                maxWidthPerPile=width      
+            else:
+                expandedPermLetters.append(le)
+            if width>maxWidthPerPile:              
+                maxWidthPerPile=width
+        # end dealing with permutation
+        if permValid==False:
+            permValid=True
+        else:
+            permTotalWidth=permTotalWidth+maxWidthPerPile
+            expandedPermLetters.append(str(maxWidthPerPile))
+            if permTotalWidth ==best:
+                print ("Equal is:"+str("".join(expandedPermLetters))+" and permTotalWidth:"+str(permTotalWidth)+" "+str(count))
+                bestPerms.append(formatPerm("".join(expandedPermLetters)))
+            if permTotalWidth <best :
+                bestPerms=list()
+                bestPerms.append(formatPerm("".join(expandedPermLetters)))            
+                print ("New best is:"+str(expandedPermLetters)+" and permTotalWidth:"+str(permTotalWidth)+" "+str(count))
+                best=permTotalWidth     
+    return bestPerms
+
+
+def checkLayoutString(lay):
+    return keep(list(lay))
+
+def keep(i:list):
+    if i[0].upper()!='T':
+        return False
+    ts=0;fs=0;ss=0
+    for l in i:
+        if l.upper()=="T":
+            ts=ts+1
+        elif l.upper()=="F":
+            fs=fs+1 
+        elif l.upper()=="S":
+            ss=ss+1                                    
+        if ts>2 or fs>2 or ss>2:
+            return False
+    return True                
+
+def formatPerm(text:str)->tuple:
+        q=Queue()
+        pattern='[0-9.]+'
+        for match in re.finditer(pattern, text):        
+            q.put(float(match.group()))
+        return re.sub('[0-9.]+', '', text).replace(" ",""), q
+
+def calculateLayouts(l, d, h, stockXDimension, t): 
+    allPermutations = list(permutations(['T', 'T', 't','t','F','F','f','f','S','S','s','s'], 6))
+    print("all allPermutations:"+str(len(allPermutations)) )
+    deduplicated = set(allPermutations)           
+    print("deduplicated:"+str(len(deduplicated)) )    
+    shortCandidates=list()
+    for candidate in deduplicated:        
+        if keep(candidate):
+            shortCandidates.append(candidate)      
+    print("shortCandidates:"+str(len(shortCandidates)))
+    bestPerms=findBest(stockXDimension,shortCandidates, l, d, h,t)
+    return bestPerms
+
+
+class AdrianBoxCreatedHandler(adsk.core.CommandCreatedEventHandler):    
+    def __init__(self):
+        super().__init__()        
+    def notify(self, args):
+        try:
+            cmd = args.command
+            onExecute = AdrianBoxCommandExecuteHandler()
+            onDestroy = AdrianBoxCommandDestroyHandler()
+            cmd.execute.add(onExecute)
+            cmd.destroy.add(onDestroy)
+            # keep the handler referenced globally
+            handlers.append(onExecute)
+            handlers.append(onDestroy)
+            cleanUpPreviouslyGeneratedItems() 
+            if not DEBUG_SKIP_INPUTS:
+                uiInputs:adsk.core.CommandInput=cmd.commandInputs               
+                storedOptions.uploadOptionValuesToUiPopup(uiInputs)
+        except:
+            if ui:
+                ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+class AdrianBoxCommandDestroyHandler(adsk.core.CommandEventHandler):
+    def __init__(self):
+        super().__init__()
+    def notify(self, args):
+        try:
+            # when the command is done, terminate the script
+            # this will release all globals which will remove all event handlers
+            adsk.terminate()
+        except:
+            if ui:
+                ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+def run(context):
+    try:
+        global app
+        app = adsk.core.Application.get()
+        a:adsk.core.Application = app
+        global ui
+        ui = app.userInterface
+        global design
+        if isinstance(app.activeProduct, adsk.cam.CAM):
+            ui.messageBox('You are in manufacture mode. Please switch to design mode')
+            return
+        design = adsk.fusion.Design.cast(app.activeProduct)
+        if not design:
+            ui.messageBox('No active Fusion Design', ' please switch to design mode and retry')
+            return   
+        global parameters
+        parameters = design.userParameters  # todo see if we need this
+        global DEFAULT_COMPONENT
+        activeProduct:adsk.fusion.Design=app.activeProduct
+        DEFAULT_COMPONENT =  activeProduct.rootComponent
+        # products = doc.products
+        # cam = adsk.cam.CAM.cast(products.itemByProductType("CAMProductType"))  
+        # unitsMgr:adsk.fusion.FusionUnitsManager = design.fusionUnitsManager
+        # unitsMgr.distanceDisplayUnits = adsk.fusion.DistanceUnits.MillimeterDistanceUnits                 
+        commandId = 'AdrianBoxCommandId'
+        commandName = 'AdrianBoxCommand'
+        commandDescription = 'Creates boxes'
+        cmdDef = ui.commandDefinitions.itemById(commandId)
+        if not cmdDef:
+            cmdDef = ui.commandDefinitions.addButtonDefinition(commandId, commandName, commandDescription) # no resource folder is specified, the default one will be used
+        onCommandCreated = AdrianBoxCreatedHandler()
+        cmdDef.commandCreated.add(onCommandCreated)
+        # keep the handler referenced beyond this function
+        handlers.append(onCommandCreated)
+        inputs = adsk.core.NamedValues.create()
+        cmdDef.execute(inputs)
+        # prevent this module from being terminate when the script returns, because we are waiting for event handlers to fire
+        adsk.autoTerminate(False)
+
+    except:
+        if ui:
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+
+# ISSUE with layout for  should have been T_S_S_F_F_T
+# LENGTH 70.0
+# DEPTH 50.0
+# HEIGHT 50.0
+# THICKNESS 3.175
+# TOOL_DIAMETER 2.01
+# TOOTH_WIDTH 10.0
+# KERF -0.1
+# DELTA_FROM_BOTTOM -0.1
+# STOCK_X_DIMENSION 50.0
+# STOCK_Y_DIMENSION 50.0
+
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+# ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
