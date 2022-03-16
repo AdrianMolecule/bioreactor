@@ -24,33 +24,32 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_GFX_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DallasTemperature}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/EEPROM/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESPmDNS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/jm_PCF8574/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FreeRTOS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FastLED/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_MCP23017_Arduino_Library/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Servo/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP32Servo/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPUpdate/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ethernet/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.127086698" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -60,33 +59,32 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_GFX_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DallasTemperature}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/EEPROM/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESPmDNS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/jm_PCF8574/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FreeRTOS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FastLED/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_MCP23017_Arduino_Library/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Servo/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP32Servo/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPUpdate/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ethernet/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.1439293084" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -96,33 +94,32 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_GFX_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DallasTemperature}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/EEPROM/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESPmDNS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/jm_PCF8574/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/OneWire}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FreeRTOS/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FS/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_ST7735_and_ST7789_Library}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ArduinoJson/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP-FlexyStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_BusIO}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/arduino-timer/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/AccelStepper/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/FastLED/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_MCP23017_Arduino_Library/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Adafruit_PWM_Servo_Driver_Library}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Preferences/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Servo/src}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/ESP32Servo/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/SPIFFS/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ticker/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Update/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPClient/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/HTTPUpdate/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFi/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WiFiClientSecure/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/DNSServer/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/BH1750FVI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/WebSockets/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/bioreactor/libraries/Ethernet/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.1568151221" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>

@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 #include <WebServer.h>
-#include <WebSocketsServer.h>
+//#include <WebSocketsServer.h>
 #include <unordered_set>
 #include <unordered_map>
 #include "SPIFFS.h"

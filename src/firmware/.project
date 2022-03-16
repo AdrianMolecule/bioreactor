@@ -82,6 +82,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/BH1750FVI/1.1.1</locationURI>
 		</link>
 		<link>
+			<name>libraries/DNSServer</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/DNSServer</locationURI>
+		</link>
+		<link>
 			<name>libraries/DallasTemperature</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/DallasTemperature/3.9.0</locationURI>
@@ -107,6 +112,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/ESPmDNS</locationURI>
 		</link>
 		<link>
+			<name>libraries/Ethernet</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Ethernet/2.0.0</locationURI>
+		</link>
+		<link>
 			<name>libraries/FS</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/FS</locationURI>
@@ -119,7 +129,17 @@
 		<link>
 			<name>libraries/FreeRTOS</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/FreeRTOS/10.4.3-8</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/FreeRTOS/10.3.0-8</locationURI>
+		</link>
+		<link>
+			<name>libraries/HTTPClient</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/HTTPClient</locationURI>
+		</link>
+		<link>
+			<name>libraries/HTTPUpdate</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/HTTPUpdate</locationURI>
 		</link>
 		<link>
 			<name>libraries/OneWire</name>
@@ -144,7 +164,7 @@
 		<link>
 			<name>libraries/Servo</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Servo/1.1.7</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/Servo/1.1.6</locationURI>
 		</link>
 		<link>
 			<name>libraries/Ticker</name>
@@ -169,7 +189,7 @@
 		<link>
 			<name>libraries/WiFi</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/1.0.6/libraries/WiFi</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/WiFi/1.2.7</locationURI>
 		</link>
 		<link>
 			<name>libraries/WiFiClientSecure</name>
