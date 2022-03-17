@@ -32,7 +32,14 @@
             <tr><td>Output</td><td>Status</td><td>Action</td></tr>
             
             <tr class="displayed"><td colspan=3><span class="tdtext">Loading...</span></td></tr>
-            <tr class="hidden"><td>Motor</td><td> <div id="motor_l"/> </td><td><input type="checkbox" name="motor">Enable</td></tr>
+            <tr class="hidden"><td>Motor</td><td> <div id="motor_l"/> </td>
+            	<td>
+            		<input type="range" name="motor" value="0" min="0" max="200" step="10" oninput="setSliderValue(this, 'rpm');">
+            		</br>
+            		<span class="tdtext" id="motor_value">0 rpm</span>
+            	</td>
+            	</td>
+            </tr>
             <tr class="hidden"><td>FET1</td><td> <div id="fet0_l"/> </td>
             	<td>
             		<input type="range" name="fet0" value="0" min="0" max="100" step="10" oninput="setSliderValue(this);">
@@ -106,10 +113,10 @@
         var temp_data = [];
         var od_data = [];
         
-		function setSliderValue(slider)
+		function setSliderValue(slider, units="%")
 		{
 			var output = document.getElementById(slider.name + "_value");
-			output.innerHTML = slider.value + " %";
+			output.innerHTML = slider.value + " " + units;
 		}
 		
         var first = true;
@@ -130,7 +137,12 @@
             });
 
             document.getElementsByName("led")[0].checked = json.led;
-            document.getElementsByName("motor")[0].checked = json.motor;
+            
+            {
+		        var motor_slider = document.getElementsByName("motor")[0];
+		    	motor_slider.value = json.motor;
+		        setSliderValue(motor_slider, "rpm");
+		    }
             
 			var elements = document.querySelectorAll('.hidden');
 			for(var i=0; i<elements.length; i++){
@@ -182,12 +194,15 @@
             else
                 document.getElementById("led_l").innerHTML = "Disabled";
                 
-            if( json.motor )
+                
             {
-                document.getElementById("motor_l").innerHTML = "Enabled";
+                var motor_l = document.getElementById("motor_l");
+            	
+            	if(json.motor == 0)
+            		motor_l.innerHTML = "Off";
+            	else
+            		motor_l.innerHTML = json.motor + " rpm";
             }
-            else
-                document.getElementById("motor_l").innerHTML = "Disabled";
         }   
         
         
@@ -303,7 +318,7 @@
 				],
 				hbridge : [],
 			    led: document.getElementsByName("led")[0].checked,
-			    motor: document.getElementsByName("motor")[0].checked,
+			    motor: document.getElementsByName("motor")[0].value,
 			  };
 	
 			for(i=0; i<4; ++i)
