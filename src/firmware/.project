@@ -94,7 +94,7 @@
 		<link>
 			<name>libraries/ESP-FlexyStepper</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP-FlexyStepper/1.4.3</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/ESP-FlexyStepper/1.4.5</locationURI>
 		</link>
 		<link>
 			<name>libraries/ESP32Servo</name>
