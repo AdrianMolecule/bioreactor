@@ -26,7 +26,7 @@ public:
 		std::array<BridgeDevice, config::HBridge::pins.size()> hbridge;
 		std::array<PWMDevice, config::fet.size()> fet;
 		bool led;
-		bool motor;
+		uint8_t motor_speed;	// revolutions per minute
 	};
 
 	Actuators();
@@ -38,7 +38,7 @@ public:
 	bool changeHBridge(size_t num, BridgeState state, uint8_t power);
 	bool changeFET(size_t num, uint8_t power);
 	bool changeLED(bool is_enabled);
-	bool changeMotor(bool is_enabled);
+	bool changeMotor(uint8_t motor_speed);
 	void runMotor();
 
 	void serializeState(JsonObject&) const;

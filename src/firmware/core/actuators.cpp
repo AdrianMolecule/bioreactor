@@ -10,12 +10,14 @@ Actuators::Actuators()
 
 bool Actuators::initialize()
 {
+	pinMode(config::motor::power, OUTPUT);
 	pinMode(config::motor::step,OUTPUT);
 	pinMode(config::motor::direction,OUTPUT);
 
 	_stepper.connectToPins(config::motor::step, config::motor::direction);
-	_stepper.setSpeedInStepsPerSecond(1000);
-	_stepper.setAccelerationInStepsPerSecondPerSecond(1000);
+	_stepper.setStepsPerRevolution(200);
+	_stepper.setAccelerationInRevolutionsPerSecondPerSecond(1);
+
 
 	for(size_t i = 0; i < config::fet.size(); ++i)
 	{
@@ -48,7 +50,7 @@ bool Actuators::shutdown()
 	}
 
 	result &= changeLED(false);
-	result &= changeMotor(false);
+	result &= changeMotor(0);
 	return result;
 }
 
@@ -107,9 +109,11 @@ bool Actuators::changeLED(bool is_enabled)
 	return true;
 }
 
-bool Actuators::changeMotor(bool is_enabled)
+bool Actuators::changeMotor(uint8_t motor_speed)
 {
-	digitalWrite(config::motor::power, is_enabled);
+	bool is_enabled = motor_speed > 0;
+
+	digitalWrite(config::motor::power, !is_enabled);
 
 	if(is_enabled && !_stepper.isStartedAsService())
 		_stepper.startAsService();
@@ -117,7 +121,8 @@ bool Actuators::changeMotor(bool is_enabled)
 		_stepper.stopService();
 
 
-	_devices_state.motor = is_enabled;
+	_devices_state.motor_speed = motor_speed;
+	_stepper.setSpeedInRevolutionsPerSecond(motor_speed / 60);
 	return true;
 }
 
@@ -138,7 +143,7 @@ void Actuators::serializeState(JsonObject& state) const
 	}
 
 	state["led"] = _devices_state.led;
-	state["motor"] = _devices_state.motor;
+	state["motor"] = _devices_state.motor_speed;
 }
 
 const char* bridgeStateConvert(BridgeState state)

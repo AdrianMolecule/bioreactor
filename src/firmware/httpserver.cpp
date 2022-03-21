@@ -57,10 +57,10 @@ void HTTPServer::init(Reactor* reactor_mgr)
 		return;
 	}
 
-	_web_server.serveStatic("/header.html", SPIFFS, "/header.html");
+	_web_server.serveStatic("/header.html", SPIFFS, "/header.html");  // "max-age=86400"
 	_web_server.serveStatic("/footer.html", SPIFFS, "/footer.html");
-	_web_server.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css");
-	_web_server.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js");
+	_web_server.serveStatic("/dygraph.min.css", SPIFFS, "/dygraph.min.css", "max-age=86400");
+	_web_server.serveStatic("/dygraph.min.js", SPIFFS, "/dygraph.min.js", "max-age=86400");
 
 	_web_server.begin();
 	_ws_server.begin();
@@ -120,7 +120,7 @@ void HTTPServer::onWSEvent(uint8_t client_id,
     		readings_time += sensor_rate_sec;
     	}
 
-        Serial.println("HTTPServer::onWSEvent: sensor data is sent");
+        Serial.printf("HTTPServer::onWSEvent: sensor data is sent, %u datagrams\n", _reactor_mgr->_sensor_data.data.size());
 
       }
       break;
