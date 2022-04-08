@@ -15,7 +15,8 @@ wires:
 https://www.aliexpress.com/item/32481623557.html?spm=a2g0o.order_list.0.0.21ef18029GRQrz, Color: 20cm 3 kinds
 ----------
 screws for NEMA mounting
-https://www.aliexpress.com/item/32981714992.html?spm=a2g0o.order_list.0.0.21ef1802Fz4SFG -M3 50pcs, 12mm
+THIS ONE IS CORRECT: 
+ -M3 50pcs, 12mm 
 or maybe M3 (50PCS), 10mm I don't remember  The depts inside Nema is 4.5 mm, the HDPE is about 3.1 mm
 ------------
 NEMA 17
