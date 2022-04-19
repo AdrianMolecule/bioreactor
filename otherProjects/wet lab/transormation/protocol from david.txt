@@ -1,0 +1,120 @@
+
+Full protocol https://asm.org/ASM/media/Protocol-Images/Transformation-of-Escherichia-coli-Made-Competent-by-Calcium-Chloride-Protocol.pdf?ext=.pdf
+you calculate upon the known transformation efficiency from a plasmid and the colony forming units of that plasmid in different selection markers, in this case all the plasmids I transformed are the pDawn with different content (taq, pfu, rt) all in LB-Kan
+6:37
+plus controls
+6:37
+all treated with the same procedure:
+
+
+grow your cells (BL21 DE3) to approx. 0.5 OD or just a 1/20 of the initial overnight inoculum, leave it for 3-4 hrs, (10ml culture vol)
+after that you spin down and wash with simple cold deionized, autoclaved water
+twice
+
+water from the fridge (4-8°C)
+
+then  make aliquots of 1ml and then split it 100uL in independent tubes
+
+you can keep them in the fridge over night or
+
+add appro 10ng of plasmids per tube, then move them to the freezer for no more than 5 min
+
+adjust your microwave to 300w and give them a pulse for 30sec
+
+add 1m fresh, new sterile LB
+
+incubate at 37°C for 45 min to 1hr
+
+plate on agarLB+ antibiotics
+
+incubate a 37°C or desired temp (pDawn grows better around 25°C)
+
+and voilá!
+
+Adrian Molecule  6:56 PM
+that sounds pretty simple and straightforward. So you mean you count the colonies from the transformed bacteria that fluoresce versus bacteria that does not fluoresce on the same plate?
+
+David J.Castillo  6:56 PM
+in this case they are not fluorescent but I can try like that, in this case are those that acquire the resistance with the transformed plasmid
+
+Adrian Molecule  6:57 PM
+or 2 plates - one negative untransformed plate  versus a trnasformed one?
+
+David J.Castillo  6:57 PM
+the plain BL21 DE3 dies in the presence of Kan
+6:57
+yeah
+6:57
+exactly
+
+Adrian Molecule  6:59 PM
+so 2 plates: one with Kan and transformed bacteria. One with no Kan and BL21 DE3. The transformed plate will have much less colonies (edited) 
+
+David J.Castillo  7:02 PM
+Plate 1: LB-Kan plus BL21-DE3 and the kan resistant plasmid = Colonies; Plate 2 LB-Kan plus BL21-DE3, with NO plasmid, they die; Plate 3 LB- plus BL21-DE3 with no plasmid= lots of colonies
+7:03
+I will patch the colonies on a new fresh LB-Kan and run some mini preps to confirm.
+
+Adrian Molecule  7:14 PM
+so the difference between Plate 1 and 3 will tell you how many of the plasmids made it in the bacteria. Normally is 1 in 10 000 -20000
+
+David J.Castillo  7:14 PM
+yup
+
+Adrian Molecule  7:15 PM
+and you tied this protocol with 3 types of plasmids and obtained a high transformation rate
+7:16
+it's fast and does not require CaCL2 reagents
+
+David J.Castillo  7:16 PM
+yup
+7:17
+faster, cheaper
+
+Adrian Molecule  7:17 PM
+the trick is to note the numbers because the microwave seconds depend on the quantity of liquid
+
+David J.Castillo  7:19 PM
+100uL per tube
+7:20
+more or less
+
+Adrian Molecule  7:20 PM
+I would probably do something like this. Take a 100 ml flask with 50 ml water and microwave for 30 seconds.
+7:20
+measure the temperatre
+
+David J.Castillo  7:20 PM
+in my case the microwave i got the manual tells how you can calculate the power
+
+Adrian Molecule  7:21 PM
+then adjust the time for any other microwave to heat the same quantity of liquid at the same temperature
+7:21
+it's not the power but the heat that the best way to calculate
+
+David J.Castillo  7:21 PM
+the critical part is maintaining the same power
+7:22
+ok
+7:22
+yeah the resulting heat
+7:22
+I read a note on epicurious about that hold on
+
+Adrian Molecule  7:22 PM
+with the same power you'll get dierent results for microwaes of dierent olumes
+
+David J.Castillo  7:23 PM
+https://www.epicurious.com/expert-advice/how-to-find-adjust-wattage-power-of-microwave-oven-article
+EpicuriousEpicurious
+The Simple Trick to Cooking Food Perfectly in the Microwave
+Just how well do you know your microwave?
+Apr 12th, 2016 (173 kB)
+https://www.epicurious.com/expert-advice/how-to-find-adjust-wattage-power-of-microwave-oven-article
+
+
+Adrian Molecule  7:23 PM
+you can tell my keyboard is missing f and b ...
+
+David J.Castillo  7:24 PM
+hehehe

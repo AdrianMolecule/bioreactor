@@ -1,0 +1,4 @@
+CoolTerm
+Tera Term (Windows)
+https://sourceforge.net/projects/y-a-terminal/
+https://learn.sparkfun.com/tutorials/terminal-basics/all
