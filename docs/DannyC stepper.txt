@@ -1,0 +1,5 @@
+
+stepper for Danny
+17hs3001-20B https://www.jugetek.com/product-page/nenam-17-40mm-long-2-phase-1-8-degree-1-2a-stepper-motor
+//and https://www.youtube.com/watch?v=BV-ouxhZamI
+//  to measure on screw-driver=1.2 amp so about .6 Volt

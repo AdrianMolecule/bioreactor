@@ -1,0 +1,7 @@
+Started at 2 PM on April 26.
+Temp: 38 Celsius,  Humidity: 22%.maximum temperature: 39 after: 3h 4m 55s
+
+OD:0.06   Sampl:10661  Buffer:12256  sample/buffer:0.87 8 hours 14 minutes
+
+
+OD:0.63   Sampl:2852  Buffer (old):12256  sample/buffer:0.23 WARMING UP for another:22h 39m 21s
