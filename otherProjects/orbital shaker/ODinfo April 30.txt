@@ -1,1 +1,6 @@
 OD:-0.00   Sampl:13833  Buffer:13676  sample/buffer:1.01 after:17m 12s at 10 PM April 30th
+
+
+OD:0.58   Sampl:3556  Buffer (old):13676  sample/buffer:0.26 after:28m 11s at 9:40 AM May 1 so AFTER 12 hours
+
+
