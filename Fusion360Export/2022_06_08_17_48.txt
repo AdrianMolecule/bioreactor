@@ -1,0 +1,1301 @@
+Visiting folder Adrian Projects
+Visiting folder bioreactor
+Visiting file 1 v2 . f3d
+Opening `1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\1_v2.f3d
+Closing 1
+Visiting file 2 v4 . f3d
+Opening `2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\2_v4.f3d
+Closing 2
+Visiting file 2 renamed and all sketch stabilized v1 . f3d
+Opening `2 renamed and all sketch stabilized`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\2 renamed and all sketch stabilized_v1.f3d
+Closing 2 renamed and all sketch stabilized
+Visiting file 3 v12 . f3d
+Opening `3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\3_v12.f3d
+Closing 3
+Visiting file 3 all box and content for OS v1 . f3d
+Opening `3 all box and content for OS`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\3 all box and content for OS_v1.f3d
+Closing 3 all box and content for OS
+Visiting file 3 all box and content for OS v1 . f3d
+C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\3 all box and content for OS_v1.f3d already exists, skipping
+Visiting file 4 bioreactor v11 . f3d
+Opening `4 bioreactor`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\4 bioreactor_v11.f3d
+Closing 4 bioreactor
+Visiting file 4 bioreactor component v18 . f3d
+Opening `4 bioreactor component`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\4 bioreactor component_v18.f3d
+Closing 4 bioreactor component
+Visiting file 5 bioreactor v5 . f3d
+Opening `5 bioreactor`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\5 bioreactor_v5.f3d
+Closing 5 bioreactor
+Visiting file 6 bioreactor v32 . f3d
+Opening `6 bioreactor`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\6 bioreactor_v32.f3d
+Closing 6 bioreactor
+Visiting file 7 bioreactor v7 . f3d
+Opening `7 bioreactor`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\7 bioreactor_v7.f3d
+Closing 7 bioreactor
+Visiting file 8 bioreactor 6 mm finger v17 . f3d
+Opening `8 bioreactor 6 mm finger`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\8 bioreactor 6 mm finger_v17.f3d
+Closing 8 bioreactor 6 mm finger
+Visiting file 9 bioreactor 6 mm finger v2 . f3d
+Opening `9 bioreactor 6 mm finger`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\9 bioreactor 6 mm finger_v2.f3d
+Closing 9 bioreactor 6 mm finger
+Visiting file 10 bioreactor 6 mm finger after arrange for cut v9 . f3d
+Opening `10 bioreactor 6 mm finger after arrange for cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\10 bioreactor 6 mm finger after arrange for cut_v9.f3d
+Closing 10 bioreactor 6 mm finger after arrange for cut
+Visiting file 11 bioreactor 6 mm finger after arrange for cut v6 . f3d
+Opening `11 bioreactor 6 mm finger after arrange for cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\11 bioreactor 6 mm finger after arrange for cut_v6.f3d
+Closing 11 bioreactor 6 mm finger after arrange for cut
+Visiting file 12 bioreactor 6 mm finger almost manufacture v8 . f3d
+Opening `12 bioreactor 6 mm finger almost manufacture`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\12 bioreactor 6 mm finger almost manufacture_v8.f3d
+Closing 12 bioreactor 6 mm finger almost manufacture
+Visiting file 13 bioreactor 6 mm finger almost manufacture v16 . f3d
+Opening `13 bioreactor 6 mm finger almost manufacture`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\13 bioreactor 6 mm finger almost manufacture_v16.f3d
+Closing 13 bioreactor 6 mm finger almost manufacture
+Visiting file 14 bioreactor 6 mme v4 . f3d
+Opening `14 bioreactor 6 mme`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\14 bioreactor 6 mme_v4.f3d
+Closing 14 bioreactor 6 mme
+Visiting file 14 bioreactor 6 mm finger to manufacture v6 . f3d
+Opening `14 bioreactor 6 mm finger to manufacture`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\14 bioreactor 6 mm finger to manufacture_v6.f3d
+Closing 14 bioreactor 6 mm finger to manufacture
+Visiting file 14 bioreactor used for content v5 . f3d
+Opening `14 bioreactor used for content`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\14 bioreactor used for content_v5.f3d
+Closing 14 bioreactor used for content
+Visiting file 14 bioreactor used for content v2 . f3d
+Opening `14 bioreactor used for content`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\14 bioreactor used for content_v2.f3d
+Closing 14 bioreactor used for content
+Visiting file 14 bioreactor use for copy 1 v4 . f3d
+Opening `14 bioreactor use for copy 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\14 bioreactor use for copy 1_v4.f3d
+Closing 14 bioreactor use for copy 1
+Visiting file b17 components v7 . f3d
+Opening `b17 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b17 components_v7.f3d
+Closing b17 components
+Visiting file b18 components v12 . f3d
+Opening `b18 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b18 components_v12.f3d
+Closing b18 components
+Visiting file b19 components v4 . f3d
+Opening `b19 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b19 components_v4.f3d
+Closing b19 components
+Visiting file b20 components v10 . f3d
+Opening `b20 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b20 components_v10.f3d
+Closing b20 components
+Visiting file b21 components v7 . f3d
+Opening `b21 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b21 components_v7.f3d
+Closing b21 components
+Visiting file b22 components v1 . f3d
+Opening `b22 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b22 components_v1.f3d
+Closing b22 components
+Visiting file b23 components v20 . f3d
+Opening `b23 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b23 components_v20.f3d
+Closing b23 components
+Visiting file b23 components to cut v5 . f3d
+Opening `b23 components to cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b23 components to cut_v5.f3d
+Closing b23 components to cut
+Visiting file b24 components to cut v9 . f3d
+Opening `b24 components to cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b24 components to cut_v9.f3d
+Closing b24 components to cut
+Visiting file b25 Right and Top v2 . f3d
+Opening `b25 Right and Top`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b25 Right and Top_v2.f3d
+Closing b25 Right and Top
+Visiting file b26 Right and Top v17 . f3d
+Opening `b26 Right and Top`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b26 Right and Top_v17.f3d
+Closing b26 Right and Top
+Visiting file b27 All bad layout v1 . f3d
+Opening `b27 All bad layout`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b27 All bad layout_v1.f3d
+Closing b27 All bad layout
+Visiting file b28 all v4 . f3d
+Opening `b28 all`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b28 all_v4.f3d
+Closing b28 all
+Visiting file b29 all v3 . f3d
+Opening `b29 all`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b29 all_v3.f3d
+Closing b29 all
+Visiting file b30 for brace v2 . f3d
+Opening `b30 for brace`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b30 for brace_v2.f3d
+Closing b30 for brace
+Visiting file b31 for brace v8 . f3d
+Opening `b31 for brace`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b31 for brace_v8.f3d
+Closing b31 for brace
+Visiting file b32 for brace v15 . f3d
+Opening `b32 for brace`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b32 for brace_v15.f3d
+Closing b32 for brace
+Visiting file b33 for brace v1 . f3d
+Opening `b33 for brace`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b33 for brace_v1.f3d
+Closing b33 for brace
+Visiting file b33 for brace OLD TEETH v12 . f3d
+Opening `b33 for brace OLD TEETH`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b33 for brace OLD TEETH_v12.f3d
+Closing b33 for brace OLD TEETH
+Visiting file b34 v18 . f3d
+Opening `b34`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b34_v18.f3d
+Closing b34
+Visiting file b35 v12 . f3d
+Opening `b35`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b35_v12.f3d
+Closing b35
+Visiting file b42 v7 . f3d
+Opening `b42`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b42_v7.f3d
+Closing b42
+Visiting file b43 v3 . f3d
+Opening `b43`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b43_v3.f3d
+Closing b43
+Visiting file b43 try v1 . f3d
+Opening `b43 try`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b43 try_v1.f3d
+Closing b43 try
+Visiting file b44 v10 . f3d
+Opening `b44`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b44_v10.f3d
+Closing b44
+Visiting file b44 junk v7 . f3d
+Opening `b44 junk`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b44 junk_v7.f3d
+Closing b44 junk
+Visiting file b45 v2 . f3d
+Opening `b45`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b45_v2.f3d
+Closing b45
+Visiting file b46 with 84 v7 . f3d
+Opening `b46 with 84`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b46 with 84_v7.f3d
+Closing b46 with 84
+Visiting file b47 with 84 v9 . f3d
+Opening `b47 with 84`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b47 with 84_v9.f3d
+Closing b47 with 84
+Visiting file b48 with 84 v10 . f3d
+Opening `b48 with 84`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b48 with 84_v10.f3d
+Closing b48 with 84
+Visiting file b49 v4 . f3d
+Opening `b49`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b49_v4.f3d
+Closing b49
+Visiting file b50 v4 . f3d
+Opening `b50`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b50_v4.f3d
+Closing b50
+Visiting file b52 v7 . f3d
+Opening `b52`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b52_v7.f3d
+Closing b52
+Visiting file b53 v20 . f3d
+Opening `b53`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b53_v20.f3d
+Closing b53
+Visiting file b53 with geared v14 . f3d
+Opening `b53 with geared`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b53 with geared_v14.f3d
+Closing b53 with geared
+Visiting file b54 v8 . f3d
+Opening `b54`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b54_v8.f3d
+Closing b54
+Visiting file b54 JUST BRACE v2 . f3d
+Opening `b54 JUST BRACE`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b54 JUST BRACE_v2.f3d
+Closing b54 JUST BRACE
+Visiting file b55 v1 . f3d
+Opening `b55`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b55_v1.f3d
+Closing b55
+Visiting file b55 another copy v1 . f3d
+Opening `b55 another copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b55 another copy_v1.f3d
+Closing b55 another copy
+Visiting file b55 YET  another copy v2 . f3d
+Opening `b55 YET  another copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b55 YET  another copy_v2.f3d
+Closing b55 YET  another copy
+Visiting file b36 76 figers for front and back v14 . f3d
+Opening `b36 76 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b36 76 figers for front and back_v14.f3d
+Closing b36 76 figers for front and back
+Visiting file b37 76 figers for front and back v8 . f3d
+Opening `b37 76 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b37 76 figers for front and back_v8.f3d
+Closing b37 76 figers for front and back
+Visiting file b38 76 figers for front and back v4 . f3d
+Opening `b38 76 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b38 76 figers for front and back_v4.f3d
+Closing b38 76 figers for front and back
+Visiting file b39 76 figers for front and back v5 . f3d
+Opening `b39 76 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b39 76 figers for front and back_v5.f3d
+Closing b39 76 figers for front and back
+Visiting file b40 76 figers for front and back v9 . f3d
+Opening `b40 76 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b40 76 figers for front and back_v9.f3d
+Closing b40 76 figers for front and back
+Visiting file b40 86 figers for front and back v4 . f3d
+Opening `b40 86 figers for front and back`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b40 86 figers for front and back_v4.f3d
+Closing b40 86 figers for front and back
+Visiting file b40 86 smaller depth v14 . f3d
+Opening `b40 86 smaller depth`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b40 86 smaller depth_v14.f3d
+Closing b40 86 smaller depth
+Visiting file b41 86 smaller depth v4 . f3d
+Opening `b41 86 smaller depth`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\b41 86 smaller depth_v4.f3d
+Closing b41 86 smaller depth
+Visiting file bio 1 from OS v15 . f3d
+Opening `bio 1 from OS`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\bio 1 from OS_v15.f3d
+Closing bio 1 from OS
+Visiting file bio 2 from OS v1 . f3d
+Opening `bio 2 from OS`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\bio 2 from OS_v1.f3d
+Closing bio 2 from OS
+Visiting file check the selection v2 . f3d
+Opening `check the selection`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\check the selection_v2.f3d
+Closing check the selection
+Visiting file hand picking contour v1 . f3d
+Opening `hand picking contour`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\hand picking contour_v1.f3d
+Closing hand picking contour
+Visiting file hand picking contour A v3 . f3d
+Opening `hand picking contour A`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\hand picking contour A_v3.f3d
+Closing hand picking contour A
+Visiting file j3 v1 . f3d
+Opening `j3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j3_v1.f3d
+Closing j3
+Visiting file j4 v11 . f3d
+Opening `j4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j4_v11.f3d
+Closing j4
+Visiting file j5 v2 . f3d
+Opening `j5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j5_v2.f3d
+Closing j5
+Visiting file j6 v1 . f3d
+Opening `j6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j6_v1.f3d
+Closing j6
+Visiting file j7 v4 . f3d
+Opening `j7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j7_v4.f3d
+Closing j7
+Visiting file j7 v2 . f3d
+Opening `j7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j7_v2.f3d
+Closing j7
+Visiting file j8 v1 . f3d
+Opening `j8`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j8_v1.f3d
+Closing j8
+Visiting file j9 v1 . f3d
+Opening `j9`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j9_v1.f3d
+Closing j9
+Visiting file j9 v7 . f3d
+Opening `j9`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j9_v7.f3d
+Closing j9
+Visiting file j10 v1 . f3d
+Opening `j10`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j10_v1.f3d
+Closing j10
+Visiting file j10 v3 . f3d
+Opening `j10`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j10_v3.f3d
+Closing j10
+Visiting file j11 v2 . f3d
+Opening `j11`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j11_v2.f3d
+Closing j11
+Visiting file j12 v5 . f3d
+Opening `j12`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j12_v5.f3d
+Closing j12
+Visiting file j13 v2 . f3d
+Opening `j13`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j13_v2.f3d
+Closing j13
+Visiting file j14 components v9 . f3d
+Opening `j14 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j14 components_v9.f3d
+Closing j14 components
+Visiting file j15 components v1 . f3d
+Opening `j15 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j15 components_v1.f3d
+Closing j15 components
+Visiting file j16 components v16 . f3d
+Opening `j16 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\j16 components_v16.f3d
+Closing j16 components
+Visiting file junk v1 . f3d
+Opening `junk`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\junk_v1.f3d
+Closing junk
+Visiting file junk 2 v2 . f3d
+Opening `junk 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\junk 2_v2.f3d
+Closing junk 2
+Visiting file Junk 12 bioreactor 6 mm finger almost manufacture v2 . f3d
+Opening `Junk 12 bioreactor 6 mm finger almost manufacture`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\Junk 12 bioreactor 6 mm finger almost manufacture_v2.f3d
+Closing Junk 12 bioreactor 6 mm finger almost manufacture
+Visiting file Junk 12 bioreactor 6 mm finger almost manufacture A v1 . f3d
+Opening `Junk 12 bioreactor 6 mm finger almost manufacture A`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\Junk 12 bioreactor 6 mm finger almost manufacture A_v1.f3d
+Closing Junk 12 bioreactor 6 mm finger almost manufacture A
+Visiting file junk 33 v1 . f3d
+Opening `junk 33`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\junk 33_v1.f3d
+Closing junk 33
+Visiting file OdPowerStrap v4 . f3d
+Opening `OdPowerStrap`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\OdPowerStrap_v4.f3d
+Closing OdPowerStrap
+Visiting file pillows v14 . f3d
+Opening `pillows`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\pillows_v14.f3d
+Closing pillows
+Visiting file pillows danny c v2 v6 . f3d
+Opening `pillows danny c v2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\pillows danny c v2_v6.f3d
+Closing pillows danny c v2
+Visiting file pillows danny c v2 v3 . f3d
+Opening `pillows danny c v2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\pillows danny c v2_v3.f3d
+Closing pillows danny c v2
+Visiting file temp bio from 12 bioreactor 6 mm finger almost manufacture v1 . f3d
+Opening `temp bio from 12 bioreactor 6 mm finger almost manufacture`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\bioreactor\temp bio from 12 bioreactor 6 mm finger almost manufacture_v1.f3d
+Closing temp bio from 12 bioreactor 6 mm finger almost manufacture
+Visiting folder housekeeping
+Visiting file bed leveling using face left  part v3 . f3d
+Opening `bed leveling using face left  part`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\housekeeping\bed leveling using face left  part_v3.f3d
+Closing bed leveling using face left  part
+Visiting file bed leveling using face main part v1 . f3d
+Opening `bed leveling using face main part`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\housekeeping\bed leveling using face main part_v1.f3d
+Closing bed leveling using face main part
+Visiting file bed levelling v5 . f3d
+Opening `bed levelling`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\housekeeping\bed levelling_v5.f3d
+Closing bed levelling
+Visiting file bed levelling using face v3 . f3d
+Opening `bed levelling using face`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\housekeeping\bed levelling using face_v3.f3d
+Closing bed levelling using face
+Visiting file clamp square nuts v4 . f3d
+Opening `clamp square nuts`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\housekeeping\clamp square nuts_v4.f3d
+Closing clamp square nuts
+Visiting folder orbital Shaker
+Visiting file WingedNutThroughScrewDouble3mm v4 . f3d
+Opening `WingedNutThroughScrewDouble3mm`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\WingedNutThroughScrewDouble3mm_v4.f3d
+Closing WingedNutThroughScrewDouble3mm
+Visiting file script OS 25 v11 . f3d
+Opening `script OS 25`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\script OS 25_v11.f3d
+Closing script OS 25
+Visiting file OS backing board brackets v23 . f3d
+Opening `OS backing board brackets`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\OS backing board brackets_v23.f3d
+Closing OS backing board brackets
+Visiting file WingedNutThroughScrewDouble2mm v3 . f3d
+Opening `WingedNutThroughScrewDouble2mm`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\WingedNutThroughScrewDouble2mm_v3.f3d
+Closing WingedNutThroughScrewDouble2mm
+Visiting file WingedNutThroughScrew2mm v2 . f3d
+Opening `WingedNutThroughScrew2mm`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\WingedNutThroughScrew2mm_v2.f3d
+Closing WingedNutThroughScrew2mm
+Visiting file WingedNutThroughScrew v4 . f3d
+Opening `WingedNutThroughScrew`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\WingedNutThroughScrew_v4.f3d
+Closing WingedNutThroughScrew
+Visiting file script OS 24 v7 . f3d
+Opening `script OS 24`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\script OS 24_v7.f3d
+Closing script OS 24
+Visiting folder older
+Visiting file box test cut v2 . f3d
+Opening `box test cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\box test cut_v2.f3d
+Closing box test cut
+Visiting file Fin 0 v1 . f3d
+Opening `Fin 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 0_v1.f3d
+Closing Fin 0
+Visiting file Fin 0 v2 . f3d
+Opening `Fin 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 0_v2.f3d
+Closing Fin 0
+Visiting file Fin 1 v1 . f3d
+Opening `Fin 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 1_v1.f3d
+Closing Fin 1
+Visiting file Fin 2 v3 . f3d
+Opening `Fin 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 2_v3.f3d
+Closing Fin 2
+Visiting file Fin 2 branch v2 . f3d
+Opening `Fin 2 branch`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 2 branch_v2.f3d
+Closing Fin 2 branch
+Visiting file Fin 3 upper part v4 . f3d
+Opening `Fin 3 upper part`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 3 upper part_v4.f3d
+Closing Fin 3 upper part
+Visiting file Fin 3 upper part with problem cut v1 . f3d
+Opening `Fin 3 upper part with problem cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Fin 3 upper part with problem cut_v1.f3d
+Closing Fin 3 upper part with problem cut
+Visiting file just small side v1 . f3d
+Opening `just small side`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\just small side_v1.f3d
+Closing just small side
+Visiting file just small side works corner reference v1 . f3d
+Opening `just small side works corner reference`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\just small side works corner reference_v1.f3d
+Closing just small side works corner reference
+Visiting file Narrow Orbital Shaker movingPlatform Centered v7 . f3d
+Opening `Narrow Orbital Shaker movingPlatform Centered`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Narrow Orbital Shaker movingPlatform Centered_v7.f3d
+Closing Narrow Orbital Shaker movingPlatform Centered
+Visiting file OnOSwitchHolder v2 . f3d
+Opening `OnOSwitchHolder`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OnOSwitchHolder_v2.f3d
+Closing OnOSwitchHolder
+Visiting file Orbital Shaker movingPlatform v22 . f3d
+Opening `Orbital Shaker movingPlatform`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Orbital Shaker movingPlatform_v22.f3d
+Closing Orbital Shaker movingPlatform
+Visiting file Orbital Shaker movingPlatform Centered v6 . f3d
+Opening `Orbital Shaker movingPlatform Centered`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\Orbital Shaker movingPlatform Centered_v6.f3d
+Closing Orbital Shaker movingPlatform Centered
+Visiting file script OS 18 v4 . f3d
+Opening `script OS 18`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\script OS 18_v4.f3d
+Closing script OS 18
+Visiting file script OS 19 v4 . f3d
+Opening `script OS 19`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\script OS 19_v4.f3d
+Closing script OS 19
+Visiting file script OS platform 22 v4 . f3d
+Opening `script OS platform 22`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\script OS platform 22_v4.f3d
+Closing script OS platform 22
+Visiting file script OS top v3 . f3d
+Opening `script OS top`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\script OS top_v3.f3d
+Closing script OS top
+Visiting file OS Finger old style 2 mm no modiications v2 . f3d
+Opening `OS Finger old style 2 mm no modiications`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS Finger old style 2 mm no modiications_v2.f3d
+Closing OS Finger old style 2 mm no modiications
+Visiting file OS Finger Box base Dec 2021 v1 . f3d
+Opening `OS Finger Box base Dec 2021`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS Finger Box base Dec 2021_v1.f3d
+Closing OS Finger Box base Dec 2021
+Visiting file OS Finger old style 2 mm larger corners v5 . f3d
+Opening `OS Finger old style 2 mm larger corners`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS Finger old style 2 mm larger corners_v5.f3d
+Closing OS Finger old style 2 mm larger corners
+Visiting file OS Finger Box only three faces top with holes v4 . f3d
+Opening `OS Finger Box only three faces top with holes`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS Finger Box only three faces top with holes_v4.f3d
+Closing OS Finger Box only three faces top with holes
+Visiting file OS from bioreactor base v5 . f3d
+Opening `OS from bioreactor base`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base_v5.f3d
+Closing OS from bioreactor base
+Visiting file OS from bioreactor base 2 v1 . f3d
+Opening `OS from bioreactor base 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 2_v1.f3d
+Closing OS from bioreactor base 2
+Visiting file OS from bioreactor v9 . f3d
+Opening `OS from bioreactor`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor_v9.f3d
+Closing OS from bioreactor
+Visiting file OS from bioreactor base 5 v4 . f3d
+Opening `OS from bioreactor base 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 5_v4.f3d
+Closing OS from bioreactor base 5
+Visiting file OS from bioreactor base 4 Good v1 . f3d
+Opening `OS from bioreactor base 4 Good`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 4 Good_v1.f3d
+Closing OS from bioreactor base 4 Good
+Visiting file OS from bioreactor 4 v2 . f3d
+Opening `OS from bioreactor 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor 4_v2.f3d
+Closing OS from bioreactor 4
+Visiting file OS from bioreactor base 3 v2 . f3d
+Opening `OS from bioreactor base 3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 3_v2.f3d
+Closing OS from bioreactor base 3
+Visiting file OS from bioreactor base 3 GOOD v1 . f3d
+Opening `OS from bioreactor base 3 GOOD`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 3 GOOD_v1.f3d
+Closing OS from bioreactor base 3 GOOD
+Visiting file OS 6 v2 . f3d
+Opening `OS 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS 6_v2.f3d
+Closing OS 6
+Visiting file HDPE Orbital Shaker movingPlatform 2mm 3point8 height v11 . f3d
+Opening `HDPE Orbital Shaker movingPlatform 2mm 3point8 height`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\HDPE Orbital Shaker movingPlatform 2mm 3point8 height_v11.f3d
+Closing HDPE Orbital Shaker movingPlatform 2mm 3point8 height
+Visiting file OS Finger Box most stuff v8 . f3d
+Opening `OS Finger Box most stuff`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS Finger Box most stuff_v8.f3d
+Closing OS Finger Box most stuff
+Visiting file OS from bioreactor base 4 v9 . f3d
+Opening `OS from bioreactor base 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 4_v9.f3d
+Closing OS from bioreactor base 4
+Visiting file OS from bioreactor base 1 v16 . f3d
+Opening `OS from bioreactor base 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\older\OS from bioreactor base 1_v16.f3d
+Closing OS from bioreactor base 1
+Visiting folder flask holder
+Visiting file flaskholder100ml v4 . f3d
+Opening `flaskholder100ml`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\flask holder\flaskholder100ml_v4.f3d
+Closing flaskholder100ml
+Visiting folder links
+Visiting file Links  big screw 11 v5 . f3d
+Opening `Links  big screw 11`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\Links  big screw 11_v5.f3d
+Closing Links  big screw 11
+Visiting file Links  big screw 10 v10 . f3d
+Opening `Links  big screw 10`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\Links  big screw 10_v10.f3d
+Closing Links  big screw 10
+Visiting file LinksPassiveAndMotor 1 v2 . f3d
+Opening `LinksPassiveAndMotor 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\LinksPassiveAndMotor 1_v2.f3d
+Closing LinksPassiveAndMotor 1
+Visiting file script OS 22 v5 . f3d
+Opening `script OS 22`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\script OS 22_v5.f3d
+Closing script OS 22
+Visiting file Links  big screw 9 v4 . f3d
+Opening `Links  big screw 9`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\Links  big screw 9_v4.f3d
+Closing Links  big screw 9
+Visiting file LinksPassiveAndMotor 0 v3 . f3d
+Opening `LinksPassiveAndMotor 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\LinksPassiveAndMotor 0_v3.f3d
+Closing LinksPassiveAndMotor 0
+Visiting folder older
+Visiting file Links  big screw v1 . f3d
+Opening `Links  big screw`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw_v1.f3d
+Closing Links  big screw
+Visiting file LinksPassive v5 . f3d
+Opening `LinksPassive`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassive_v5.f3d
+Closing LinksPassive
+Visiting file LinksPassive 4 to print v1 . f3d
+Opening `LinksPassive 4 to print`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassive 4 to print_v1.f3d
+Closing LinksPassive 4 to print
+Visiting file LinksPassive 5 v4 . f3d
+Opening `LinksPassive 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassive 5_v4.f3d
+Closing LinksPassive 5
+Visiting file LinksPassive 6 v1 . f3d
+Opening `LinksPassive 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassive 6_v1.f3d
+Closing LinksPassive 6
+Visiting file LinksPassiveAndMotor 7 v4 . f3d
+Opening `LinksPassiveAndMotor 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassiveAndMotor 7_v4.f3d
+Closing LinksPassiveAndMotor 7
+Visiting file LinksPassiveAndMotor 7 v12 . f3d
+Opening `LinksPassiveAndMotor 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassiveAndMotor 7_v12.f3d
+Closing LinksPassiveAndMotor 7
+Visiting file LinksPassiveAndMotor 8 v2 . f3d
+Opening `LinksPassiveAndMotor 8`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassiveAndMotor 8_v2.f3d
+Closing LinksPassiveAndMotor 8
+Visiting file LinksPassiveAndMotor 9 v2 . f3d
+Opening `LinksPassiveAndMotor 9`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassiveAndMotor 9_v2.f3d
+Closing LinksPassiveAndMotor 9
+Visiting file LinksPassiveAndMotor  big screw v6 . f3d
+Opening `LinksPassiveAndMotor  big screw`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\LinksPassiveAndMotor  big screw_v6.f3d
+Closing LinksPassiveAndMotor  big screw
+Visiting file orbital shaker 6.f3d v1 . f3d
+Opening `orbital shaker 6.f3d`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\orbital shaker 6.f3d_v1.f3d
+Closing orbital shaker 6.f3d
+Visiting file Links  big screw 6 printed v1 . f3d
+Opening `Links  big screw 6 printed`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 6 printed_v1.f3d
+Closing Links  big screw 6 printed
+Visiting file Links  big screw 6 v1 . f3d
+Opening `Links  big screw 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 6_v1.f3d
+Closing Links  big screw 6
+Visiting file Links  big screw 7 v2 . f3d
+Opening `Links  big screw 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 7_v2.f3d
+Closing Links  big screw 7
+Visiting file Links  big screw 8 v5 . f3d
+Opening `Links  big screw 8`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 8_v5.f3d
+Closing Links  big screw 8
+Visiting file Links  big screw 5 v4 . f3d
+Opening `Links  big screw 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 5_v4.f3d
+Closing Links  big screw 5
+Visiting file Links  big screw 5 v1 . f3d
+Opening `Links  big screw 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 5_v1.f3d
+Closing Links  big screw 5
+Visiting file Links  big screw 4 v2 . f3d
+Opening `Links  big screw 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 4_v2.f3d
+Closing Links  big screw 4
+Visiting file Links  big screw 3 v7 . f3d
+Opening `Links  big screw 3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 3_v7.f3d
+Closing Links  big screw 3
+Visiting file Links  big screw 2 v5 . f3d
+Opening `Links  big screw 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\links\older\Links  big screw 2_v5.f3d
+Closing Links  big screw 2
+Visiting folder parametric maybe
+Visiting file Narrow Orbital Shaker movingPlatform Centered v1 . f3d
+Opening `Narrow Orbital Shaker movingPlatform Centered`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\parametric maybe\Narrow Orbital Shaker movingPlatform Centered_v1.f3d
+Closing Narrow Orbital Shaker movingPlatform Centered
+Visiting file OS 7 v7 . f3d
+Opening `OS 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\parametric maybe\OS 7_v7.f3d
+Closing OS 7
+Visiting file OS old style updated v11 . f3d
+Opening `OS old style updated`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\parametric maybe\OS old style updated_v11.f3d
+Closing OS old style updated
+Visiting folder crickItShaker
+Visiting file Crickit_Lab_Shaker v1 . f3d
+Opening `Crickit_Lab_Shaker`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\crickItShaker\Crickit_Lab_Shaker_v1.f3d
+Closing Crickit_Lab_Shaker
+Visiting file script OS 6 v1 . f3d
+Opening `script OS 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\crickItShaker\script OS 6_v1.f3d
+Closing script OS 6
+Visiting folder imported from tinkercad
+Visiting file Orbital Shaker Quad v1 . f3d
+Opening `Orbital Shaker Quad`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\imported from tinkercad\Orbital Shaker Quad_v1.f3d
+Closing Orbital Shaker Quad
+Visiting file orbital shaker 6.f3d v2 . f3d
+Opening `orbital shaker 6.f3d`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\imported from tinkercad\orbital shaker 6.f3d_v2.f3d
+Closing orbital shaker 6.f3d
+Visiting file orbital shaker 6 ungrouped v2 . f3d
+Opening `orbital shaker 6 ungrouped`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\imported from tinkercad\orbital shaker 6 ungrouped_v2.f3d
+Closing orbital shaker 6 ungrouped
+Visiting file Orbital Shaker Quad v3 . f3d
+Opening `Orbital Shaker Quad`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\orbital Shaker\imported from tinkercad\Orbital Shaker Quad_v3.f3d
+Closing Orbital Shaker Quad
+Visiting folder danny
+Visiting file KubKar one wheel v1 . f3d
+Opening `KubKar one wheel`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\KubKar one wheel_v1.f3d
+Closing KubKar one wheel
+Visiting file KubKar v1 . f3d
+Opening `KubKar`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\KubKar_v1.f3d
+Closing KubKar
+Visiting file KubKar 2 v2 . f3d
+Opening `KubKar 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\KubKar 2_v2.f3d
+Closing KubKar 2
+Visiting file KubKar 2 v15 . f3d
+Opening `KubKar 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\KubKar 2_v15.f3d
+Closing KubKar 2
+Visiting file minecraftdiamondsword adrian engraving 1 MM DEEP v2 . f3d
+Opening `minecraftdiamondsword adrian engraving 1 MM DEEP`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraftdiamondsword adrian engraving 1 MM DEEP_v2.f3d
+Closing minecraftdiamondsword adrian engraving 1 MM DEEP
+Visiting file minecraftdiamondsword adrian tracing 1 MM DEEP v1 . f3d
+Opening `minecraftdiamondsword adrian tracing 1 MM DEEP`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraftdiamondsword adrian tracing 1 MM DEEP_v1.f3d
+Closing minecraftdiamondsword adrian tracing 1 MM DEEP
+Visiting file Otrio 1 v9 . f3d
+Opening `Otrio 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\Otrio 1_v9.f3d
+Closing Otrio 1
+Visiting file Otrio v5 . f3d
+Opening `Otrio`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\Otrio_v5.f3d
+Closing Otrio
+Visiting file dan add in carved v4 . f3d
+Opening `dan add in carved`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\dan add in carved_v4.f3d
+Closing dan add in carved
+Visiting file dan carved 5 v6 . f3d
+Opening `dan carved 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\dan carved 5_v6.f3d
+Closing dan carved 5
+Visiting file treeLotus Cut and Working with 1 mm and 2 mm bits v1 . f3d
+Opening `treeLotus Cut and Working with 1 mm and 2 mm bits`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\treeLotus Cut and Working with 1 mm and 2 mm bits_v1.f3d
+Closing treeLotus Cut and Working with 1 mm and 2 mm bits
+Visiting file treeLotus with leaves v2 . f3d
+Opening `treeLotus with leaves`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\treeLotus with leaves_v2.f3d
+Closing treeLotus with leaves
+Visiting folder bots
+Visiting file blade 1 v5 . f3d
+Opening `blade 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\bots\blade 1_v5.f3d
+Closing blade 1
+Visiting file blade v1 . f3d
+Opening `blade`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\bots\blade_v1.f3d
+Closing blade
+Visiting folder cards
+Visiting file chrismas v0 v5 . f3d
+Opening `chrismas v0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\chrismas v0_v5.f3d
+Closing chrismas v0
+Visiting file dan v2 . f3d
+Opening `dan`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\dan_v2.f3d
+Closing dan
+Visiting file dan 1 v1 . f3d
+Opening `dan 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\dan 1_v1.f3d
+Closing dan 1
+Visiting file minecraft card v1 . f3d
+Opening `minecraft card`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\minecraft card_v1.f3d
+Closing minecraft card
+Visiting file snowman cards v2 . f3d
+Opening `snowman cards`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\snowman cards_v2.f3d
+Closing snowman cards
+Visiting file HaTree v3 . f3d
+Opening `HaTree`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\cards\HaTree_v3.f3d
+Closing HaTree
+Visiting folder minecraft
+Visiting file minecraftdiamondsword .3 mm cut on small CNC v1 . f3d
+Opening `minecraftdiamondsword .3 mm cut on small CNC`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword .3 mm cut on small CNC_v1.f3d
+Closing minecraftdiamondsword .3 mm cut on small CNC
+Visiting file minecraftdiamondsword .3 mm with all correct v4 . f3d
+Opening `minecraftdiamondsword .3 mm with all correct`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword .3 mm with all correct_v4.f3d
+Closing minecraftdiamondsword .3 mm with all correct
+Visiting file minecraftdiamondsword big CNC rotated v6 . f3d
+Opening `minecraftdiamondsword big CNC rotated`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword big CNC rotated_v6.f3d
+Closing minecraftdiamondsword big CNC rotated
+Visiting file minecraftdiamondsword big CNC rotated CUT v1 . f3d
+Opening `minecraftdiamondsword big CNC rotated CUT`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword big CNC rotated CUT_v1.f3d
+Closing minecraftdiamondsword big CNC rotated CUT
+Visiting file minecraftdiamondsword for big CNC v6 . f3d
+Opening `minecraftdiamondsword for big CNC`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword for big CNC_v6.f3d
+Closing minecraftdiamondsword for big CNC
+Visiting file minecraftdiamondsword for big CNC schetch straight v1 . f3d
+Opening `minecraftdiamondsword for big CNC schetch straight`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword for big CNC schetch straight_v1.f3d
+Closing minecraftdiamondsword for big CNC schetch straight
+Visiting file minecraftdiamondsword for big CNC schetch rotated v3 . f3d
+Opening `minecraftdiamondsword for big CNC schetch rotated`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\minecraft\minecraftdiamondsword for big CNC schetch rotated_v3.f3d
+Closing minecraftdiamondsword for big CNC schetch rotated
+Visiting folder robots
+Visiting file rob3 v2 . f3d
+Opening `rob3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\robots\rob3_v2.f3d
+Closing rob3
+Visiting file cobalt robot blade v4 . f3d
+Opening `cobalt robot blade`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\danny\robots\cobalt robot blade_v4.f3d
+Closing cobalt robot blade
+Visiting folder enzyme cooler
+Visiting file enz cooler metal tubes caps 1 v2 . f3d
+Opening `enz cooler metal tubes caps 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz cooler metal tubes caps 1_v2.f3d
+Closing enz cooler metal tubes caps 1
+Visiting file enz metal 1 v6 . f3d
+Opening `enz metal 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz metal 1_v6.f3d
+Closing enz metal 1
+Visiting file enz one 2 parts 1 v15 . f3d
+Opening `enz one 2 parts 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz one 2 parts 1_v15.f3d
+Closing enz one 2 parts 1
+Visiting file enz one piece 6 v3 . f3d
+Opening `enz one piece 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz one piece 6_v3.f3d
+Closing enz one piece 6
+Visiting file enz one two parts 4 v4 . f3d
+Opening `enz one two parts 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz one two parts 4_v4.f3d
+Closing enz one two parts 4
+Visiting file enz one part 0 v10 . f3d
+Opening `enz one part 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\enzyme cooler\enz one part 0_v10.f3d
+Closing enz one part 0
+Visiting folder exterior parts
+Visiting file TT yellow incorrect 17 point 5 and 33 mm 1 v1 . f3d
+Opening `TT yellow incorrect 17 point 5 and 33 mm 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\exterior parts\TT yellow incorrect 17 point 5 and 33 mm 1_v1.f3d
+Closing TT yellow incorrect 17 point 5 and 33 mm 1
+Visiting file TT yellow motor 17 point 5 and 33 mm Incorrect in the mo v1 . f3d
+Opening `TT yellow motor 17 point 5 and 33 mm Incorrect in the mo`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\exterior parts\TT yellow motor 17 point 5 and 33 mm Incorrect in the mo_v1.f3d
+Closing TT yellow motor 17 point 5 and 33 mm Incorrect in the mo
+Visiting folder coding
+Visiting file cube 2 v4 . f3d
+Opening `cube 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\cube 2_v4.f3d
+Closing cube 2
+Visiting file test for drilling generated on Friday first cirlecs then intersect v1 . f3d
+Opening `test for drilling generated on Friday first cirlecs then intersect`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\test for drilling generated on Friday first cirlecs then intersect_v1.f3d
+Closing test for drilling generated on Friday first cirlecs then intersect
+Visiting file test for drilling generated on Friday aft does drill v1 . f3d
+Opening `test for drilling generated on Friday aft does drill`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\test for drilling generated on Friday aft does drill_v1.f3d
+Closing test for drilling generated on Friday aft does drill
+Visiting file test for drilling generated on Friday aft v2 . f3d
+Opening `test for drilling generated on Friday aft`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\test for drilling generated on Friday aft_v2.f3d
+Closing test for drilling generated on Friday aft
+Visiting file TEST generated POWER BOX  6 CUT first showing drilling in contour v3 . f3d
+Opening `TEST generated POWER BOX  6 CUT first showing drilling in contour`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\TEST generated POWER BOX  6 CUT first showing drilling in contour_v3.f3d
+Closing TEST generated POWER BOX  6 CUT first showing drilling in contour
+Visiting file TEST generated POWER BOX  6 CUT first v1 . f3d
+Opening `TEST generated POWER BOX  6 CUT first`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\TEST generated POWER BOX  6 CUT first_v1.f3d
+Closing TEST generated POWER BOX  6 CUT first
+Visiting file problem selecting circles v5 . f3d
+Opening `problem selecting circles`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\coding\problem selecting circles_v5.f3d
+Closing problem selecting circles
+Visiting folder forums
+Visiting file Cuts right on nonexistent path v1 . f3d
+Opening `Cuts right on nonexistent path`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\Cuts right on nonexistent path_v1.f3d
+Closing Cuts right on nonexistent path
+Visiting file Cuts right on nonexistent path v1 . f3d
+C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\Cuts right on nonexistent path_v1.f3d already exists, skipping
+Visiting file Cuts right on nonexistent path original submit to Autodesk v1 . f3d
+Opening `Cuts right on nonexistent path original submit to Autodesk`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\Cuts right on nonexistent path original submit to Autodesk_v1.f3d
+Closing Cuts right on nonexistent path original submit to Autodesk
+Visiting file Cuts right on nonexistent path simplified 1 v1 . f3d
+Opening `Cuts right on nonexistent path simplified 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\Cuts right on nonexistent path simplified 1_v1.f3d
+Closing Cuts right on nonexistent path simplified 1
+Visiting file drill select minimal DOES not work v2 . f3d
+Opening `drill select minimal DOES not work`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\drill select minimal DOES not work_v2.f3d
+Closing drill select minimal DOES not work
+Visiting file drill select works v1 . f3d
+Opening `drill select works`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\drill select works_v1.f3d
+Closing drill select works
+Visiting file PROBLM Cuts right on nonexistent path simplified 1 ONE PASS v1 . f3d
+Opening `PROBLM Cuts right on nonexistent path simplified 1 ONE PASS`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\PROBLM Cuts right on nonexistent path simplified 1 ONE PASS_v1.f3d
+Closing PROBLM Cuts right on nonexistent path simplified 1 ONE PASS
+Visiting file script OS 4 v1 . f3d
+Opening `script OS 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\script OS 4_v1.f3d
+Closing script OS 4
+Visiting file script OS 5 v2 . f3d
+Opening `script OS 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\script OS 5_v2.f3d
+Closing script OS 5
+Visiting file test for drilling Friday both directio joins all mae drill kerf 15 v1 . f3d
+Opening `test for drilling Friday both directio joins all mae drill kerf 15`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\test for drilling Friday both directio joins all mae drill kerf 15_v1.f3d
+Closing test for drilling Friday both directio joins all mae drill kerf 15
+Visiting file two vertical kerfs to cut 0 v11 . f3d
+Opening `two vertical kerfs to cut 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\forums\two vertical kerfs to cut 0_v11.f3d
+Closing two vertical kerfs to cut 0
+Visiting folder gel box power
+Visiting file generated POWER BOX  6 CUT first v1 . f3d
+Opening `generated POWER BOX  6 CUT first`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\gel box power\generated POWER BOX  6 CUT first_v1.f3d
+Closing generated POWER BOX  6 CUT first
+Visiting file generated POWER BOX WITH BOX OPERATIONS 7uncut v3 . f3d
+Opening `generated POWER BOX WITH BOX OPERATIONS 7uncut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\gel box power\generated POWER BOX WITH BOX OPERATIONS 7uncut_v3.f3d
+Closing generated POWER BOX WITH BOX OPERATIONS 7uncut
+Visiting folder manual
+Visiting file gel box power 12 v2 . f3d
+Opening `gel box power 12`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\gel box power\manual\gel box power 12_v2.f3d
+Closing gel box power 12
+Visiting file gel box power 12 backup copy v1 . f3d
+Opening `gel box power 12 backup copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\gel box power\manual\gel box power 12 backup copy_v1.f3d
+Closing gel box power 12 backup copy
+Visiting folder machine test cuts
+Visiting file line 10 cm 2mm cutter v4 . f3d
+Opening `line 10 cm 2mm cutter`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\line 10 cm 2mm cutter_v4.f3d
+Closing line 10 cm 2mm cutter
+Visiting folder Acryl
+Visiting file test Acryl circle 2 mm cutter v5 . f3d
+Opening `test Acryl circle 2 mm cutter`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\Acryl\test Acryl circle 2 mm cutter_v5.f3d
+Closing test Acryl circle 2 mm cutter
+Visiting file winged nuts Acryl on small machine v2 . f3d
+Opening `winged nuts Acryl on small machine`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\Acryl\winged nuts Acryl on small machine_v2.f3d
+Closing winged nuts Acryl on small machine
+Visiting file test cut Acryl on small machine v1 . f3d
+Opening `test cut Acryl on small machine`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\Acryl\test cut Acryl on small machine_v1.f3d
+Closing test cut Acryl on small machine
+Visiting folder HDPE
+Visiting file TEST b55 YET  another copy v5 . f3d
+Opening `TEST b55 YET  another copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\TEST b55 YET  another copy_v5.f3d
+Closing TEST b55 YET  another copy
+Visiting file Test Fit 2 mm new sketch design from OS 7 2 v5 . f3d
+Opening `Test Fit 2 mm new sketch design from OS 7 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\Test Fit 2 mm new sketch design from OS 7 2_v5.f3d
+Closing Test Fit 2 mm new sketch design from OS 7 2
+Visiting file JUNK Test  cut b55 YET  another copy v3 . f3d
+Opening `JUNK Test  cut b55 YET  another copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\JUNK Test  cut b55 YET  another copy_v3.f3d
+Closing JUNK Test  cut b55 YET  another copy
+Visiting file Test Fit 2 mm new sketch design from OS 7 1 v1 . f3d
+Opening `Test Fit 2 mm new sketch design from OS 7 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\Test Fit 2 mm new sketch design from OS 7 1_v1.f3d
+Closing Test Fit 2 mm new sketch design from OS 7 1
+Visiting file Test Fit 2 mm new sketch design from OS 7 v2 . f3d
+Opening `Test Fit 2 mm new sketch design from OS 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\Test Fit 2 mm new sketch design from OS 7_v2.f3d
+Closing Test Fit 2 mm new sketch design from OS 7
+Visiting file test cut HDPE on small machine or burrs v8 . f3d
+Opening `test cut HDPE on small machine or burrs`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\test cut HDPE on small machine or burrs_v8.f3d
+Closing test cut HDPE on small machine or burrs
+Visiting file HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height v1 . f3d
+Opening `HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height_v1.f3d
+Closing HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height
+Visiting file HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height v3 . f3d
+Opening `HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height_v3.f3d
+Closing HDPE test circle 2 mm cutter 12point8 circle centered 3point8 height
+Visiting file test cut HDPE on small machine or burrs v1 . f3d
+Opening `test cut HDPE on small machine or burrs`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\machine test cuts\HDPE\test cut HDPE on small machine or burrs_v1.f3d
+Closing test cut HDPE on small machine or burrs
+Visiting folder box
+Visiting file b50 v2 . f3d
+Opening `b50`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\b50_v2.f3d
+Closing b50
+Visiting file pHHolder v3 . f3d
+Opening `pHHolder`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\pHHolder_v3.f3d
+Closing pHHolder
+Visiting file b51 v4 . f3d
+Opening `b51`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\b51_v4.f3d
+Closing b51
+Visiting file bioreactor box with corner holes for any box usage v1 . f3d
+Opening `bioreactor box with corner holes for any box usage`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\bioreactor box with corner holes for any box usage_v1.f3d
+Closing bioreactor box with corner holes for any box usage
+Visiting file b24 components v2 . f3d
+Opening `b24 components`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\b24 components_v2.f3d
+Closing b24 components
+Visiting file Current Best 12 1p4 used for copy v2 . f3d
+Opening `Current Best 12 1p4 used for copy`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 12 1p4 used for copy_v2.f3d
+Closing Current Best 12 1p4 used for copy
+Visiting file junk OS 1 v4 . f3d
+Opening `junk OS 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\junk OS 1_v4.f3d
+Closing junk OS 1
+Visiting file 15 bioreactor 10 mm v7 . f3d
+Opening `15 bioreactor 10 mm`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\15 bioreactor 10 mm_v7.f3d
+Closing 15 bioreactor 10 mm
+Visiting file Current Best 12 1p4 USABLE v5 . f3d
+Opening `Current Best 12 1p4 USABLE`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 12 1p4 USABLE_v5.f3d
+Closing Current Best 12 1p4 USABLE
+Visiting file Current Best 11 1p4 JUST BIG PARTS to CUT v2 . f3d
+Opening `Current Best 11 1p4 JUST BIG PARTS to CUT`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 11 1p4 JUST BIG PARTS to CUT_v2.f3d
+Closing Current Best 11 1p4 JUST BIG PARTS to CUT
+Visiting file Current Best 11 1p4 v6 . f3d
+Opening `Current Best 11 1p4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 11 1p4_v6.f3d
+Closing Current Best 11 1p4
+Visiting file Current Best 10 1p4 v7 . f3d
+Opening `Current Best 10 1p4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 10 1p4_v7.f3d
+Closing Current Best 10 1p4
+Visiting file Current Best 10 2mm cutter v1 . f3d
+Opening `Current Best 10 2mm cutter`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 10 2mm cutter_v1.f3d
+Closing Current Best 10 2mm cutter
+Visiting file Current Best 10 v2 . f3d
+Opening `Current Best 10`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 10_v2.f3d
+Closing Current Best 10
+Visiting file test fit hdpe 1point4 mm CUT a little loosefine Finish 800 v3 . f3d
+Opening `test fit hdpe 1point4 mm CUT a little loosefine Finish 800`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\test fit hdpe 1point4 mm CUT a little loosefine Finish 800_v3.f3d
+Closing test fit hdpe 1point4 mm CUT a little loosefine Finish 800
+Visiting file test fit hdpe 1point4 mm CUT a little loose v2 . f3d
+Opening `test fit hdpe 1point4 mm CUT a little loose`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\test fit hdpe 1point4 mm CUT a little loose_v2.f3d
+Closing test fit hdpe 1point4 mm CUT a little loose
+Visiting file 1 element test fit 1 4 v11 . f3d
+Opening `1 element test fit 1 4`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\1 element test fit 1 4_v11.f3d
+Closing 1 element test fit 1 4
+Visiting file 1 OINT 4 test fit WITH 2 MM TOOLDIAM PARAM v4 . f3d
+Opening `1 OINT 4 test fit WITH 2 MM TOOLDIAM PARAM`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\1 OINT 4 test fit WITH 2 MM TOOLDIAM PARAM_v4.f3d
+Closing 1 OINT 4 test fit WITH 2 MM TOOLDIAM PARAM
+Visiting file test fit v5 . f3d
+Opening `test fit`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\test fit_v5.f3d
+Closing test fit
+Visiting file recut smaller fingers for big pieces v2 . f3d
+Opening `recut smaller fingers for big pieces`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\recut smaller fingers for big pieces_v2.f3d
+Closing recut smaller fingers for big pieces
+Visiting file Current Best 9 v3 . f3d
+Opening `Current Best 9`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 9_v3.f3d
+Closing Current Best 9
+Visiting file Current Best 8 After CUT improvements v4 . f3d
+Opening `Current Best 8 After CUT improvements`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 8 After CUT improvements_v4.f3d
+Closing Current Best 8 After CUT improvements
+Visiting file Current Best 8 CUT short Layout small pieces first v4 . f3d
+Opening `Current Best 8 CUT short Layout small pieces first`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Current Best 8 CUT short Layout small pieces first_v4.f3d
+Closing Current Best 8 CUT short Layout small pieces first
+Visiting file Curent Best 8 short Layoutsmall pieces first CUT funny Front v2 . f3d
+Opening `Curent Best 8 short Layoutsmall pieces first CUT funny Front`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 8 short Layoutsmall pieces first CUT funny Front_v2.f3d
+Closing Curent Best 8 short Layoutsmall pieces first CUT funny Front
+Visiting file Curent Best 8 short Layout v2 . f3d
+Opening `Curent Best 8 short Layout`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 8 short Layout_v2.f3d
+Closing Curent Best 8 short Layout
+Visiting file Curent Best 8 Tall Layout v1 . f3d
+Opening `Curent Best 8 Tall Layout`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 8 Tall Layout_v1.f3d
+Closing Curent Best 8 Tall Layout
+Visiting file Curent Best 8 v4 . f3d
+Opening `Curent Best 8`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 8_v4.f3d
+Closing Curent Best 8
+Visiting file Curent Best 7 v10 . f3d
+Opening `Curent Best 7`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 7_v10.f3d
+Closing Curent Best 7
+Visiting file Curent Best 6 v3 . f3d
+Opening `Curent Best 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 6_v3.f3d
+Closing Curent Best 6
+Visiting file Curent Best 5 all Drills v2 . f3d
+Opening `Curent Best 5 all Drills`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\Curent Best 5 all Drills_v2.f3d
+Closing Curent Best 5 all Drills
+Visiting folder old
+Visiting file Hole countours for all bodies work with bottom exception 1 v1 . f3d
+Opening `Hole countours for all bodies work with bottom exception 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Hole countours for all bodies work with bottom exception 1_v1.f3d
+Closing Hole countours for all bodies work with bottom exception 1
+Visiting file junk 4 both hole making counours work v3 . f3d
+Opening `junk 4 both hole making counours work`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 4 both hole making counours work_v3.f3d
+Closing junk 4 both hole making counours work
+Visiting file B 4 works cut v1 . f3d
+Opening `B 4 works cut`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 4 works cut_v1.f3d
+Closing B 4 works cut
+Visiting file B 3 v21 . f3d
+Opening `B 3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 3_v21.f3d
+Closing B 3
+Visiting file B 6 v3 . f3d
+Opening `B 6`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 6_v3.f3d
+Closing B 6
+Visiting file Hole countours for two bodies work 2 v1 . f3d
+Opening `Hole countours for two bodies work 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Hole countours for two bodies work 2_v1.f3d
+Closing Hole countours for two bodies work 2
+Visiting file fingerBoxAttempt v25 . f3d
+Opening `fingerBoxAttempt`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\fingerBoxAttempt_v25.f3d
+Closing fingerBoxAttempt
+Visiting file B 5 v1 . f3d
+Opening `B 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 5_v1.f3d
+Closing B 5
+Visiting file BEST v5 . f3d
+Opening `BEST`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\BEST_v5.f3d
+Closing BEST
+Visiting file Hole countous for two bodies work v1 . f3d
+Opening `Hole countous for two bodies work`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Hole countous for two bodies work_v1.f3d
+Closing Hole countous for two bodies work
+Visiting file B 8 v1 . f3d
+Opening `B 8`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 8_v1.f3d
+Closing B 8
+Visiting file finger box equal width v1 . f3d
+Opening `finger box equal width`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\finger box equal width_v1.f3d
+Closing finger box equal width
+Visiting file junk 3 v1 . f3d
+Opening `junk 3`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 3_v1.f3d
+Closing junk 3
+Visiting file fingers generated with script Tools addins boxmaker v1 . f3d
+Opening `fingers generated with script Tools addins boxmaker`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\fingers generated with script Tools addins boxmaker_v1.f3d
+Closing fingers generated with script Tools addins boxmaker
+Visiting file junk 3 slimmed v1 . f3d
+Opening `junk 3 slimmed`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 3 slimmed_v1.f3d
+Closing junk 3 slimmed
+Visiting file simpleTestBone1 v3 . f3d
+Opening `simpleTestBone1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\simpleTestBone1_v3.f3d
+Closing simpleTestBone1
+Visiting file B 5 v5 . f3d
+Opening `B 5`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 5_v5.f3d
+Closing B 5
+Visiting file Hole countours for all bodies work with bottom exception 1 Best v1 . f3d
+Opening `Hole countours for all bodies work with bottom exception 1 Best`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Hole countours for all bodies work with bottom exception 1 Best_v1.f3d
+Closing Hole countours for all bodies work with bottom exception 1 Best
+Visiting file BEST 2 v4 . f3d
+Opening `BEST 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\BEST 2_v4.f3d
+Closing BEST 2
+Visiting file fingerBox v1 . f3d
+Opening `fingerBox`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\fingerBox_v1.f3d
+Closing fingerBox
+Visiting file Hole countours for all bodies work with bottom exception v1 . f3d
+Opening `Hole countours for all bodies work with bottom exception`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Hole countours for all bodies work with bottom exception_v1.f3d
+Closing Hole countours for all bodies work with bottom exception
+Visiting file B 2 v4 . f3d
+Opening `B 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 2_v4.f3d
+Closing B 2
+Visiting file junk 3 slimmed still the contour make hole WORKS v1 . f3d
+Opening `junk 3 slimmed still the contour make hole WORKS`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 3 slimmed still the contour make hole WORKS_v1.f3d
+Closing junk 3 slimmed still the contour make hole WORKS
+Visiting file junk 2 v1 . f3d
+Opening `junk 2`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 2_v1.f3d
+Closing junk 2
+Visiting file B 0 v4 . f3d
+Opening `B 0`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 0_v4.f3d
+Closing B 0
+Visiting file OS Finger with Orbital Shaker face v2 . f3d
+Opening `OS Finger with Orbital Shaker face`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\OS Finger with Orbital Shaker face_v2.f3d
+Closing OS Finger with Orbital Shaker face
+Visiting file OS Finger Box only three faces v2 . f3d
+Opening `OS Finger Box only three faces`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\OS Finger Box only three faces_v2.f3d
+Closing OS Finger Box only three faces
+Visiting file junk 3 slimmed still the contour make hole issue v2 . f3d
+Opening `junk 3 slimmed still the contour make hole issue`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\junk 3 slimmed still the contour make hole issue_v2.f3d
+Closing junk 3 slimmed still the contour make hole issue
+Visiting file OS Finger v9 . f3d
+Opening `OS Finger`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\OS Finger_v9.f3d
+Closing OS Finger
+Visiting file B 4 works v3 . f3d
+Opening `B 4 works`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\B 4 works_v3.f3d
+Closing B 4 works
+Visiting file finger box v12 . f3d
+Opening `finger box`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\finger box_v12.f3d
+Closing finger box
+Visiting file Current Best 1 v1 . f3d
+Opening `Current Best 1`
+Saved C:\Users\ad\Desktop\Fusion360Export\Adrian Projects\box\old\Current Best 1_v1.f3d
+Closing Current Best 1
+Visiting file junk 3 slimmed still the contour make hole issue changed param v2 . f3d
+Opening `junk 3 slimmed still the contour make hole issue changed param`
