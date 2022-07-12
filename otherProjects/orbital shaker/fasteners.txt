@@ -1,6 +1,0 @@
-The backing board is CNCed and connected via 3d printed brackets to the PCB. The backing board is attached to the upper back of the OS housing. Besides the PCBs it also provide support or the ON-OFF motor switch, optional Wifi antenna and beeper.
-we need some screws to attach
-PCB to bracket 4 mm long 3mm diam screws
-backing board to racket 3mm diam 7mm long or longer screws and nut
-
-OS box to backing board either 3mm or 2.5 mm diameter with 2 screws where ideally one of the nuts will be a wing nut

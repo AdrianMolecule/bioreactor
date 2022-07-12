@@ -1,0 +1,1 @@
+The f3d files are Fusion360 files for both the CNC machine and 3dPrintig. On request, I can generate stl files for 3d printing and raw files for the specific CNC you have.
